@@ -1,0 +1,113 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use App\Models\Animal;
+use App\Models\Raca;
+use App\Models\Especie;
+
+class AnimalController extends Controller
+{
+    public function index(Request $request)
+    {
+        $query = Animal::query();
+
+        // Filtro por espécie (via relação)
+        if ($request->especie_id) {
+            $query->whereHas('raca', function ($q) use ($request) {
+                $q->where('especie_id', $request->especie_id);
+            });
+        }
+
+        // Filtro por raça
+        if ($request->raca_id) {
+            $query->where('raca_id', $request->raca_id);
+        }
+
+        // Filtro por status
+        if ($request->status) {
+            $query->where('status', $request->status);
+        }
+
+        $animais = $query->get();
+
+        $especies = \App\Models\Especie::all();
+        $racas = \App\Models\Raca::all();
+
+        return view('animais.index', compact('animais', 'especies', 'racas'));
+    }
+
+    public function create()
+    {
+        $especies = Especie::all();
+        $racas = Raca::all();
+
+        return view('animais.create', compact('especies', 'racas'));
+    }
+
+    public function store(Request $request)
+    {
+        $request->validate([
+            'nome' => 'required|max:255',
+            'sexo' => 'required',
+            'raca_id' => 'required|exists:racas,id'
+        ]);
+
+        Animal::create([
+            'nome' => $request->nome,
+            'data_nascimento' => $request->data_nascimento,
+            'sexo' => $request->sexo,
+            'porte' => $request->porte,
+            'descricao' => $request->descricao,
+            'status' => $request->status,
+            'user_id' => 1,
+            'raca_id' => $request->raca_id
+        ]);
+
+        return redirect()->route('animais.index')
+                        ->with('success', 'Animal cadastrado com sucesso!');
+    }
+
+    public function edit($id)
+    {
+        $animal = Animal::findOrFail($id);
+        $especies = Especie::all();
+        $racas = Raca::all();
+
+        return view('animais.edit', compact('animal', 'especies', 'racas'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $animal = Animal::findOrFail($id);
+
+        $request->validate([
+            'nome' => 'required|max:255',
+            'sexo' => 'required',
+            'raca_id' => 'required|exists:racas,id'
+        ]);
+
+        $animal->update([
+            'nome' => $request->nome,
+            'data_nascimento' => $request->data_nascimento,
+            'sexo' => $request->sexo,
+            'porte' => $request->porte,
+            'descricao' => $request->descricao,
+            'status' => $request->status,
+            'raca_id' => $request->raca_id
+        ]);
+
+        return redirect()->route('animais.index')
+                         ->with('success', 'Animal atualizado com sucesso!');
+    }
+
+    public function destroy($id)
+    {
+        $animal = Animal::findOrFail($id);
+        $animal->delete();
+
+        return redirect()->route('animais.index')
+                         ->with('success', 'Animal excluído com sucesso!');
+    }
+}
