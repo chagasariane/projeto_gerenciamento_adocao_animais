@@ -61,7 +61,7 @@ class AnimalController extends Controller
             'porte' => $request->porte,
             'descricao' => $request->descricao,
             'status' => $request->status,
-            'user_id' => 1,
+            'user_id' => 2,
             'raca_id' => $request->raca_id
         ]);
 
