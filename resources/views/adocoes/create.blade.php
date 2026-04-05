@@ -2,49 +2,81 @@
 
 @section('content')
 
-<div class="card">
-    <div class="card-header bg-primary text-white">
-        Nova Adoção
-    </div>
+<div class="container">
 
-    <div class="card-body">
-        <form action="{{ route('adocoes.store') }}" method="POST">
-            @csrf
+    <h1 class="mb-4">Cadastrar Adoção</h1>
 
-            <div class="mb-3">
-                <label>Usuário</label>
-                <select name="user_id" class="form-control">
+    {{-- Erros --}}
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul class="mb-0">
+                @foreach ($errors->all() as $erro)
+                    <li>{{ $erro }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
+    <form action="{{ route('adocoes.store') }}" method="POST">
+        @csrf
+
+        <div class="row">
+
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Adotante</label>
+                <select name="user_id" class="form-control" required>
+                    <option value="">Selecione</option>
                     @foreach($users as $user)
-                        <option value="{{ $user->id }}">{{ $user->name }}</option>
+                        <option value="{{ $user->id }}"
+                            {{ old('user_id') == $user->id ? 'selected' : '' }}>
+                            {{ $user->name }}
+                        </option>
                     @endforeach
                 </select>
             </div>
 
-            <div class="mb-3">
-                <label>Animal</label>
-                <select name="animal_id" class="form-control">
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Animal</label>
+                <select name="animal_id" class="form-control" required>
+                    <option value="">Selecione</option>
                     @foreach($animais as $animal)
-                        <option value="{{ $animal->id }}">{{ $animal->nome }}</option>
+                        <option value="{{ $animal->id }}"
+                            {{ old('animal_id') == $animal->id ? 'selected' : '' }}>
+                            {{ $animal->nome }}
+                        </option>
                     @endforeach
                 </select>
             </div>
 
-            <div class="mb-3">
-                <label>Status</label>
-                <select name="status" class="form-control">
-                    <option value="PENDENTE">Pendente</option>
-                    <option value="APROVADA">Aprovada</option>
-                    <option value="RECUSADA">Recusada</option>
-                </select>
-            </div>
-            <div class="mb-3">
-                <label class="form-label">Descrição</label>
-                <textarea name="descricao" class="form-control" rows="3">{{ old('descricao') }}</textarea>
-            </div>
+        </div>
 
-            <button class="btn btn-primary">Salvar</button>
-        </form>
-    </div>
+        <div class="mb-3">
+            <label class="form-label">Status</label>
+            <select name="status" class="form-control">
+                <option value="PENDENTE" {{ old('status') == 'PENDENTE' ? 'selected' : '' }}>Pendente</option>
+                <option value="APROVADO" {{ old('status') == 'APROVADO' ? 'selected' : '' }}>Aprovado</option>
+                <option value="RECUSADO" {{ old('status') == 'RECUSADO' ? 'selected' : '' }}>Recusado</option>
+                <option value="FINALIZADO" {{ old('status') == 'FINALIZADO' ? 'selected' : '' }}>Finalizado</option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Observações</label>
+            <textarea name="descricao" class="form-control" rows="3">{{ old('descricao') }}</textarea>
+        </div>
+
+        <div class="d-flex justify-content-between mt-4">
+            <a href="{{ route('adocoes.index') }}" class="btn btn-secondary">
+                Voltar
+            </a>
+
+            <button type="submit" class="btn btn-primary">
+                Salvar
+            </button>
+        </div>
+
+    </form>
+
 </div>
 
 @endsection

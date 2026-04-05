@@ -3,11 +3,13 @@
 @section('content')
 
 <div class="container">
-    <h1>Lista de Animais</h1>
 
-    <a href="{{ route('animais.create') }}" class="btn btn-primary mb-3">
-        Novo Animal
-    </a>
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h1>Animais</h1>
+        <a href="{{ route('animais.create') }}" class="btn btn-primary">
+            Novo Animal
+        </a>
+    </div>
 
     @if(session('success'))
         <div class="alert alert-success">
@@ -17,10 +19,10 @@
 
     <form method="GET" action="{{ route('animais.index') }}" class="mb-4">
 
-        <div class="row">
+        <div class="row g-3">
 
             <div class="col-md-3">
-                <label>Espécie</label>
+                <label class="form-label">Espécie</label>
                 <select name="especie_id" id="especie" class="form-control">
                     <option value="">Todas</option>
                     @foreach($especies as $especie)
@@ -33,7 +35,7 @@
             </div>
 
             <div class="col-md-3">
-                <label>Raça</label>
+                <label class="form-label">Raça</label>
                 <select name="raca_id" id="raca" class="form-control">
                     <option value="">Todas</option>
                     @foreach($racas as $raca)
@@ -47,7 +49,7 @@
             </div>
 
             <div class="col-md-3">
-                <label>Status</label>
+                <label class="form-label">Status</label>
                 <select name="status" class="form-control">
                     <option value="">Todos</option>
                     <option value="DISPONIVEL" {{ request('status') == 'DISPONIVEL' ? 'selected' : '' }}>Disponível</option>
@@ -56,16 +58,21 @@
                 </select>
             </div>
 
-            <div class="col-md-3 d-flex align-items-end">
-                <button type="submit" class="btn btn-primary me-2">Filtrar</button>
-                <a href="{{ route('animais.index') }}" class="btn btn-secondary">Limpar</a>
+            <div class="col-md-3 d-flex align-items-end gap-2">
+                <button type="submit" class="btn btn-primary w-100">
+                    Filtrar
+                </button>
+
+                <a href="{{ route('animais.index') }}" class="btn btn-secondary w-100">
+                    Limpar
+                </a>
             </div>
 
         </div>
     </form>
 
-    <table class="table table-bordered">
-        <thead>
+    <table class="table table-bordered table-striped">
+        <thead class="table-dark">
             <tr>
                 <th>ID</th>
                 <th>Nome</th>
@@ -74,19 +81,31 @@
                 <th>Status</th>
                 <th>Protetor</th>
                 <th>Raça</th>
-                <th>Ações</th>
+                <th width="180">Ações</th>
             </tr>
         </thead>
+
         <tbody>
-            @foreach($animais as $animal)
+            @forelse($animais as $animal)
                 <tr>
                     <td>{{ $animal->id }}</td>
                     <td>{{ $animal->nome }}</td>
                     <td>{{ $animal->sexo }}</td>
                     <td>{{ $animal->porte }}</td>
-                    <td>{{ $animal->status }}</td>
+
+                    <td>
+                        @if($animal->status == 'DISPONIVEL')
+                            <span class="badge bg-success">Disponível</span>
+                        @elseif($animal->status == 'EM_PROCESSO')
+                            <span class="badge bg-warning text-dark">Em processo</span>
+                        @else
+                            <span class="badge bg-secondary">Adotado</span>
+                        @endif
+                    </td>
+
                     <td>{{ $animal->user->name ?? '—' }}</td>
                     <td>{{ $animal->raca->nome ?? '—' }}</td>
+
                     <td>
                         <a href="{{ route('animais.edit', $animal->id) }}" class="btn btn-warning btn-sm">
                             Editar
@@ -102,9 +121,16 @@
                         </form>
                     </td>
                 </tr>
-            @endforeach
+            @empty
+                <tr>
+                    <td colspan="8" class="text-center">
+                        Nenhum animal cadastrado
+                    </td>
+                </tr>
+            @endforelse
         </tbody>
     </table>
+
 </div>
 
 @endsection
@@ -114,26 +140,28 @@
     const especieSelect = document.getElementById('especie');
     const racaSelect = document.getElementById('raca');
 
-    function filtrarRacas() {
-        const especieId = especieSelect.value;
+    if (especieSelect && racaSelect) {
 
-        Array.from(racaSelect.options).forEach(option => {
-            if (!option.value) return;
+        function filtrarRacas() {
+            const especieId = especieSelect.value;
 
-            const pertence = option.getAttribute('data-especie') === especieId;
+            Array.from(racaSelect.options).forEach(option => {
+                if (!option.value) return;
 
-            option.style.display = (!especieId || pertence) ? 'block' : 'none';
+                const pertence = option.getAttribute('data-especie') === especieId;
+
+                option.style.display = (!especieId || pertence) ? 'block' : 'none';
+            });
+
+            racaSelect.disabled = !especieId;
+        }
+
+        especieSelect.addEventListener('change', function () {
+            racaSelect.value = "";
+            filtrarRacas();
         });
 
-        // desabilita se não tiver espécie
-        racaSelect.disabled = !especieId;
+        window.addEventListener('load', filtrarRacas);
     }
-
-    especieSelect.addEventListener('change', function () {
-        racaSelect.value = "";
-        filtrarRacas();
-    });
-
-    window.addEventListener('load', filtrarRacas);
 </script>
 @endsection

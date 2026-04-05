@@ -7,9 +7,8 @@ use App\Http\Controllers\AnimalController;
 use App\Http\Controllers\RacaController;
 use App\Http\Controllers\AdocaoController;
 
-
 Route::get('/', function () {
-    return view('welcome');
+    return view('home');
 });
 
 Route::resource('users', UserController::class);

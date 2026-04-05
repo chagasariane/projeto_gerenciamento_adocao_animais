@@ -10,7 +10,9 @@ class RacaController extends Controller
 {
     public function index()
     {
-        $racas = Raca::all();
+        // 🔹 Eager Loading para evitar N+1
+        $racas = Raca::with('especie')->get();
+
         return view('racas.index', compact('racas'));
     }
 
@@ -33,8 +35,9 @@ class RacaController extends Controller
             'especie_id'
         ]));
 
-        return redirect()->route('racas.index')
-                         ->with('success', 'Raça cadastrada com sucesso!');
+        return redirect()
+            ->route('racas.index')
+            ->with('success', 'Raça cadastrada com sucesso!');
     }
 
     public function edit($id)
@@ -60,8 +63,9 @@ class RacaController extends Controller
             'especie_id'
         ]));
 
-        return redirect()->route('racas.index')
-                         ->with('success', 'Raça atualizada com sucesso!');
+        return redirect()
+            ->route('racas.index')
+            ->with('success', 'Raça atualizada com sucesso!');
     }
 
     public function destroy($id)
@@ -69,7 +73,8 @@ class RacaController extends Controller
         $raca = Raca::findOrFail($id);
         $raca->delete();
 
-        return redirect()->route('racas.index')
-                         ->with('success', 'Raça excluída com sucesso!');
+        return redirect()
+            ->route('racas.index')
+            ->with('success', 'Raça excluída com sucesso!');
     }
 }

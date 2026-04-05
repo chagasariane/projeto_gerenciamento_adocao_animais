@@ -11,7 +11,8 @@ class AdocaoController extends Controller
 {
     public function index()
     {
-        $adocoes = Adocao::with(['user', 'animal'])->get();
+        $adocoes = Adocao::with(['user', 'animal'])->latest()->get();
+
         return view('adocoes.index', compact('adocoes'));
     }
 
@@ -19,23 +20,27 @@ class AdocaoController extends Controller
     {
         $users = User::all();
         $animais = Animal::all();
+
         return view('adocoes.create', compact('users', 'animais'));
     }
 
     public function store(Request $request)
     {
+        // Regra de duplicidade
         $existe = Adocao::where('user_id', $request->user_id)
             ->where('animal_id', $request->animal_id)
             ->exists();
 
         if ($existe) {
-            return back()->with('error', 'Este usuário já solicitou adoção deste animal.');
+            return back()
+                ->withErrors(['user_id' => 'Este usuário já solicitou adoção deste animal.'])
+                ->withInput();
         }
 
         $request->validate([
-            'user_id' => 'required',
-            'animal_id' => 'required',
-            'status' => 'required',
+            'user_id' => 'required|exists:users,id',
+            'animal_id' => 'required|exists:animais,id',
+            'status' => 'required|in:PENDENTE,APROVADO,RECUSADO,FINALIZADO',
             'descricao' => 'nullable|string'
         ]);
 
@@ -47,7 +52,9 @@ class AdocaoController extends Controller
             'data_requisicao' => now()
         ]);
 
-        return redirect()->route('adocoes.index');
+        return redirect()
+            ->route('adocoes.index')
+            ->with('success', 'Adoção cadastrada com sucesso!');
     }
 
     public function edit($id)
@@ -63,10 +70,22 @@ class AdocaoController extends Controller
     {
         $adocao = Adocao::findOrFail($id);
 
+        // Regra de duplicidade (exceto o próprio registro)
+        $existe = Adocao::where('user_id', $request->user_id)
+            ->where('animal_id', $request->animal_id)
+            ->where('id', '!=', $id)
+            ->exists();
+
+        if ($existe) {
+            return back()
+                ->withErrors(['user_id' => 'Este usuário já solicitou adoção deste animal.'])
+                ->withInput();
+        }
+
         $request->validate([
-            'user_id' => 'required',
-            'animal_id' => 'required',
-            'status' => 'required',
+            'user_id' => 'required|exists:users,id',
+            'animal_id' => 'required|exists:animais,id',
+            'status' => 'required|in:PENDENTE,APROVADO,RECUSADO,FINALIZADO',
             'descricao' => 'nullable|string'
         ]);
 
@@ -77,7 +96,9 @@ class AdocaoController extends Controller
             'descricao' => $request->descricao
         ]);
 
-        return redirect()->route('adocoes.index');
+        return redirect()
+            ->route('adocoes.index')
+            ->with('success', 'Adoção atualizada com sucesso!');
     }
 
     public function destroy($id)
@@ -85,6 +106,8 @@ class AdocaoController extends Controller
         $adocao = Adocao::findOrFail($id);
         $adocao->delete();
 
-        return redirect()->route('adocoes.index');
+        return redirect()
+            ->route('adocoes.index')
+            ->with('success', 'Adoção excluída com sucesso!');
     }
 }

@@ -2,32 +2,55 @@
 
 @section('content')
 
-<div class="card">
-    <div class="card-header bg-primary text-white">
-        <h4>Nova Espécie</h4>
-    </div>
+<div class="container">
 
-    <div class="card-body">
-        <form action="{{ route('especies.store') }}" method="POST">
-            @csrf
+    <h1 class="mb-4">Cadastrar Espécie</h1>
 
-            <div class="mb-3">
-                <label class="form-label">Nome</label>
-                <input type="text" name="nome" class="form-control">
-            </div>
+    {{-- Erros --}}
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul class="mb-0">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
 
-            <div class="mb-3">
-                <label class="form-label">Descrição</label>
-                <textarea name="descricao" class="form-control"></textarea>
-            </div>
+    <form action="{{ route('especies.store') }}" method="POST">
+        @csrf
 
-            <div class="d-flex justify-content-between">
-                <a href="{{ route('especies.index') }}" class="btn btn-secondary">Voltar</a>
-                <button type="submit" class="btn btn-primary">Salvar</button>
-            </div>
+        <div class="mb-3">
+            <label class="form-label">Nome</label>
+            <input 
+                type="text" 
+                name="nome" 
+                class="form-control"
+                value="{{ old('nome') }}"
+            >
+        </div>
 
-        </form>
-    </div>
+        <div class="mb-3">
+            <label class="form-label">Descrição</label>
+            <textarea 
+                name="descricao" 
+                class="form-control"
+                rows="3"
+            >{{ old('descricao') }}</textarea>
+        </div>
+
+        <div class="d-flex justify-content-between mt-4">
+            <a href="{{ route('especies.index') }}" class="btn btn-secondary">
+                Voltar
+            </a>
+
+            <button type="submit" class="btn btn-primary">
+                Salvar
+            </button>
+        </div>
+
+    </form>
+
 </div>
 
 @endsection

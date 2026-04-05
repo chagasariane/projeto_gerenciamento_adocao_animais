@@ -56,7 +56,7 @@ class UserController extends Controller
         // 4. Criptografar senha
         $data['password'] = bcrypt($data['password']);
 
-        // 5. Criar usuário (CORRIGIDO - apenas uma vez)
+        // 5. Criar usuário
         $user = User::create($data);
 
         // 6. Criar endereço
@@ -70,7 +70,9 @@ class UserController extends Controller
             'user_id' => $user->id
         ]);
 
-        return redirect()->route('users.index');
+        return redirect()
+            ->route('users.index')
+            ->with('success', 'Usuário cadastrado com sucesso!');
     }
 
     public function show(string $id)
@@ -80,13 +82,13 @@ class UserController extends Controller
 
     public function edit(string $id)
     {
-        $user = User::find($id);
+        $user = User::findOrFail($id);
         return view('users.edit', compact('user'));
     }
 
     public function update(Request $request, string $id)
     {
-        $user = User::find($id);
+        $user = User::findOrFail($id);
 
         // 1. Validação básica
         $request->validate([
@@ -153,14 +155,18 @@ class UserController extends Controller
             ]);
         }
 
-        return redirect()->route('users.index');
+        return redirect()
+            ->route('users.index')
+            ->with('success', 'Usuário atualizado com sucesso!');
     }
 
-    public function destroy(string $id)
+    public function destroy($id)
     {
-        $user = User::find($id);
+        $user = User::findOrFail($id);
         $user->delete();
 
-        return redirect()->route('users.index');
+        return redirect()
+            ->route('users.index')
+            ->with('success', 'Usuário excluído com sucesso!');
     }
 }

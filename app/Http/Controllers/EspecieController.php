@@ -33,7 +33,9 @@ class EspecieController extends Controller
             'descricao' => $request->descricao
         ]);
 
-        return redirect()->route('especies.index');
+        return redirect()
+            ->route('especies.index')
+            ->with('success', 'Espécie cadastrada com sucesso!');
     }
 
     // FORMULÁRIO DE EDIÇÃO
@@ -58,7 +60,9 @@ class EspecieController extends Controller
             'descricao' => $request->descricao
         ]);
 
-        return redirect()->route('especies.index');
+        return redirect()
+            ->route('especies.index')
+            ->with('success', 'Espécie atualizada com sucesso!');
     }
 
     // EXCLUIR
@@ -67,6 +71,8 @@ class EspecieController extends Controller
         $especie = Especie::findOrFail($id);
         $especie->delete();
 
-        return redirect()->route('especies.index');
+        return redirect()
+            ->route('especies.index')
+            ->with('success', 'Espécie excluída com sucesso!');
     }
 }

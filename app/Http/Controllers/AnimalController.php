@@ -14,24 +14,24 @@ class AnimalController extends Controller
     {
         $query = Animal::with(['raca', 'user']);
 
-        // Filtro por espécie (via relação)
-        if ($request->especie_id) {
+        // Filtro por espécie
+        if ($request->filled('especie_id')) {
             $query->whereHas('raca', function ($q) use ($request) {
                 $q->where('especie_id', $request->especie_id);
             });
         }
 
         // Filtro por raça
-        if ($request->raca_id) {
+        if ($request->filled('raca_id')) {
             $query->where('raca_id', $request->raca_id);
         }
 
         // Filtro por status
-        if ($request->status) {
+        if ($request->filled('status')) {
             $query->where('status', $request->status);
         }
 
-        $animais = $query->get();
+        $animais = $query->latest()->get();
 
         $especies = Especie::all();
         $racas = Raca::all();
@@ -63,13 +63,14 @@ class AnimalController extends Controller
             'sexo' => $request->sexo,
             'porte' => $request->porte,
             'descricao' => $request->descricao,
-            'status' => $request->status,
+            'status' => $request->status ?? 'disponivel',
             'user_id' => $request->user_id,
             'raca_id' => $request->raca_id
         ]);
 
-        return redirect()->route('animais.index')
-                        ->with('success', 'Animal cadastrado com sucesso!');
+        return redirect()
+            ->route('animais.index')
+            ->with('success', 'Animal cadastrado com sucesso!');
     }
 
     public function edit($id)
@@ -99,13 +100,14 @@ class AnimalController extends Controller
             'sexo' => $request->sexo,
             'porte' => $request->porte,
             'descricao' => $request->descricao,
-            'status' => $request->status,
+            'status' => $request->status ?? 'disponivel',
             'user_id' => $request->user_id,
             'raca_id' => $request->raca_id
         ]);
 
-        return redirect()->route('animais.index')
-                         ->with('success', 'Animal atualizado com sucesso!');
+        return redirect()
+            ->route('animais.index')
+            ->with('success', 'Animal atualizado com sucesso!');
     }
 
     public function destroy($id)
@@ -113,7 +115,8 @@ class AnimalController extends Controller
         $animal = Animal::findOrFail($id);
         $animal->delete();
 
-        return redirect()->route('animais.index')
-                         ->with('success', 'Animal excluído com sucesso!');
+        return redirect()
+            ->route('animais.index')
+            ->with('success', 'Animal excluído com sucesso!');
     }
 }
