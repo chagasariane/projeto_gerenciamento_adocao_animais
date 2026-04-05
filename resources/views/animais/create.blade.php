@@ -24,20 +24,20 @@
 
         <div class="mb-3">
             <label>Nome</label>
-            <input type="text" name="nome" class="form-control" required>
+            <input type="text" name="nome" class="form-control" value="{{ old('nome') }}" required>
         </div>
 
         <div class="mb-3">
             <label>Data de Nascimento</label>
-            <input type="date" name="data_nascimento" class="form-control">
+            <input type="date" name="data_nascimento" class="form-control" value="{{ old('data_nascimento') }}">
         </div>
 
         <div class="mb-3">
             <label>Sexo</label>
             <select name="sexo" class="form-control" required>
                 <option value="">Selecione</option>
-                <option value="MACHO">Macho</option>
-                <option value="FEMEA">Fêmea</option>
+                <option value="MACHO" {{ old('sexo') == 'MACHO' ? 'selected' : '' }}>Macho</option>
+                <option value="FEMEA" {{ old('sexo') == 'FEMEA' ? 'selected' : '' }}>Fêmea</option>
             </select>
         </div>
 
@@ -45,38 +45,51 @@
             <label>Porte</label>
             <select name="porte" class="form-control">
                 <option value="">Selecione</option>
-                <option value="PEQUENO">Pequeno</option>
-                <option value="MEDIO">Médio</option>
-                <option value="GRANDE">Grande</option>
+                <option value="PEQUENO" {{ old('porte') == 'PEQUENO' ? 'selected' : '' }}>Pequeno</option>
+                <option value="MEDIO" {{ old('porte') == 'MEDIO' ? 'selected' : '' }}>Médio</option>
+                <option value="GRANDE" {{ old('porte') == 'GRANDE' ? 'selected' : '' }}>Grande</option>
             </select>
         </div>
 
         <div class="mb-3">
             <label>Status</label>
             <select name="status" class="form-control">
-                <option value="DISPONIVEL">Disponível</option>
-                <option value="EM_PROCESSO">Em processo</option>
-                <option value="ADOTADO">Adotado</option>
+                <option value="DISPONIVEL" {{ old('status') == 'DISPONIVEL' ? 'selected' : '' }}>Disponível</option>
+                <option value="EM_PROCESSO" {{ old('status') == 'EM_PROCESSO' ? 'selected' : '' }}>Em processo</option>
+                <option value="ADOTADO" {{ old('status') == 'ADOTADO' ? 'selected' : '' }}>Adotado</option>
             </select>
         </div>
 
-        <!-- ESPÉCIE -->
+        {{-- PROTETOR --}}
+        <div class="mb-3">
+            <label class="form-label">Protetor</label>
+            <select name="user_id" class="form-control" required>
+                <option value="">Selecione</option>
+                @foreach($protetores as $user)
+                    <option value="{{ $user->id }}" {{ old('user_id') == $user->id ? 'selected' : '' }}>
+                        {{ $user->name }}
+                    </option>
+                @endforeach
+            </select>
+        </div>
+
+        {{-- ESPÉCIE --}}
         <div class="mb-3">
             <label>Espécie</label>
-            <select id="especie" class="form-control">
+            <select id="especie" name="especie_id" class="form-control" required>
                 <option value="">Selecione</option>
                 @foreach($especies as $especie)
-                    <option value="{{ $especie->id }}">
+                    <option value="{{ $especie->id }}" {{ old('especie_id') == $especie->id ? 'selected' : '' }}>
                         {{ $especie->nome }}
                     </option>
                 @endforeach
             </select>
         </div>
 
-        <!-- RAÇA -->
+        {{-- RAÇA --}}
         <div class="mb-3">
             <label>Raça</label>
-            <select id="raca" name="raca_id" class="form-control" disabled required>
+            <select id="raca" name="raca_id" class="form-control" required disabled>
                 <option value="">Selecione a espécie primeiro</option>
                 @foreach($racas as $raca)
                     <option value="{{ $raca->id }}" data-especie="{{ $raca->especie_id }}">
@@ -88,10 +101,10 @@
 
         <div class="mb-3">
             <label>Descrição</label>
-            <textarea name="descricao" class="form-control"></textarea>
+            <textarea name="descricao" class="form-control">{{ old('descricao') }}</textarea>
         </div>
 
-        <button type="submit" class="btn btn-success">
+        <button type="submit" class="btn btn-success" id="btnSalvar">
             Salvar
         </button>
     </form>
@@ -103,26 +116,31 @@
 <script>
     const especieSelect = document.getElementById('especie');
     const racaSelect = document.getElementById('raca');
+    const form = document.querySelector('form');
+    const btn = document.getElementById('btnSalvar');
 
     especieSelect.addEventListener('change', function () {
         const especieId = this.value;
 
-        // Reset
         racaSelect.value = "";
         racaSelect.disabled = true;
 
-        // Filtrar opções
         Array.from(racaSelect.options).forEach(option => {
             if (!option.value) return;
 
             const pertence = option.getAttribute('data-especie') === especieId;
-
-            option.style.display = pertence ? 'block' : 'none';
+            option.hidden = !pertence;
         });
 
         if (especieId) {
             racaSelect.disabled = false;
         }
+    });
+
+    // Evita duplo submit
+    form.addEventListener('submit', function () {
+        btn.disabled = true;
+        btn.innerText = 'Salvando...';
     });
 </script>
 @endsection

@@ -3,87 +3,164 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Endereco;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        $users = User::all(); // retorna todos os registros da tabela
-        return view('users.index', compact('users')); // Retorna a view 'users.index' passando os usuários para a view
+        $users = User::all();
+        return view('users.index', compact('users'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        return view('users.create'); // Retorna a view 'users.create' para exibir o formulário de criação de usuário    
+        return view('users.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
-    {   
+    {
+        // 1. Validação básica
         $request->validate([
             'name' => 'required',
-            'email' => 'required',
+            'email' => 'required|email|unique:users,email',
             'password' => 'required',
+            'role' => 'required|in:ADOTANTE,PROTETOR',
         ]);
-        $data = $request->all(); // Obtém todos os dados do formulário
-        $data['password'] = bcrypt($data['password']); // Criptografa a senha antes de salvar
-        User::create($data); // Cria um novo usuário com os dados fornecidos
-        return redirect()->route('users.index'); // Redireciona para a lista de usuários    
+
+        $data = $request->all();
+
+        // 2. Normalizar CPF e CNPJ
+        $data['cpf'] = $request->cpf ?: null;
+        $data['cnpj'] = $request->cnpj ?: null;
+
+        // 3. Regra de negócio
+        if ($data['role'] === 'ADOTANTE') {
+            if (empty($data['cpf'])) {
+                return back()
+                    ->withErrors(['cpf' => 'CPF é obrigatório para adotantes'])
+                    ->withInput();
+            }
+            $data['cnpj'] = null;
+        }
+
+        if ($data['role'] === 'PROTETOR') {
+            if (empty($data['cpf']) && empty($data['cnpj'])) {
+                return back()
+                    ->withErrors(['cpf' => 'Informe CPF ou CNPJ para protetor'])
+                    ->withInput();
+            }
+        }
+
+        // 4. Criptografar senha
+        $data['password'] = bcrypt($data['password']);
+
+        // 5. Criar usuário (CORRIGIDO - apenas uma vez)
+        $user = User::create($data);
+
+        // 6. Criar endereço
+        Endereco::create([
+            'logradouro' => $request->logradouro,
+            'numero' => $request->numero,
+            'complemento' => $request->complemento,
+            'cidade' => $request->cidade,
+            'estado' => $request->estado,
+            'cep' => $request->cep,
+            'user_id' => $user->id
+        ]);
+
+        return redirect()->route('users.index');
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(string $id)
     {
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(string $id)
     {
-        $user = User::find($id); // Encontra o usuário pelo ID
-        return view('users.edit', compact('user')); // Retorna a view 'users.edit' passando o usuário para a view
+        $user = User::find($id);
+        return view('users.edit', compact('user'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, string $id)
-    {   
+    {
+        $user = User::find($id);
+
+        // 1. Validação básica
         $request->validate([
             'name' => 'required',
-            'email' => 'required',
+            'email' => 'required|email|unique:users,email,' . $id,
+            'role' => 'required|in:ADOTANTE,PROTETOR',
         ]);
-        $user = User::find($id); // Encontra o usuário pelo ID
-        $data = $request->all(); // Obtém todos os dados do formulário
-        if (isset($data['password']) && $data['password'] != '') {
-            $data['password'] = bcrypt($data['password']); // Criptografa a senha se ela for fornecida
-        } else {
-            unset($data['password']); // Remove a senha do array de dados para não atualizar se não for fornecida
+
+        $data = $request->all();
+
+        // 2. Normalizar CPF e CNPJ
+        $data['cpf'] = $request->cpf ?: null;
+        $data['cnpj'] = $request->cnpj ?: null;
+
+        // 3. Regra de negócio
+        if ($data['role'] === 'ADOTANTE') {
+            if (empty($data['cpf'])) {
+                return back()
+                    ->withErrors(['cpf' => 'CPF é obrigatório para adotantes'])
+                    ->withInput();
+            }
+            $data['cnpj'] = null;
         }
-        $user->update($data); // Atualiza o usuário com os novos dados
-        return redirect()->route('users.index'); // Redireciona para a lista de usuários
+
+        if ($data['role'] === 'PROTETOR') {
+            if (empty($data['cpf']) && empty($data['cnpj'])) {
+                return back()
+                    ->withErrors(['cpf' => 'Informe CPF ou CNPJ para protetor'])
+                    ->withInput();
+            }
+        }
+
+        // 4. Atualizar senha (se preenchida)
+        if (!empty($data['password'])) {
+            $data['password'] = bcrypt($data['password']);
+        } else {
+            unset($data['password']);
+        }
+
+        // 5. Atualizar usuário
+        $user->update($data);
+
+        // 6. Atualizar ou criar endereço
+        $endereco = $user->endereco;
+
+        if ($endereco) {
+            $endereco->update([
+                'logradouro' => $request->logradouro,
+                'numero' => $request->numero,
+                'complemento' => $request->complemento,
+                'cidade' => $request->cidade,
+                'estado' => $request->estado,
+                'cep' => $request->cep,
+            ]);
+        } else {
+            Endereco::create([
+                'logradouro' => $request->logradouro,
+                'numero' => $request->numero,
+                'complemento' => $request->complemento,
+                'cidade' => $request->cidade,
+                'estado' => $request->estado,
+                'cep' => $request->cep,
+                'user_id' => $user->id
+            ]);
+        }
+
+        return redirect()->route('users.index');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(string $id)
     {
-        $user = User::find($id); // Encontra o usuário pelo ID
-        $user->delete(); // Exclui o usuário
-        return redirect()->route('users.index'); // Redireciona para a lista de usuários
+        $user = User::find($id);
+        $user->delete();
+
+        return redirect()->route('users.index');
     }
 }

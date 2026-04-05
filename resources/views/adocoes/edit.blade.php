@@ -42,6 +42,10 @@
                     <option value="RECUSADA" {{ $adocao->status == 'RECUSADA' ? 'selected' : '' }}>Recusada</option>
                 </select>
             </div>
+            <div class="mb-3">
+                <label class="form-label">Descrição</label>
+                <textarea name="descricao" class="form-control" rows="3">{{ $adocao->descricao }}</textarea>
+            </div>
 
             <button class="btn btn-warning">Atualizar</button>
         </form>

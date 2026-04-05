@@ -25,19 +25,27 @@ class AdocaoController extends Controller
     public function store(Request $request)
     {
         $existe = Adocao::where('user_id', $request->user_id)
-    ->where('animal_id', $request->animal_id)
-    ->exists();
+            ->where('animal_id', $request->animal_id)
+            ->exists();
 
-if ($existe) {
-    return back()->with('error', 'Este usuário já solicitou adoção deste animal.');
-}
+        if ($existe) {
+            return back()->with('error', 'Este usuário já solicitou adoção deste animal.');
+        }
+
         $request->validate([
             'user_id' => 'required',
             'animal_id' => 'required',
             'status' => 'required',
+            'descricao' => 'nullable|string'
         ]);
 
-        Adocao::create($request->all());
+        Adocao::create([
+            'user_id' => $request->user_id,
+            'animal_id' => $request->animal_id,
+            'status' => $request->status,
+            'descricao' => $request->descricao,
+            'data_requisicao' => now()
+        ]);
 
         return redirect()->route('adocoes.index');
     }
@@ -55,7 +63,19 @@ if ($existe) {
     {
         $adocao = Adocao::findOrFail($id);
 
-        $adocao->update($request->all());
+        $request->validate([
+            'user_id' => 'required',
+            'animal_id' => 'required',
+            'status' => 'required',
+            'descricao' => 'nullable|string'
+        ]);
+
+        $adocao->update([
+            'user_id' => $request->user_id,
+            'animal_id' => $request->animal_id,
+            'status' => $request->status,
+            'descricao' => $request->descricao
+        ]);
 
         return redirect()->route('adocoes.index');
     }

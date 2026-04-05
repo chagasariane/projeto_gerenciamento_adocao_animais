@@ -6,12 +6,13 @@ use Illuminate\Http\Request;
 use App\Models\Animal;
 use App\Models\Raca;
 use App\Models\Especie;
+use App\Models\User;
 
 class AnimalController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Animal::query();
+        $query = Animal::with(['raca', 'user']);
 
         // Filtro por espécie (via relação)
         if ($request->especie_id) {
@@ -32,8 +33,8 @@ class AnimalController extends Controller
 
         $animais = $query->get();
 
-        $especies = \App\Models\Especie::all();
-        $racas = \App\Models\Raca::all();
+        $especies = Especie::all();
+        $racas = Raca::all();
 
         return view('animais.index', compact('animais', 'especies', 'racas'));
     }
@@ -42,8 +43,9 @@ class AnimalController extends Controller
     {
         $especies = Especie::all();
         $racas = Raca::all();
+        $protetores = User::where('role', 'PROTETOR')->get();
 
-        return view('animais.create', compact('especies', 'racas'));
+        return view('animais.create', compact('especies', 'racas', 'protetores'));
     }
 
     public function store(Request $request)
@@ -51,7 +53,8 @@ class AnimalController extends Controller
         $request->validate([
             'nome' => 'required|max:255',
             'sexo' => 'required',
-            'raca_id' => 'required|exists:racas,id'
+            'raca_id' => 'required|exists:racas,id',
+            'user_id' => 'required|exists:users,id'
         ]);
 
         Animal::create([
@@ -61,7 +64,7 @@ class AnimalController extends Controller
             'porte' => $request->porte,
             'descricao' => $request->descricao,
             'status' => $request->status,
-            'user_id' => 2,
+            'user_id' => $request->user_id,
             'raca_id' => $request->raca_id
         ]);
 
@@ -74,8 +77,9 @@ class AnimalController extends Controller
         $animal = Animal::findOrFail($id);
         $especies = Especie::all();
         $racas = Raca::all();
+        $protetores = User::where('role', 'PROTETOR')->get();
 
-        return view('animais.edit', compact('animal', 'especies', 'racas'));
+        return view('animais.edit', compact('animal', 'especies', 'racas', 'protetores'));
     }
 
     public function update(Request $request, $id)
@@ -85,7 +89,8 @@ class AnimalController extends Controller
         $request->validate([
             'nome' => 'required|max:255',
             'sexo' => 'required',
-            'raca_id' => 'required|exists:racas,id'
+            'raca_id' => 'required|exists:racas,id',
+            'user_id' => 'required|exists:users,id'
         ]);
 
         $animal->update([
@@ -95,6 +100,7 @@ class AnimalController extends Controller
             'porte' => $request->porte,
             'descricao' => $request->descricao,
             'status' => $request->status,
+            'user_id' => $request->user_id,
             'raca_id' => $request->raca_id
         ]);
 

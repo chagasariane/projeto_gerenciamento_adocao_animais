@@ -37,6 +37,10 @@
                     <option value="RECUSADA">Recusada</option>
                 </select>
             </div>
+            <div class="mb-3">
+                <label class="form-label">Descrição</label>
+                <textarea name="descricao" class="form-control" rows="3">{{ old('descricao') }}</textarea>
+            </div>
 
             <button class="btn btn-primary">Salvar</button>
         </form>
