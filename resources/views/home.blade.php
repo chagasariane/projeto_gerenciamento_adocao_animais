@@ -2,104 +2,281 @@
 
 @section('content')
 
-<div class="container">
+{{-- HERO --}}
+<section class="hero-section">
 
-    {{-- HERO SECTION --}}
-    <div class="row align-items-center mb-5">
+    <div class="container">
 
-        <div class="col-md-6">
-            <h1 class="fw-bold mb-3">
-                Encontre um novo amigo e transforme vidas 
-            </h1>
+        <div class="row align-items-center">
 
-            <p class="text-muted mb-4">
-                O MiauDot conecta você a animais que precisam de um lar.
-                Adote com responsabilidade e transforme uma vida, inclusive a sua.
-            </p>
+            <div class="col-lg-6">
 
-            <a href="{{ route('animais.index') }}" class="btn btn-primary">
-                Ver animais disponíveis
-            </a>
-        </div>
+                <h1 class="hero-title">
 
-        <div class="col-md-6 text-center">
-            <img src="{{ asset('imagem/home2.png') }}"
-                 class="img-fluid rounded shadow"
-                 style="max-height: 350px;">
+                    Encontre um companheiro,
+                    mude uma vida.
+
+                </h1>
+
+                <p class="hero-description">
+
+                    Nossa plataforma conecta adotantes responsáveis
+                    com animais que precisam de um novo lar seguro,
+                    acolhedor e cheio de carinho.
+
+                </p>
+
+                <a href="{{ route('animais.index') }}"
+                   class="btn hero-btn">
+
+                    Ver animais disponíveis
+
+                </a>
+
+            </div>
+
+            <div class="col-lg-6 text-center">
+
+                <img src="{{ asset('imagem/home2.png') }}"
+                     class="img-fluid hero-image"
+                     alt="Animal">
+
+            </div>
+
         </div>
 
     </div>
 
-    {{-- FILTRO SIMPLES (visual apenas) --}}
-    <div class="card mb-5">
-        <div class="card-body">
+</section>
+
+{{-- FILTROS --}}
+<section class="filter-section">
+
+    <div class="container">
+
+        <div class="filter-box">
+
             <div class="row g-3">
 
                 <div class="col-md-3">
-                    <select class="form-control">
-                        <option>Espécie</option>
+
+                    <select class="form-select custom-select">
+
+                        <option>Todas as espécies</option>
+
                     </select>
+
                 </div>
 
                 <div class="col-md-3">
-                    <select class="form-control">
-                        <option>Porte</option>
+
+                    <select class="form-select custom-select">
+
+                        <option>Qualquer porte</option>
+
                     </select>
+
                 </div>
 
                 <div class="col-md-3">
-                    <select class="form-control">
-                        <option>Idade</option>
+
+                    <select class="form-select custom-select">
+
+                        <option>Qualquer idade</option>
+
                     </select>
+
                 </div>
 
                 <div class="col-md-3">
-                    <input type="text" class="form-control" placeholder="Buscar...">
+
+                    <input type="text"
+                           class="form-control custom-input"
+                           placeholder="Buscar animal...">
+
                 </div>
 
             </div>
+
         </div>
+
     </div>
 
-    {{-- LISTA DE ANIMAIS (ESTÁTICA POR ENQUANTO) --}}
-    <h4 class="mb-4">Animais disponíveis</h4>
+</section>
 
-    <div class="row">
+{{-- SOBRE --}}
+<section class="about-section">
 
-        @for ($i = 0; $i < 6; $i++)
-        <div class="col-md-4 mb-4">
-            <div class="card shadow-sm h-100">
+    <div class="container text-center">
 
-                <img src="https://placedog.net/400/300"
-                     class="card-img-top"
-                     alt="Animal">
+        <h2 class="section-title">
 
-                <div class="card-body">
+            A adoção responsável começa
+            com a conexão certa
 
-                    <h5 class="card-title">Nome do Animal</h5>
+        </h2>
 
-                    <p class="text-muted mb-2">
-                        Raça • 2 anos
+        <p class="section-description">
+
+            Adotar um animal é um compromisso de longo prazo.
+            Nossa plataforma ajuda adotantes e protetores
+            a criarem conexões mais seguras e transparentes.
+
+        </p>
+
+        <div class="row mt-5">
+
+            <div class="col-md-4 mb-4">
+
+                <div class="info-card">
+
+                    <div class="info-icon">
+                        🛡️
+                    </div>
+
+                    <h4>
+                        Perfis Verificados
+                    </h4>
+
+                    <p>
+                        Informações mais seguras para aumentar
+                        a confiança no processo de adoção.
                     </p>
 
-                    <p class="small">
-                        Animal dócil, saudável e pronto para adoção.
-                    </p>
-
-                </div>
-
-                <div class="card-footer text-center">
-                    <a href="#" class="btn btn-outline-primary btn-sm">
-                        Ver detalhes
-                    </a>
                 </div>
 
             </div>
+
+            <div class="col-md-4 mb-4">
+
+                <div class="info-card">
+
+                    <div class="info-icon">
+                        ❤️
+                    </div>
+
+                    <h4>
+                        Adoção Responsável
+                    </h4>
+
+                    <p>
+                        Incentivamos adoções conscientes e
+                        alinhadas ao perfil do adotante.
+                    </p>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-4 mb-4">
+
+                <div class="info-card">
+
+                    <div class="info-icon">
+                        👥
+                    </div>
+
+                    <h4>
+                        Apoio da Comunidade
+                    </h4>
+
+                    <p>
+                        Aproximamos ONGs, protetores
+                        independentes e adotantes.
+                    </p>
+
+                </div>
+
+            </div>
+
         </div>
-        @endfor
 
     </div>
 
-</div>
+</section>
+
+{{-- ANIMAIS --}}
+<section class="animals-section">
+
+    <div class="container">
+
+        <div class="d-flex justify-content-between align-items-center mb-4">
+
+            <h2 class="section-title mb-0">
+
+                Animais disponíveis
+
+            </h2>
+
+            <span class="animals-count">
+
+                8 animais encontrados
+
+            </span>
+
+        </div>
+
+        <div class="row">
+
+            @for ($i = 0; $i < 4; $i++)
+
+            <div class="col-lg-3 col-md-6 mb-4">
+
+                <div class="animal-card">
+
+                    <img src="https://placedog.net/500/400"
+                         class="animal-image"
+                         alt="Animal">
+
+                    <div class="animal-body">
+
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+
+                            <h4 class="animal-name">
+
+                                Thor
+
+                            </h4>
+
+                            <span class="animal-tag">
+
+                                Cachorro
+
+                            </span>
+
+                        </div>
+
+                        <p class="animal-location">
+
+                            📍 Presidente Prudente - SP · 2 anos
+
+                        </p>
+
+                        <p class="animal-breed">
+
+                            Labrador · Grande
+
+                        </p>
+
+                        <a href="#"
+                           class="btn animal-btn">
+
+                            Ver detalhes
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            @endfor
+
+        </div>
+
+    </div>
+
+</section>
 
 @endsection
