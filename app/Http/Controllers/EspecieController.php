@@ -8,9 +8,20 @@ use App\Models\Especie;
 class EspecieController extends Controller
 {
     // LISTAR
-    public function index()
+    public function index(Request $request)
     {
-        $especies = Especie::all();
+        $query = Especie::query();
+
+        if ($request->filled('nome')) {
+
+            $query->where('nome', 'like', '%' . $request->nome . '%');
+
+        }
+
+        $especies = $query
+            ->orderBy('nome')
+            ->get();
+
         return view('especies.index', compact('especies'));
     }
 
