@@ -41,8 +41,10 @@
             <div class="col-md-6 mb-3">
                 <label class="form-label">Tipo</label>
                 <select name="role" id="role" class="form-control">
+                    <option value="ADMIN" {{ old('role') == 'ADMIN' ? 'selected' : '' }}>Administrador </option>
                     <option value="ADOTANTE" {{ old('role') == 'ADOTANTE' ? 'selected' : '' }}>Adotante</option>
                     <option value="PROTETOR" {{ old('role') == 'PROTETOR' ? 'selected' : '' }}>Protetor</option>
+                    
                 </select>
             </div>
         </div>

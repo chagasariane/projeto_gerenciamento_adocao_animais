@@ -26,7 +26,7 @@ class UserController extends Controller
             'name' => 'required',
             'email' => 'required|email|unique:users,email',
             'password' => 'required',
-            'role' => 'required|in:ADOTANTE,PROTETOR',
+            'role' => 'required|in:ADMIN,ADOTANTE,PROTETOR',
         ]);
 
         $data = $request->all();
@@ -51,6 +51,11 @@ class UserController extends Controller
                     ->withErrors(['cpf' => 'Informe CPF ou CNPJ para protetor'])
                     ->withInput();
             }
+        }
+
+        if ($data['role'] === 'ADMIN') {
+            $data['cpf'] = null;
+        $data['cnpj'] = null;
         }
 
         // 4. Criptografar senha
@@ -94,7 +99,7 @@ class UserController extends Controller
         $request->validate([
             'name' => 'required',
             'email' => 'required|email|unique:users,email,' . $id,
-            'role' => 'required|in:ADOTANTE,PROTETOR',
+            'role' => 'required|in:ADMIN,ADOTANTE,PROTETOR',
         ]);
 
         $data = $request->all();
@@ -119,6 +124,11 @@ class UserController extends Controller
                     ->withErrors(['cpf' => 'Informe CPF ou CNPJ para protetor'])
                     ->withInput();
             }
+        }
+
+        if ($data['role'] === 'ADMIN') {
+            $data['cpf'] = null;
+            $data['cnpj'] = null;
         }
 
         // 4. Atualizar senha (se preenchida)
