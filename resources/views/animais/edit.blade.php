@@ -2,37 +2,33 @@
 
 @section('content')
 
-<section class="form-page">
+<section class="animal-show-page">
 
     <div class="container">
 
         {{-- HEADER --}}
-        <div class="page-header mb-5">
+        <div class="mb-5">
 
-            <div>
+            <h1 class="section-title mb-3">
+                Editar Animal
+            </h1>
 
-                <h1 class="page-title">
-                    Editar Animal
-                </h1>
-
-                <p class="page-description">
-                    Atualize as informações do animal cadastrado.
-                </p>
-
-            </div>
+            <p class="section-description m-0">
+                Atualize as informações e mantenha o perfil do animal sempre atualizado.
+            </p>
 
         </div>
 
         {{-- ERROS --}}
         @if ($errors->any())
 
-            <div class="custom-alert error-alert">
+            <div class="alert alert-danger border-0 shadow-sm rounded-4 mb-5">
 
-                <strong>
-                    Foram encontrados erros:
+                <strong class="d-block mb-2">
+                    Foram encontrados erros no formulário:
                 </strong>
 
-                <ul class="mb-0 mt-2">
+                <ul class="mb-0 ps-3">
 
                     @foreach ($errors->all() as $erro)
 
@@ -47,28 +43,28 @@
         @endif
 
         {{-- FORM CARD --}}
-        <div class="form-card">
+        <div class="filter-box">
 
+            {{-- FORM PRINCIPAL --}}
             <form action="{{ route('animais.update', $animal->id) }}"
                   method="POST">
 
                 @csrf
                 @method('PUT')
 
-                {{-- DADOS BÁSICOS --}}
-                <div class="form-section">
+                {{-- INFORMAÇÕES BÁSICAS --}}
+                <div class="mb-5">
 
-                    <h3 class="form-section-title">
-
+                    <h3 class="animal-section-title">
                         Informações Básicas
-
                     </h3>
 
-                    <div class="row">
+                    <div class="row g-4">
 
-                        <div class="col-md-6 mb-4">
+                        {{-- NOME --}}
+                        <div class="col-lg-6">
 
-                            <label class="custom-label">
+                            <label class="form-label fw-semibold mb-2">
                                 Nome
                             </label>
 
@@ -76,20 +72,37 @@
                                    name="nome"
                                    class="form-control custom-input"
                                    value="{{ old('nome', $animal->nome) }}"
+                                   placeholder="Digite o nome do animal"
                                    required>
 
                         </div>
 
-                        <div class="col-md-6 mb-4">
+                        {{-- DATA --}}
+                        <div class="col-lg-6">
 
-                            <label class="custom-label">
-                                Data de Nascimento
+                            <label class="form-label fw-semibold mb-2">
+                                Data de Nascimento Aproximada
                             </label>
 
                             <input type="date"
                                    name="data_nascimento"
                                    class="form-control custom-input"
-                                   value="{{ old('data_nascimento', $animal->data_nascimento) }}">
+                                   value="{{ old('data_nascimento', optional($animal->data_nascimento)->format('Y-m-d')) }}">
+
+                        </div>
+
+                        {{-- DESCRIÇÃO --}}
+                        <div class="col-12">
+
+                            <label class="form-label fw-semibold mb-2">
+                                Descrição
+                            </label>
+
+                            <textarea name="descricao"
+                                      rows="5"
+                                      class="form-control custom-input"
+                                      placeholder="Descreva comportamento, personalidade e informações importantes do animal."
+                                      required>{{ old('descricao', $animal->descricao) }}</textarea>
 
                         </div>
 
@@ -98,19 +111,18 @@
                 </div>
 
                 {{-- CARACTERÍSTICAS --}}
-                <div class="form-section">
+                <div class="mb-5">
 
-                    <h3 class="form-section-title">
-
+                    <h3 class="animal-section-title">
                         Características
-
                     </h3>
 
-                    <div class="row">
+                    <div class="row g-4">
 
-                        <div class="col-md-4 mb-4">
+                        {{-- SEXO --}}
+                        <div class="col-lg-3">
 
-                            <label class="custom-label">
+                            <label class="form-label fw-semibold mb-2">
                                 Sexo
                             </label>
 
@@ -136,22 +148,26 @@
 
                                 </option>
 
+                                <option value="NAO_IDENTIFICADO"
+                                    {{ old('sexo', $animal->sexo) == 'NAO_IDENTIFICADO' ? 'selected' : '' }}>
+
+                                    Não Identificado
+
+                                </option>
+
                             </select>
 
                         </div>
 
-                        <div class="col-md-4 mb-4">
+                        {{-- PORTE --}}
+                        <div class="col-lg-3">
 
-                            <label class="custom-label">
+                            <label class="form-label fw-semibold mb-2">
                                 Porte
                             </label>
 
                             <select name="porte"
                                     class="form-select custom-select">
-
-                                <option value="">
-                                    Selecione
-                                </option>
 
                                 <option value="PEQUENO"
                                     {{ old('porte', $animal->porte) == 'PEQUENO' ? 'selected' : '' }}>
@@ -178,9 +194,10 @@
 
                         </div>
 
-                        <div class="col-md-4 mb-4">
+                        {{-- STATUS --}}
+                        <div class="col-lg-3">
 
-                            <label class="custom-label">
+                            <label class="form-label fw-semibold mb-2">
                                 Status
                             </label>
 
@@ -194,13 +211,6 @@
 
                                 </option>
 
-                                <option value="EM_PROCESSO"
-                                    {{ old('status', $animal->status) == 'EM_PROCESSO' ? 'selected' : '' }}>
-
-                                    Em processo
-
-                                </option>
-
                                 <option value="ADOTADO"
                                     {{ old('status', $animal->status) == 'ADOTADO' ? 'selected' : '' }}>
 
@@ -208,33 +218,28 @@
 
                                 </option>
 
+                                <option value="INATIVO"
+                                    {{ old('status', $animal->status) == 'INATIVO' ? 'selected' : '' }}>
+
+                                    Inativo
+
+                                </option>
+
                             </select>
 
                         </div>
 
-                    </div>
+                        {{-- ESPÉCIE --}}
+                        <div class="col-lg-3">
 
-                </div>
-
-                {{-- RELACIONAMENTOS --}}
-                <div class="form-section">
-
-                    <h3 class="form-section-title">
-
-                        Relacionamentos
-
-                    </h3>
-
-                    <div class="row">
-
-                        <div class="col-md-6 mb-4">
-
-                            <label class="custom-label">
+                            <label class="form-label fw-semibold mb-2">
                                 Espécie
                             </label>
 
                             <select id="especie"
-                                    class="form-select custom-select">
+                                    name="especie_id"
+                                    class="form-select custom-select"
+                                    required>
 
                                 <option value="">
                                     Selecione
@@ -245,7 +250,7 @@
                                     <option value="{{ $especie->id }}"
                                         {{ old('especie_id', optional($animal->raca)->especie_id) == $especie->id ? 'selected' : '' }}>
 
-                                        {{ $especie->nome }}
+                                        {{ ucfirst(strtolower($especie->nome)) }}
 
                                     </option>
 
@@ -255,9 +260,10 @@
 
                         </div>
 
-                        <div class="col-md-6 mb-4">
+                        {{-- RAÇA --}}
+                        <div class="col-lg-6">
 
-                            <label class="custom-label">
+                            <label class="form-label fw-semibold mb-2">
                                 Raça
                             </label>
 
@@ -272,7 +278,7 @@
                                             data-especie="{{ $raca->especie_id }}"
                                         {{ old('raca_id', $animal->raca_id) == $raca->id ? 'selected' : '' }}>
 
-                                        {{ $raca->nome }}
+                                        {{ ucfirst(strtolower($raca->nome)) }}
 
                                     </option>
 
@@ -282,42 +288,129 @@
 
                         </div>
 
+                        {{-- CIDADE --}}
+                        <div class="col-lg-3">
+
+                            <label class="form-label fw-semibold mb-2">
+                                Cidade
+                            </label>
+
+                            <input type="text"
+                                   name="cidade"
+                                   class="form-control custom-input"
+                                   value="{{ old('cidade', $animal->cidade) }}"
+                                   placeholder="Digite a cidade"
+                                   required>
+
+                        </div>
+
+                        {{-- ESTADO --}}
+                        <div class="col-lg-3">
+
+                            <label class="form-label fw-semibold mb-2">
+                                Estado
+                            </label>
+
+                            <input type="text"
+                                   name="estado"
+                                   class="form-control custom-input"
+                                   value="{{ old('estado', $animal->estado) }}"
+                                   placeholder="UF do estado"
+                                   required>
+
+                        </div>
+
                     </div>
 
                 </div>
 
-                {{-- DESCRIÇÃO --}}
-                <div class="form-section">
+                {{-- SAÚDE --}}
+                <div class="mb-5">
 
-                    <h3 class="form-section-title">
-
-                        Descrição
-
+                    <h3 class="animal-section-title">
+                        Saúde e Cuidados
                     </h3>
 
-                    <div class="mb-4">
+                    <div class="row g-4 mb-4">
 
-                        <textarea name="descricao"
+                        {{-- CASTRADO --}}
+                        <div class="col-lg-6">
+
+                            <div class="animal-info-item h-100 justify-content-center">
+
+                                <div class="form-check">
+
+                                    <input type="checkbox"
+                                           name="castrado"
+                                           class="form-check-input"
+                                           {{ old('castrado', $animal->castrado) ? 'checked' : '' }}>
+
+                                    <label class="form-check-label fw-semibold">
+
+                                        Animal castrado
+
+                                    </label>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        {{-- VACINADO --}}
+                        <div class="col-lg-6">
+
+                            <div class="animal-info-item h-100 justify-content-center">
+
+                                <div class="form-check">
+
+                                    <input type="checkbox"
+                                           name="vacinado"
+                                           class="form-check-input"
+                                           {{ old('vacinado', $animal->vacinado) ? 'checked' : '' }}>
+
+                                    <label class="form-check-label fw-semibold">
+
+                                        Animal vacinado
+
+                                    </label>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    {{-- NECESSIDADES --}}
+                    <div>
+
+                        <label class="form-label fw-semibold mb-2">
+                            Necessidades Especiais
+                        </label>
+
+                        <textarea name="necessidades_especiais"
                                   rows="5"
-                                  class="form-control custom-textarea"
-                                  placeholder="Descreva comportamento, histórico, temperamento e observações importantes...">{{ old('descricao', $animal->descricao) }}</textarea>
+                                  class="form-control custom-input"
+                                  placeholder="Informe medicações, cuidados especiais ou observações relevantes.">{{ old('necessidades_especiais', $animal->necessidades_especiais) }}</textarea>
 
                     </div>
 
                 </div>
 
-                {{-- ACTIONS --}}
-                <div class="form-actions">
+                {{-- BOTÕES --}}
+                <div class="d-flex flex-column flex-md-row justify-content-end gap-3">
 
                     <a href="{{ route('animais.index') }}"
-                       class="btn back-btn">
+                       class="back-btn text-decoration-none text-center">
 
-                        Voltar
+                        Cancelar
 
                     </a>
 
                     <button type="submit"
-                            class="btn save-btn">
+                            class="save-btn">
 
                         Atualizar Animal
 
@@ -326,6 +419,124 @@
                 </div>
 
             </form>
+
+        </div>
+
+        {{-- FOTOS --}}
+        <div class="filter-box mt-5">
+
+            <div class="mb-4">
+
+                <h3 class="animal-section-title mb-2">
+                    Fotos do Animal
+                </h3>
+
+                <p class="text-muted mb-0">
+
+                    A primeira imagem enviada será definida automaticamente como foto principal.
+
+                </p>
+
+            </div>
+
+            {{-- UPLOAD --}}
+            <form action="{{ route('animais.fotos.store', $animal->id) }}"
+                  method="POST"
+                  enctype="multipart/form-data"
+                  class="mb-5">
+
+                @csrf
+
+                <div class="mb-4">
+
+                    <input type="file"
+                           name="fotos[]"
+                           multiple
+                           class="form-control custom-input"
+                           accept="image/*"
+                           required>
+
+                </div>
+
+                <button type="submit"
+                        class="save-btn">
+
+                    Enviar Fotos
+
+                </button>
+
+            </form>
+
+            {{-- GALERIA --}}
+            @if($animal->fotos->count())
+
+                <div class="row g-4">
+
+                    @foreach($animal->fotos as $foto)
+
+                        <div class="col-xl-3 col-md-4 col-sm-6">
+
+                            <div class="animal-card h-100">
+
+                                <img src="{{ asset('storage/' . $foto->caminho) }}"
+                                     class="animal-image"
+                                     alt="Foto do animal">
+
+                                <div class="animal-body">
+
+                                    @if($foto->principal)
+
+                                        <span class="animal-tag d-inline-block mb-3">
+
+                                            Foto Principal
+
+                                        </span>
+
+                                    @endif
+
+                                    <form action="{{ route('animais.fotos.destroy', $foto->id) }}"
+                                          method="POST">
+
+                                        @csrf
+                                        @method('DELETE')
+
+                                        <button type="submit"
+                                                class="delete-btn w-100"
+                                                onclick="return confirm('Deseja remover esta foto?')">
+
+                                            Remover Foto
+
+                                        </button>
+
+                                    </form>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    @endforeach
+
+                </div>
+
+            @else
+
+                <div class="animal-info-item text-center py-5">
+
+                    <h5 class="fw-bold mb-2">
+                        Nenhuma foto cadastrada
+                    </h5>
+
+                    <p class="text-muted mb-0">
+
+                        Adicione imagens para aumentar as chances de adoção.
+
+                    </p>
+
+                </div>
+
+            @endif
 
         </div>
 
@@ -350,14 +561,16 @@
 
             Array.from(racaSelect.options).forEach(option => {
 
+                if (!option.value) return;
+
                 const pertence =
                     option.getAttribute('data-especie') === especieId;
 
                 option.style.display =
                     (!especieId || pertence) ? 'block' : 'none';
-
             });
 
+            racaSelect.disabled = !especieId;
         }
 
         especieSelect.addEventListener('change', function () {

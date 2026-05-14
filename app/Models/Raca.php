@@ -3,20 +3,34 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Especie;
+
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Raca extends Model
 {
-    protected $table = 'racas';
-
+    /**
+     * Campos permitidos para atribuição em massa.
+     */
     protected $fillable = [
         'nome',
         'descricao',
         'especie_id'
     ];
 
-    public function especie()
+    /**
+     * Espécie à qual a raça pertence.
+     */
+    public function especie(): BelongsTo
     {
         return $this->belongsTo(Especie::class);
+    }
+
+    /**
+     * Animais pertencentes à raça.
+     */
+    public function animais(): HasMany
+    {
+        return $this->hasMany(Animal::class);
     }
 }

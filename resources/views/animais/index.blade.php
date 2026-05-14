@@ -2,61 +2,61 @@
 
 @section('content')
 
-<section class="animals-page">
+<div class="container animal-show-page">
 
-    <div class="container">
+    {{-- HEADER --}}
+    <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-4 mb-5">
 
-        {{-- HEADER --}}
-        <div class="page-header">
+        <div>
 
-            <div>
+            <h1 class="section-title mb-2">
+                Meus Animais
+            </h1>
 
-                <h1 class="page-title">
-                    Animais Disponíveis
-                </h1>
-
-                <p class="page-description">
-                    Encontre animais disponíveis para adoção responsável.
-                </p>
-
-            </div>
-
-            <a href="{{ route('animais.create') }}"
-               class="btn create-btn">
-
-                + Novo Animal
-
-            </a>
+            <p class="section-description m-0">
+                Gerencie os animais cadastrados na plataforma de adoção responsável.
+            </p>
 
         </div>
 
-        {{-- ALERT --}}
-        @if(session('success'))
+        <a href="{{ route('animais.create') }}"
+           class="create-btn text-decoration-none">
 
-            <div class="custom-alert success-alert">
+            Cadastrar Animal
 
-                {{ session('success') }}
+        </a>
 
-            </div>
+    </div>
 
-        @endif
+    {{-- ALERTAS --}}
+    @if(session('success'))
 
-        {{-- FILTROS --}}
-        <div class="filter-box mb-5">
+        <div class="alert alert-success border-0 shadow-sm rounded-4 mb-4">
+
+            {{ session('success') }}
+
+        </div>
+
+    @endif
+
+    {{-- FILTROS --}}
+    <section class="filter-section mb-5">
+
+        <div class="filter-box">
 
             <form method="GET"
                   action="{{ route('animais.index') }}">
 
-                <div class="row g-3">
+                <div class="row g-4">
 
-                    <div class="col-lg-3">
+                    {{-- ESPÉCIE --}}
+                    <div class="col-lg-4">
 
-                        <label class="form-label custom-label">
+                        <label class="form-label fw-semibold mb-2">
                             Espécie
                         </label>
 
                         <select name="especie_id"
-                                id="especie"
                                 class="form-select custom-select">
 
                             <option value="">
@@ -68,7 +68,7 @@
                                 <option value="{{ $especie->id }}"
                                     {{ request('especie_id') == $especie->id ? 'selected' : '' }}>
 
-                                    {{ $especie->nome }}
+                                    {{ ucfirst(strtolower($especie->nome)) }}
 
                                 </option>
 
@@ -78,14 +78,14 @@
 
                     </div>
 
-                    <div class="col-lg-3">
+                    {{-- RAÇA --}}
+                    <div class="col-lg-4">
 
-                        <label class="form-label custom-label">
+                        <label class="form-label fw-semibold mb-2">
                             Raça
                         </label>
 
                         <select name="raca_id"
-                                id="raca"
                                 class="form-select custom-select">
 
                             <option value="">
@@ -95,10 +95,9 @@
                             @foreach($racas as $raca)
 
                                 <option value="{{ $raca->id }}"
-                                        data-especie="{{ $raca->especie_id }}"
                                     {{ request('raca_id') == $raca->id ? 'selected' : '' }}>
 
-                                    {{ $raca->nome }}
+                                    {{ ucfirst(strtolower($raca->nome)) }}
 
                                 </option>
 
@@ -108,9 +107,10 @@
 
                     </div>
 
-                    <div class="col-lg-3">
+                    {{-- STATUS --}}
+                    <div class="col-lg-4">
 
-                        <label class="form-label custom-label">
+                        <label class="form-label fw-semibold mb-2">
                             Status
                         </label>
 
@@ -128,13 +128,6 @@
 
                             </option>
 
-                            <option value="EM_PROCESSO"
-                                {{ request('status') == 'EM_PROCESSO' ? 'selected' : '' }}>
-
-                                Em processo
-
-                            </option>
-
                             <option value="ADOTADO"
                                 {{ request('status') == 'ADOTADO' ? 'selected' : '' }}>
 
@@ -142,27 +135,35 @@
 
                             </option>
 
+                            <option value="INATIVO"
+                                {{ request('status') == 'INATIVO' ? 'selected' : '' }}>
+
+                                Inativo
+
+                            </option>
+
                         </select>
 
                     </div>
 
-                    <div class="col-lg-3 d-flex align-items-end gap-2">
+                </div>
 
-                        <button type="submit"
-                                class="btn filter-btn w-100">
+                {{-- BOTÕES --}}
+                <div class="d-flex flex-column flex-md-row justify-content-end gap-3 mt-4">
 
-                            Filtrar
+                    <a href="{{ route('animais.index') }}"
+                       class="clear-btn text-decoration-none">
 
-                        </button>
+                        Limpar Filtros
 
-                        <a href="{{ route('animais.index') }}"
-                           class="btn clear-btn w-100">
+                    </a>
 
-                            Limpar
+                    <button type="submit"
+                            class="filter-btn">
 
-                        </a>
+                        Filtrar Animais
 
-                    </div>
+                    </button>
 
                 </div>
 
@@ -170,118 +171,152 @@
 
         </div>
 
-        {{-- QUANTIDADE --}}
-        <div class="animals-info">
+    </section>
 
-            <span>
+    {{-- LISTAGEM --}}
+    @if($animais->count())
 
-                {{ $animais->count() }} animal(is) encontrado(s)
+        <div class="d-flex justify-content-between align-items-center mb-4">
+
+            <span class="animals-count">
+
+                {{ $animais->count() }}
+                {{ $animais->count() > 1 ? 'animais encontrados' : 'animal encontrado' }}
 
             </span>
 
         </div>
 
-        {{-- GRID --}}
-        <div class="row">
+        <div class="row g-4">
 
-            @forelse($animais as $animal)
+            @foreach($animais as $animal)
 
-                <div class="col-xl-3 col-lg-4 col-md-6 mb-4">
+                <div class="col-xl-4 col-md-6">
 
                     <div class="animal-card">
 
-                        <img src="https://placedog.net/500/400"
-                             class="animal-image"
-                             alt="Animal">
+                        {{-- IMAGEM --}}
+                        @if($animal->foto)
 
+                            <img src="{{ asset('storage/' . $animal->foto) }}"
+                                 class="animal-image"
+                                 alt="{{ $animal->nome }}">
+
+                        @else
+
+                            <img src="https://placehold.co/600x400?text=MiauDot"
+                                 class="animal-image"
+                                 alt="{{ $animal->nome }}">
+
+                        @endif
+
+                        {{-- CONTEÚDO --}}
                         <div class="animal-body">
 
-                            <div class="d-flex justify-content-between align-items-start mb-2">
+                            <div class="d-flex justify-content-between align-items-start mb-3">
 
-                                <h4 class="animal-name">
+                                <h3 class="animal-name mb-0">
 
-                                    {{ $animal->nome }}
+                                    {{ ucfirst($animal->nome) }}
 
-                                </h4>
+                                </h3>
 
-                                @if($animal->status == 'DISPONIVEL')
+                                <span class="animal-tag">
 
-                                    <span class="status-badge success">
+                                    {{ ucfirst(strtolower($animal->status)) }}
 
-                                        Disponível
-
-                                    </span>
-
-                                @elseif($animal->status == 'EM_PROCESSO')
-
-                                    <span class="status-badge warning">
-
-                                        Em processo
-
-                                    </span>
-
-                                @else
-
-                                    <span class="status-badge secondary">
-
-                                        Adotado
-
-                                    </span>
-
-                                @endif
+                                </span>
 
                             </div>
 
-                            <p class="animal-info">
+                            <p class="animal-breed mb-2">
 
-                                {{ $animal->raca->nome ?? 'Sem raça' }}
-
-                            </p>
-
-                            <p class="animal-info">
-
-                                {{ $animal->porte }}
+                                {{ ucfirst(strtolower($animal->especie->nome)) }}
+                                •
+                                {{ ucfirst(strtolower($animal->raca->nome)) }}
 
                             </p>
 
-                            <p class="animal-info">
+                            <p class="animal-location mb-3">
 
-                                {{ $animal->sexo }}
-
-                            </p>
-
-                            <p class="animal-owner">
-
-                                Responsável:
-                                {{ $animal->user->name ?? 'Não informado' }}
+                                {{ ucfirst(strtolower($animal->cidade)) }}
+                                -
+                                {{ strtoupper($animal->estado) }}
 
                             </p>
 
-                            <div class="animal-actions">
+                            {{-- INFO GRID --}}
+                            <div class="animal-info-grid mb-4">
+
+                                <div class="animal-info-item">
+
+                                    <span class="animal-info-label">
+                                        Porte
+                                    </span>
+
+                                    <span class="animal-info-value">
+                                        {{ ucfirst(strtolower($animal->porte)) }}
+                                    </span>
+
+                                </div>
+
+                                <div class="animal-info-item">
+
+                                    <span class="animal-info-label">
+                                        Sexo
+                                    </span>
+
+                                    <span class="animal-info-value">
+                                        {{ ucfirst(strtolower($animal->sexo)) }}
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+                            {{-- DESCRIÇÃO --}}
+                            <p class="text-muted mb-4"
+                               style="line-height: 1.8;">
+
+                                {{ \Illuminate\Support\Str::limit($animal->descricao, 120) }}
+
+                            </p>
+
+                            {{-- BOTÕES --}}
+                            <div class="d-flex gap-2">
+
+                                <a href="{{ route('animais.show', $animal->id) }}"
+                                   class="animal-btn text-decoration-none text-center">
+
+                                    Visualizar
+
+                                </a>
 
                                 <a href="{{ route('animais.edit', $animal->id) }}"
-                                   class="btn edit-btn">
+                                   class="edit-btn text-decoration-none text-center w-100">
 
                                     Editar
 
                                 </a>
 
-                                <form action="{{ route('animais.destroy', $animal->id) }}"
-                                      method="POST">
-
-                                    @csrf
-                                    @method('DELETE')
-
-                                    <button type="submit"
-                                            class="btn delete-btn">
-
-                                        Excluir
-
-                                    </button>
-
-                                </form>
-
                             </div>
+
+                            <form action="{{ route('animais.destroy', $animal->id) }}"
+                                  method="POST"
+                                  class="mt-2">
+
+                                @csrf
+                                @method('DELETE')
+
+                                <button type="submit"
+                                        class="delete-btn w-100"
+                                        onclick="return confirm('Deseja remover este animal?')">
+
+                                    Remover
+
+                                </button>
+
+                            </form>
 
                         </div>
 
@@ -289,65 +324,35 @@
 
                 </div>
 
-            @empty
-
-                <div class="col-12">
-
-                    <div class="empty-box">
-
-                        Nenhum animal encontrado.
-
-                    </div>
-
-                </div>
-
-            @endforelse
+            @endforeach
 
         </div>
 
-    </div>
+    @else
 
-</section>
+        <div class="filter-box text-center py-5">
 
-@endsection
+            <h3 class="mb-3 fw-bold">
+                Nenhum animal cadastrado
+            </h3>
 
-@section('scripts')
+            <p class="text-muted mb-4">
 
-<script>
+                Você ainda não cadastrou animais na plataforma.
 
-    const especieSelect = document.getElementById('especie');
-    const racaSelect = document.getElementById('raca');
+            </p>
 
-    if (especieSelect && racaSelect) {
+            <a href="{{ route('animais.create') }}"
+               class="create-btn text-decoration-none">
 
-        function filtrarRacas() {
+                Cadastrar Primeiro Animal
 
-            const especieId = especieSelect.value;
+            </a>
 
-            Array.from(racaSelect.options).forEach(option => {
+        </div>
 
-                if (!option.value) return;
+    @endif
 
-                const pertence =
-                    option.getAttribute('data-especie') === especieId;
-
-                option.style.display =
-                    (!especieId || pertence) ? 'block' : 'none';
-            });
-
-            racaSelect.disabled = !especieId;
-        }
-
-        especieSelect.addEventListener('change', function () {
-
-            racaSelect.value = "";
-            filtrarRacas();
-
-        });
-
-        window.addEventListener('load', filtrarRacas);
-    }
-
-</script>
+</div>
 
 @endsection

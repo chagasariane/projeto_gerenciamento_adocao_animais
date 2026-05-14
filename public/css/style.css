@@ -69,6 +69,7 @@ body{
     padding: 10px 22px;
     font-weight: 600;
     transition: 0.3s;
+    border: none;
 }
 
 .btn-signup:hover{
@@ -83,7 +84,7 @@ body{
 ========================= */
 
 .hero-section{
-    padding: 90px 0 70px;
+    padding: 35px 0 70px;
 }
 
 .hero-title{
@@ -110,6 +111,7 @@ body{
     border-radius: 16px;
     font-weight: 600;
     transition: 0.3s;
+    border: none;
 }
 
 .hero-btn:hover{
@@ -122,11 +124,6 @@ body{
 .hero-image{
     border-radius: 28px;
     box-shadow: 0 20px 40px rgba(0,0,0,0.12);
-    transition: 0.4s;
-}
-
-.hero-image:hover{
-    transform: scale(1.01);
 }
 
 /* =========================
@@ -226,7 +223,7 @@ body{
 ========================= */
 
 .animals-section{
-    margin-bottom: 100px;
+    margin-bottom: 60px;
 }
 
 .animals-count{
@@ -244,7 +241,6 @@ body{
 }
 
 .animal-card:hover{
-    transform: translateY(-8px);
     box-shadow: 0 18px 40px rgba(0,0,0,0.10);
 }
 
@@ -253,10 +249,6 @@ body{
     height: 280px;
     object-fit: cover;
     transition: 0.4s;
-}
-
-.animal-card:hover .animal-image{
-    transform: scale(1.03);
 }
 
 .animal-body{
@@ -289,6 +281,8 @@ body{
     padding: 12px;
     font-weight: 600;
     transition: 0.3s;
+    background-color: white;
+    color: #111827;
 }
 
 .animal-btn:hover{
@@ -324,26 +318,6 @@ body{
 .footer-description-small{
     color: #d1d5db;
     line-height: 1.8;
-}
-
-.footer-badges{
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-}
-
-.footer-badge{
-    background-color: rgba(255,255,255,0.12);
-    color: white;
-    padding: 8px 14px;
-    border-radius: 999px;
-    font-size: 0.85rem;
-    font-weight: 600;
-    transition: 0.3s;
-}
-
-.footer-badge:hover{
-    background-color: rgba(255,255,255,0.20);
 }
 
 .footer-title{
@@ -441,33 +415,8 @@ body{
 }
 
 /* =========================
-   ANIMAIS PAGE
+   BOTÕES PADRONIZADOS
 ========================= */
-
-.animals-page{
-    padding: 40px 0 80px;
-}
-
-.page-header{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 35px;
-    flex-wrap: wrap;
-    gap: 20px;
-}
-
-.page-title{
-    font-size: 2.8rem;
-    font-weight: 800;
-    color: #0f172a;
-    margin-bottom: 10px;
-}
-
-.page-description{
-    color: #64748b;
-    font-size: 1.05rem;
-}
 
 .create-btn{
     background-color: #1b4332;
@@ -476,37 +425,25 @@ body{
     padding: 14px 24px;
     font-weight: 600;
     transition: 0.3s;
+    border: none;
 }
 
 .create-btn:hover{
     background-color: #163828;
     color: white;
-    transform: translateY(-2px);
-}
-
-.custom-alert{
-    padding: 18px 22px;
-    border-radius: 18px;
-    margin-bottom: 30px;
-    font-weight: 500;
-}
-
-.success-alert{
-    background-color: #dcfce7;
-    color: #166534;
-}
-
-.custom-label{
-    font-weight: 600;
-    margin-bottom: 10px;
 }
 
 .filter-btn{
     background-color: #1b4332;
     color: white;
-    border-radius: 14px;
-    padding: 14px;
+    border-radius: 16px;
+    padding: 16px 32px;
     font-weight: 600;
+    border: none;
+    transition: 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .filter-btn:hover{
@@ -515,267 +452,22 @@ body{
 }
 
 .clear-btn{
-    background-color: #e5e7eb;
-    color: #111827;
-    border-radius: 14px;
-    padding: 14px;
+    background-color: #f1f5f9;
+    color: #334155;
+    border-radius: 16px;
+    padding: 16px 32px;
     font-weight: 600;
+    border: 1px solid #dbe1e8;
+    transition: 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .clear-btn:hover{
-    background-color: #d1d5db;
-}
-
-.animals-info{
-    margin-bottom: 25px;
-    color: #64748b;
-    font-weight: 500;
-}
-
-.status-badge{
-    padding: 6px 12px;
-    border-radius: 999px;
-    font-size: 0.75rem;
-    font-weight: 700;
-}
-
-.status-badge.success{
-    background-color: #dcfce7;
-    color: #166534;
-}
-
-.status-badge.warning{
-    background-color: #fef3c7;
-    color: #92400e;
-}
-
-.status-badge.secondary{
-    background-color: #e5e7eb;
-    color: #374151;
-}
-
-.animal-info{
-    color: #64748b;
-    margin-bottom: 8px;
-}
-
-.animal-owner{
-    margin-top: 18px;
-    color: #374151;
-    font-size: 0.95rem;
-}
-
-.animal-actions{
-    display: flex;
-    gap: 10px;
-    margin-top: 22px;
-}
-
-.edit-btn{
-    flex: 1;
-    background-color: #facc15;
-    color: #111827;
-    border-radius: 12px;
-    font-weight: 600;
-}
-
-.edit-btn:hover{
-    background-color: #eab308;
-}
-
-.delete-btn{
-    flex: 1;
-    background-color: #ef4444;
-    color: white;
-    border-radius: 12px;
-    font-weight: 600;
-    border: none;
-}
-
-.delete-btn:hover{
-    background-color: #dc2626;
-}
-
-.empty-box{
-    background-color: white;
-    padding: 50px;
-    border-radius: 24px;
-    text-align: center;
-    color: #64748b;
-    border: 1px solid #ececec;
-}
-
-/* =========================
-   FORM PAGE
-========================= */
-
-.form-page{
-    padding: 40px 0 90px;
-}
-
-.form-card{
-    background-color: white;
-    border-radius: 28px;
-    padding: 45px;
-    border: 1px solid #ececec;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.04);
-}
-
-.form-section{
-    margin-bottom: 45px;
-}
-
-.form-section-title{
-    font-size: 1.5rem;
-    font-weight: 700;
-    margin-bottom: 28px;
+    background-color: #e2e8f0;
     color: #0f172a;
 }
-
-.custom-input,
-.custom-select,
-.custom-textarea{
-    border-radius: 16px;
-    border: 1px solid #dbe1e8;
-    padding: 14px 18px;
-    transition: 0.3s;
-    background-color: #ffffff;
-}
-
-.custom-input,
-.custom-select{
-    height: 58px;
-}
-
-.custom-textarea{
-    resize: none;
-}
-
-.custom-input:focus,
-.custom-select:focus,
-.custom-textarea:focus{
-    border-color: #1b4332;
-    box-shadow: 0 0 0 0.20rem rgba(27,67,50,0.10);
-}
-
-.form-actions{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 20px;
-    gap: 15px;
-    flex-wrap: wrap;
-}
-
-.back-btn{
-    background-color: #e5e7eb;
-    color: #111827;
-    border-radius: 14px;
-    padding: 14px 28px;
-    font-weight: 600;
-}
-
-.back-btn:hover{
-    background-color: #d1d5db;
-}
-
-.save-btn{
-    background-color: #1b4332;
-    color: white;
-    border-radius: 14px;
-    padding: 14px 28px;
-    font-weight: 600;
-    transition: 0.3s;
-}
-
-.save-btn:hover{
-    background-color: #163828;
-    color: white;
-    transform: translateY(-2px);
-}
-
-.error-alert{
-    background-color: #fee2e2;
-    color: #991b1b;
-}
-
-/* =========================
-   CRUD TABLES
-========================= */
-
-.crud-page{
-    padding: 40px 0 90px;
-}
-
-.table-card{
-    background-color: white;
-    border-radius: 28px;
-    padding: 10px;
-    border: 1px solid #ececec;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.04);
-    overflow: hidden;
-}
-
-.custom-table{
-    margin-bottom: 0;
-}
-
-.custom-table thead{
-    background-color: #f8fafc;
-}
-
-.custom-table thead th{
-    border-bottom: 1px solid #e5e7eb;
-    padding: 22px 20px;
-    font-size: 0.95rem;
-    font-weight: 700;
-    color: #374151;
-}
-
-.custom-table tbody tr{
-    transition: 0.25s;
-}
-
-.custom-table tbody tr:hover{
-    background-color: #f9fafb;
-}
-
-.custom-table tbody td{
-    padding: 22px 20px;
-    border-bottom: 1px solid #f1f5f9;
-    vertical-align: middle;
-}
-
-.table-id{
-    font-weight: 700;
-    color: #64748b;
-}
-
-.table-title{
-    font-weight: 700;
-    color: #111827;
-}
-
-.table-description{
-    color: #64748b;
-    line-height: 1.7;
-}
-
-.table-actions{
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-}
-
-.empty-table{
-    padding: 50px;
-    text-align: center;
-    color: #64748b;
-}
-
-/* =========================
-   ACTION BUTTONS
-========================= */
 
 .edit-btn{
     background-color: #eef2f7;
@@ -790,7 +482,6 @@ body{
 .edit-btn:hover{
     background-color: #dbe4ee;
     color: #0f172a;
-    transform: translateY(-1px);
 }
 
 .delete-btn{
@@ -806,35 +497,248 @@ body{
 .delete-btn:hover{
     background-color: #ffe4e6;
     color: #9f1239;
-    transform: translateY(-1px);
 }
 
-.filter-btn{
-    background-color: #1b4332;
-    color: white;
-    border-radius: 14px;
-    padding: 14px 20px;
-    font-weight: 600;
-    border: none;
-    transition: 0.3s;
-}
-
-.filter-btn:hover{
-    background-color: #163828;
-    color: white;
-}
-
-.clear-btn{
+.back-btn{
     background-color: #f1f5f9;
     color: #334155;
-    border-radius: 14px;
-    padding: 14px 20px;
+    border-radius: 16px;
+    padding: 14px 28px;
     font-weight: 600;
     border: 1px solid #dbe1e8;
     transition: 0.3s;
 }
 
-.clear-btn:hover{
+.back-btn:hover{
     background-color: #e2e8f0;
     color: #0f172a;
+}
+
+.save-btn{
+    background-color: #1b4332;
+    color: white;
+    border-radius: 14px;
+    padding: 14px 28px;
+    font-weight: 600;
+    transition: 0.3s;
+    border: none;
+}
+
+.save-btn:hover{
+    background-color: #163828;
+    color: white;
+}
+
+.animal-info-card{
+    border-radius: 12px;
+}
+
+.animal-section-title{
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 28px;
+    color: #0f172a;
+}
+
+.animal-info-grid{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
+}
+
+.animal-info-item{
+    background-color: #f8fafc;
+    border-radius: 18px;
+    padding: 18px;
+    display: flex;
+    flex-direction: column;
+}
+
+.animal-info-label{
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #64748b;
+    margin-bottom: 6px;
+}
+
+.animal-info-value{
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #0f172a;
+}
+
+.animal-show-page{
+    padding: 18px 0 80px;
+}
+
+.adopt-btn{
+    background-color: #1b4332;
+    color: white;
+    border-radius: 18px;
+    padding: 18px 24px;
+    font-size: 1.05rem;
+    font-weight: 700;
+    border: none;
+    transition: 0.3s;
+}
+
+.adopt-btn:hover{
+    background-color: #163828;
+    color: white;
+    box-shadow: 0 12px 28px rgba(27,67,50,0.18);
+}
+
+/* =========================
+   FILE INPUT
+========================= */
+
+.custom-file-input{
+    border: 1px solid #e5e7eb;
+    border-radius: 18px;
+    padding: 14px 18px;
+    background-color: #ffffff;
+    transition: 0.3s;
+    color: #64748b;
+    font-weight: 500;
+}
+
+.custom-file-input:focus{
+    border-color: #1b4332;
+    box-shadow: 0 0 0 0.20rem rgba(27,67,50,0.10);
+}
+
+.custom-file-input::file-selector-button{
+    background-color: #f1f5f9;
+    border: 1px solid #dbe1e8;
+    color: #0f172a;
+    padding: 10px 18px;
+    border-radius: 12px;
+    margin-right: 16px;
+    font-weight: 600;
+    transition: 0.3s;
+    cursor: pointer;
+}
+
+.custom-file-input::file-selector-button:hover{
+    background-color: #e2e8f0;
+}
+
+/* =========================
+   PREVIEW FOTOS
+========================= */
+
+.preview-card-body{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 150px;
+}
+
+
+/* =========================
+   FOTO PRINCIPAL
+========================= */
+
+.foto-principal-card{
+    border: 2px solid #1b4332;
+    box-shadow:
+        0 0 0 4px rgba(27,67,50,0.08),
+        0 18px 40px rgba(27,67,50,0.12);
+    transform: translateY(-2px);
+}
+
+.foto-principal-card .animal-image{
+    border-bottom: 1px solid rgba(27,67,50,0.08);
+}
+
+/* =========================
+   PREVIEW DE FOTOS
+========================= */
+
+.preview-foto-card{
+    width: 220px;
+    border-radius: 22px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.preview-foto-card .animal-image{
+    height: 170px !important;
+    object-fit: cover;
+}
+
+.preview-foto-card .animal-body{
+    padding: 14px;
+}
+
+.preview-foto-card .delete-btn{
+    padding: 10px 14px;
+    font-size: 0.95rem;
+}
+
+/* =========================
+   FOTO PRINCIPAL
+========================= */
+
+.foto-principal-card{
+    border: 2px solid #1b4332;
+    box-shadow:
+        0 0 0 4px rgba(27,67,50,0.08),
+        0 10px 24px rgba(27,67,50,0.10);
+}
+
+
+/* =========================
+   PREVIEW DE FOTOS
+========================= */
+
+.preview-foto-card{
+    width: 220px;
+    border-radius: 22px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.preview-foto-card .animal-image{
+    height: 170px !important;
+    object-fit: cover;
+}
+
+.preview-foto-card .animal-body{
+    padding: 14px;
+}
+
+.preview-foto-card .delete-btn{
+    padding: 10px 14px;
+    font-size: 0.95rem;
+}
+
+/* =========================
+   FOTO PRINCIPAL
+========================= */
+
+.foto-principal-card{
+    border: 2px solid #1b4332;
+    box-shadow:
+        0 0 0 4px rgba(27,67,50,0.08),
+        0 10px 24px rgba(27,67,50,0.10);
+}
+
+/* =========================
+   SORTABLE
+========================= */
+
+.preview-item{
+    cursor: grab;
+}
+
+.preview-item:active{
+    cursor: grabbing;
+}
+
+.sortable-ghost{
+    opacity: 0.45;
+    transform: scale(0.96);
 }

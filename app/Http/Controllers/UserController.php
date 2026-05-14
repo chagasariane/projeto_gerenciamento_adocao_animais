@@ -10,7 +10,8 @@ class UserController extends Controller
 {
     public function index()
     {
-        $users = User::all();
+        $users = User::latest()->get();
+
         return view('users.index', compact('users'));
     }
 
@@ -21,50 +22,53 @@ class UserController extends Controller
 
     public function store(Request $request)
     {
-        // 1. Validação básica
         $request->validate([
-            'name' => 'required',
+            'name' => 'required|max:255',
             'email' => 'required|email|unique:users,email',
-            'password' => 'required',
-            'role' => 'required|in:ADMIN,ADOTANTE,PROTETOR',
+            'password' => 'required|min:6',
         ]);
 
-        $data = $request->all();
+        /*
+        |--------------------------------------------------------------------------
+        | REGRA DE NEGÓCIO
+        |--------------------------------------------------------------------------
+        | Usuário deve possuir CPF ou CNPJ
+        */
 
-        // 2. Normalizar CPF e CNPJ
-        $data['cpf'] = $request->cpf ?: null;
-        $data['cnpj'] = $request->cnpj ?: null;
-
-        // 3. Regra de negócio
-        if ($data['role'] === 'ADOTANTE') {
-            if (empty($data['cpf'])) {
-                return back()
-                    ->withErrors(['cpf' => 'CPF é obrigatório para adotantes'])
-                    ->withInput();
-            }
-            $data['cnpj'] = null;
+        if (
+            empty($request->cpf) &&
+            empty($request->cnpj)
+        ) {
+            return back()
+                ->withErrors([
+                    'cpf' => 'Informe CPF ou CNPJ.'
+                ])
+                ->withInput();
         }
 
-        if ($data['role'] === 'PROTETOR') {
-            if (empty($data['cpf']) && empty($data['cnpj'])) {
-                return back()
-                    ->withErrors(['cpf' => 'Informe CPF ou CNPJ para protetor'])
-                    ->withInput();
-            }
-        }
+        /*
+        |--------------------------------------------------------------------------
+        | CRIAÇÃO DO USUÁRIO
+        |--------------------------------------------------------------------------
+        */
 
-        if ($data['role'] === 'ADMIN') {
-            $data['cpf'] = null;
-        $data['cnpj'] = null;
-        }
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => $request->password,
+            'cpf' => $request->cpf ?: null,
+            'cnpj' => $request->cnpj ?: null,
+            'telefone' => $request->telefone,
+            'celular' => $request->celular,
+            'is_admin' => false,
+        ]);
 
-        // 4. Criptografar senha
-        $data['password'] = bcrypt($data['password']);
+        /*
+        |--------------------------------------------------------------------------
+        | ENDEREÇO
+        |--------------------------------------------------------------------------
+        */
 
-        // 5. Criar usuário
-        $user = User::create($data);
-
-        // 6. Criar endereço
         Endereco::create([
             'logradouro' => $request->logradouro,
             'numero' => $request->numero,
@@ -76,8 +80,8 @@ class UserController extends Controller
         ]);
 
         return redirect()
-            ->route('users.index')
-            ->with('success', 'Usuário cadastrado com sucesso!');
+            ->route('login.form')
+            ->with('success', 'Conta criada com sucesso!');
     }
 
     public function show(string $id)
@@ -88,6 +92,7 @@ class UserController extends Controller
     public function edit(string $id)
     {
         $user = User::findOrFail($id);
+
         return view('users.edit', compact('user'));
     }
 
@@ -95,57 +100,64 @@ class UserController extends Controller
     {
         $user = User::findOrFail($id);
 
-        // 1. Validação básica
         $request->validate([
-            'name' => 'required',
+            'name' => 'required|max:255',
             'email' => 'required|email|unique:users,email,' . $id,
-            'role' => 'required|in:ADMIN,ADOTANTE,PROTETOR',
         ]);
 
-        $data = $request->all();
+        /*
+        |--------------------------------------------------------------------------
+        | REGRA DE NEGÓCIO
+        |--------------------------------------------------------------------------
+        */
 
-        // 2. Normalizar CPF e CNPJ
-        $data['cpf'] = $request->cpf ?: null;
-        $data['cnpj'] = $request->cnpj ?: null;
-
-        // 3. Regra de negócio
-        if ($data['role'] === 'ADOTANTE') {
-            if (empty($data['cpf'])) {
-                return back()
-                    ->withErrors(['cpf' => 'CPF é obrigatório para adotantes'])
-                    ->withInput();
-            }
-            $data['cnpj'] = null;
+        if (
+            empty($request->cpf) &&
+            empty($request->cnpj)
+        ) {
+            return back()
+                ->withErrors([
+                    'cpf' => 'Informe CPF ou CNPJ.'
+                ])
+                ->withInput();
         }
 
-        if ($data['role'] === 'PROTETOR') {
-            if (empty($data['cpf']) && empty($data['cnpj'])) {
-                return back()
-                    ->withErrors(['cpf' => 'Informe CPF ou CNPJ para protetor'])
-                    ->withInput();
-            }
+        /*
+        |--------------------------------------------------------------------------
+        | ATUALIZAÇÃO
+        |--------------------------------------------------------------------------
+        */
+
+        $data = [
+            'name' => $request->name,
+            'email' => $request->email,
+            'cpf' => $request->cpf ?: null,
+            'cnpj' => $request->cnpj ?: null,
+            'telefone' => $request->telefone,
+            'celular' => $request->celular,
+        ];
+
+        /*
+        |--------------------------------------------------------------------------
+        | SENHA OPCIONAL
+        |--------------------------------------------------------------------------
+        */
+
+        if (!empty($request->password)) {
+            $data['password'] = $request->password;
         }
 
-        if ($data['role'] === 'ADMIN') {
-            $data['cpf'] = null;
-            $data['cnpj'] = null;
-        }
-
-        // 4. Atualizar senha (se preenchida)
-        if (!empty($data['password'])) {
-            $data['password'] = bcrypt($data['password']);
-        } else {
-            unset($data['password']);
-        }
-
-        // 5. Atualizar usuário
         $user->update($data);
 
-        // 6. Atualizar ou criar endereço
-        $endereco = $user->endereco;
+        /*
+        |--------------------------------------------------------------------------
+        | ENDEREÇO
+        |--------------------------------------------------------------------------
+        */
 
-        if ($endereco) {
-            $endereco->update([
+        if ($user->endereco) {
+
+            $user->endereco->update([
                 'logradouro' => $request->logradouro,
                 'numero' => $request->numero,
                 'complemento' => $request->complemento,
@@ -153,7 +165,9 @@ class UserController extends Controller
                 'estado' => $request->estado,
                 'cep' => $request->cep,
             ]);
+
         } else {
+
             Endereco::create([
                 'logradouro' => $request->logradouro,
                 'numero' => $request->numero,
@@ -163,6 +177,7 @@ class UserController extends Controller
                 'cep' => $request->cep,
                 'user_id' => $user->id
             ]);
+
         }
 
         return redirect()
@@ -170,9 +185,10 @@ class UserController extends Controller
             ->with('success', 'Usuário atualizado com sucesso!');
     }
 
-    public function destroy($id)
+    public function destroy(string $id)
     {
         $user = User::findOrFail($id);
+
         $user->delete();
 
         return redirect()

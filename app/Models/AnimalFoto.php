@@ -3,35 +3,25 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class Adocao extends Model
+class AnimalFoto extends Model
 {
-    use SoftDeletes;
-
-    /**
-     * Nome da tabela.
-     */
-    protected $table = 'adocoes';
-
     /**
      * Campos permitidos para atribuição em massa.
      */
     protected $fillable = [
-        'user_id',
         'animal_id',
-        'status',
-        'mensagem',
-        'data_aprovacao',
+        'caminho',
+        'principal'
     ];
 
     /**
      * Conversão automática de tipos.
      */
     protected $casts = [
-        'data_aprovacao' => 'datetime',
+        'principal' => 'boolean',
     ];
 
     /*
@@ -41,15 +31,7 @@ class Adocao extends Model
     */
 
     /**
-     * Usuário solicitante da adoção.
-     */
-    public function user(): BelongsTo
-    {
-        return $this->belongsTo(User::class);
-    }
-
-    /**
-     * Animal relacionado à adoção.
+     * Animal proprietário da foto.
      */
     public function animal(): BelongsTo
     {

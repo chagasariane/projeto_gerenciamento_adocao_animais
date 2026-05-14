@@ -8,13 +8,13 @@ use Symfony\Component\HttpFoundation\Response;
 
 class RoleMiddleware
 {
-    public function handle(Request $request, Closure $next, ...$roles): Response
+    public function handle(Request $request, Closure $next): Response
     {
         if (!auth()->check()) {
             return redirect('/login');
         }
 
-        if (!in_array(auth()->user()->role, $roles)) {
+        if (!auth()->user()->is_admin) {
             abort(403, 'Acesso negado.');
         }
 

@@ -1,12 +1,15 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\EspecieController;
-use App\Http\Controllers\AnimalController;
 use App\Http\Controllers\RacaController;
+use App\Http\Controllers\AnimalController;
 use App\Http\Controllers\AdocaoController;
+use App\Http\Controllers\AnimalFotoController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,9 +17,7 @@ use App\Http\Controllers\AdocaoController;
 |--------------------------------------------------------------------------
 */
 
-Route::get('/', function () {
-    return view('home');
-});
+Route::get('/', [HomeController::class, 'index']);
 
 /*
 |--------------------------------------------------------------------------
@@ -24,16 +25,21 @@ Route::get('/', function () {
 |--------------------------------------------------------------------------
 */
 
-Route::get('/login', [AuthController::class, 'loginForm'])->name('login.form');
-Route::post('/login', [AuthController::class, 'login'])->name('login');
+Route::get('/login', [AuthController::class, 'loginForm'])
+    ->name('login.form');
 
-Route::get('/register', [AuthController::class, 'registerForm'])->name('register.form');
+Route::post('/login', [AuthController::class, 'login'])
+    ->name('login');
 
-Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+Route::get('/register', [AuthController::class, 'registerForm'])
+    ->name('register.form');
+
+Route::post('/logout', [AuthController::class, 'logout'])
+    ->name('logout');
 
 /*
 |--------------------------------------------------------------------------
-| ADMIN
+| CADASTRO PÚBLICO
 |--------------------------------------------------------------------------
 */
 
@@ -42,32 +48,63 @@ Route::resource('users', UserController::class)->only([
     'store'
 ]);
 
-Route::middleware(['auth', 'role:ADMIN'])->group(function () {
+/*
+|--------------------------------------------------------------------------
+| ADMIN
+|--------------------------------------------------------------------------
+*/
+
+Route::middleware(['auth', 'admin'])->group(function () {
+
     Route::resource('users', UserController::class)->except([
         'create',
         'store'
     ]);
 
     Route::resource('especies', EspecieController::class);
+
     Route::resource('racas', RacaController::class);
+
 });
 
 /*
 |--------------------------------------------------------------------------
-| ADMIN + PROTETOR
+| USUÁRIOS AUTENTICADOS
 |--------------------------------------------------------------------------
 */
 
-Route::middleware(['auth', 'role:ADMIN,PROTETOR'])->group(function () {
+Route::middleware(['auth'])->group(function () {
+
+    /*
+    |--------------------------------------------------------------------------
+    | ANIMAIS
+    |--------------------------------------------------------------------------
+    */
+
     Route::resource('animais', AnimalController::class);
-});
 
-/*
-|--------------------------------------------------------------------------
-| TODOS AUTENTICADOS
-|--------------------------------------------------------------------------
-*/
+    /*
+    |--------------------------------------------------------------------------
+    | FOTOS DOS ANIMAIS
+    |--------------------------------------------------------------------------
+    */
 
-Route::middleware(['auth', 'role:ADMIN,PROTETOR,ADOTANTE'])->group(function () {
+    Route::post(
+        '/animais/{animal}/fotos',
+        [AnimalFotoController::class, 'store']
+    )->name('animais.fotos.store');
+
+    Route::delete(
+        '/animais/fotos/{foto}',
+        [AnimalFotoController::class, 'destroy']
+    )->name('animais.fotos.destroy');
+
+    /*
+    |--------------------------------------------------------------------------
+    | ADOÇÕES
+    |--------------------------------------------------------------------------
+    */
+
     Route::resource('adocoes', AdocaoController::class);
+
 });
