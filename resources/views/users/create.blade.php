@@ -65,6 +65,7 @@
                             <label class="form-label fw-semibold">
 
                                 Nome
+                                <span class="required-field">*</span>
 
                             </label>
 
@@ -81,6 +82,7 @@
                             <label class="form-label fw-semibold">
 
                                 E-mail
+                                <span class="required-field">*</span>
 
                             </label>
 
@@ -101,15 +103,36 @@
                             <label class="form-label fw-semibold">
 
                                 Senha
+                                <span class="required-field">*</span>
 
                             </label>
 
                             <input type="password"
-                                   name="password"
-                                   class="form-control custom-input"
-                                   placeholder="Digite sua senha">
+                                name="password"
+                                class="form-control custom-input"
+                                placeholder="Digite sua senha">
 
                         </div>
+
+                        <div class="col-md-6 mb-4">
+
+                            <label class="form-label fw-semibold">
+
+                                Confirmar Senha
+                                <span class="required-field">*</span>
+
+                            </label>
+
+                            <input type="password"
+                                name="password_confirmation"
+                                class="form-control custom-input"
+                                placeholder="Confirme sua senha">
+
+                        </div>
+
+                    </div>
+
+                    <div class="row">
 
                         <div class="col-md-6 mb-4">
 
@@ -120,28 +143,28 @@
                             </label>
 
                             <input type="text"
-                                   name="cpf"
-                                   class="form-control custom-input"
-                                   value="{{ old('cpf') }}"
-                                   placeholder="Digite seu CPF">
+                                name="cpf"
+                                class="form-control custom-input"
+                                value="{{ old('cpf') }}"
+                                placeholder="Digite seu CPF">
 
                         </div>
 
-                    </div>
+                        <div class="col-md-6 mb-0">
 
-                    <div class="mb-0">
+                            <label class="form-label fw-semibold">
 
-                        <label class="form-label fw-semibold">
+                                CNPJ
 
-                            CNPJ
+                            </label>
 
-                        </label>
+                            <input type="text"
+                                name="cnpj"
+                                class="form-control custom-input"
+                                value="{{ old('cnpj') }}"
+                                placeholder="Digite seu CNPJ (opcional)">
 
-                        <input type="text"
-                               name="cnpj"
-                               class="form-control custom-input"
-                               value="{{ old('cnpj') }}"
-                               placeholder="Digite seu CNPJ (opcional)">
+                        </div>
 
                     </div>
 
@@ -170,7 +193,7 @@
                                    name="telefone"
                                    class="form-control custom-input"
                                    value="{{ old('telefone') }}"
-                                   placeholder="Digite seu telefone">
+                                   placeholder="Digite seu telefone (opcional)">
 
                         </div>
 
@@ -179,6 +202,7 @@
                             <label class="form-label fw-semibold">
 
                                 Celular
+                                <span class="required-field">*</span>
 
                             </label>
 
@@ -200,6 +224,7 @@
                     <h3 class="form-section-title">
 
                         Endereço
+                        <span class="required-field">*</span>
 
                     </h3>
 
@@ -210,6 +235,7 @@
                             <label class="form-label fw-semibold">
 
                                 CEP
+                                <span class="required-field">*</span>
 
                             </label>
 
@@ -226,6 +252,7 @@
                             <label class="form-label fw-semibold">
 
                                 Logradouro
+                                <span class="required-field">*</span>
 
                             </label>
 
@@ -246,6 +273,7 @@
                             <label class="form-label fw-semibold">
 
                                 Número
+                                <span class="required-field">*</span>
 
                             </label>
 
@@ -269,7 +297,7 @@
                                    name="complemento"
                                    class="form-control custom-input"
                                    value="{{ old('complemento') }}"
-                                   placeholder="Complemento">
+                                   placeholder="Complemento (opcional)">
 
                         </div>
 
@@ -278,6 +306,7 @@
                             <label class="form-label fw-semibold">
 
                                 Cidade
+                                <span class="required-field">*</span>
 
                             </label>
 
@@ -296,14 +325,40 @@
                         <label class="form-label fw-semibold">
 
                             Estado
+                            <span class="required-field">*</span>
 
                         </label>
 
-                        <input type="text"
-                               name="estado"
-                               class="form-control custom-input"
-                               value="{{ old('estado') }}"
-                               placeholder="Estado">
+                        <select name="estado"
+                                class="form-select custom-input">
+
+                            <option value="">
+
+                                Selecione o estado
+
+                            </option>
+
+                            @php
+                                $ufs = [
+                                    'AC','AL','AP','AM','BA','CE','DF','ES',
+                                    'GO','MA','MT','MS','MG','PA','PB','PR',
+                                    'PE','PI','RJ','RN','RS','RO','RR','SC',
+                                    'SP','SE','TO'
+                                ];
+                            @endphp
+
+                            @foreach($ufs as $uf)
+
+                                <option value="{{ $uf }}"
+                                    {{ old('estado') == $uf ? 'selected' : '' }}>
+
+                                    {{ $uf }}
+
+                                </option>
+
+                            @endforeach
+
+                        </select>
 
                     </div>
 
@@ -348,5 +403,27 @@
     </div>
 
 </section>
+
+@endsection
+
+@section('scripts')
+
+<script>
+
+    $(document).ready(function(){
+
+        $('input[name="cpf"]').mask('000.000.000-00');
+
+        $('input[name="cnpj"]').mask('00.000.000/0000-00');
+
+        $('input[name="cep"]').mask('00000-000');
+
+        $('input[name="telefone"]').mask('(00) 0000-0000');
+
+        $('input[name="celular"]').mask('(00) 00000-0000');
+
+    });
+
+</script>
 
 @endsection

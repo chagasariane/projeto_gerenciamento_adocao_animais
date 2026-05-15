@@ -5,12 +5,24 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\Endereco;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $users = User::latest()->get();
+        $query = User::latest();
+
+        if ($request->filled('name')) {
+            $query->where('name', 'like', '%' . $request->name . '%');
+        }
+
+        if ($request->filled('email')) {
+            $query->where('email', 'like', '%' . $request->email . '%');
+        }
+
+        $users = $query->get();
 
         return view('users.index', compact('users'));
     }
@@ -25,7 +37,16 @@ class UserController extends Controller
         $request->validate([
             'name' => 'required|max:255',
             'email' => 'required|email|unique:users,email',
-            'password' => 'required|min:6',
+
+            'password' => 'required|string|min:6|confirmed',
+
+            'celular' => 'required',
+
+            'cep' => 'required',
+            'logradouro' => 'required|max:255',
+            'numero' => 'required|max:20',
+            'cidade' => 'required|max:255',
+            'estado' => 'required|max:2',
         ]);
 
         /*
@@ -52,14 +73,34 @@ class UserController extends Controller
         |--------------------------------------------------------------------------
         */
 
+        $cpf = $request->cpf
+            ? preg_replace('/\D/', '', $request->cpf)
+            : null;
+
+        $cnpj = $request->cnpj
+            ? preg_replace('/\D/', '', $request->cnpj)
+            : null;
+
+        $telefone = $request->telefone
+            ? preg_replace('/\D/', '', $request->telefone)
+            : null;
+
+        $celular = $request->celular
+            ? preg_replace('/\D/', '', $request->celular)
+            : null;
+
+        $cep = $request->cep
+            ? preg_replace('/\D/', '', $request->cep)
+            : null;
+
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
-            'password' => $request->password,
-            'cpf' => $request->cpf ?: null,
-            'cnpj' => $request->cnpj ?: null,
-            'telefone' => $request->telefone,
-            'celular' => $request->celular,
+            'password' => Hash::make($request->password),
+            'cpf' => $cpf,
+            'cnpj' => $cnpj,
+            'telefone' => $telefone,
+            'celular' => $celular,
             'is_admin' => false,
         ]);
 
@@ -75,7 +116,7 @@ class UserController extends Controller
             'complemento' => $request->complemento,
             'cidade' => $request->cidade,
             'estado' => $request->estado,
-            'cep' => $request->cep,
+            'cep' => $cep,
             'user_id' => $user->id
         ]);
 
@@ -128,13 +169,33 @@ class UserController extends Controller
         |--------------------------------------------------------------------------
         */
 
+        $cpf = $request->cpf
+            ? preg_replace('/\D/', '', $request->cpf)
+            : null;
+
+        $cnpj = $request->cnpj
+            ? preg_replace('/\D/', '', $request->cnpj)
+            : null;
+
+        $telefone = $request->telefone
+            ? preg_replace('/\D/', '', $request->telefone)
+            : null;
+
+        $celular = $request->celular
+            ? preg_replace('/\D/', '', $request->celular)
+            : null;
+
+        $cep = $request->cep
+            ? preg_replace('/\D/', '', $request->cep)
+            : null;
+
         $data = [
             'name' => $request->name,
             'email' => $request->email,
-            'cpf' => $request->cpf ?: null,
-            'cnpj' => $request->cnpj ?: null,
-            'telefone' => $request->telefone,
-            'celular' => $request->celular,
+            'cpf' => $cpf,
+            'cnpj' => $cnpj,
+            'telefone' => $telefone,
+            'celular' => $celular,
             'is_admin' => $request->is_admin,
         ];
 
@@ -145,7 +206,7 @@ class UserController extends Controller
         */
 
         if (!empty($request->password)) {
-            $data['password'] = $request->password;
+            $data['password'] = Hash::make($request->password);
         }
 
         $user->update($data);
@@ -164,7 +225,7 @@ class UserController extends Controller
                 'complemento' => $request->complemento,
                 'cidade' => $request->cidade,
                 'estado' => $request->estado,
-                'cep' => $request->cep,
+                'cep' => $cep,
             ]);
 
         } else {
@@ -175,7 +236,7 @@ class UserController extends Controller
                 'complemento' => $request->complemento,
                 'cidade' => $request->cidade,
                 'estado' => $request->estado,
-                'cep' => $request->cep,
+                'cep' => $cep,
                 'user_id' => $user->id
             ]);
 
@@ -231,14 +292,33 @@ class UserController extends Controller
         | ATUALIZAÇÃO
         |--------------------------------------------------------------------------
         */
+        $cpf = $request->cpf
+            ? preg_replace('/\D/', '', $request->cpf)
+            : null;
+
+        $cnpj = $request->cnpj
+            ? preg_replace('/\D/', '', $request->cnpj)
+            : null;
+
+        $telefone = $request->telefone
+            ? preg_replace('/\D/', '', $request->telefone)
+            : null;
+
+        $celular = $request->celular
+            ? preg_replace('/\D/', '', $request->celular)
+            : null;
+
+        $cep = $request->cep
+            ? preg_replace('/\D/', '', $request->cep)
+            : null;
 
         $data = [
             'name' => $request->name,
             'email' => $request->email,
-            'cpf' => $request->cpf ?: null,
-            'cnpj' => $request->cnpj ?: null,
-            'telefone' => $request->telefone,
-            'celular' => $request->celular,
+            'cpf' => $cpf,
+            'cnpj' => $cnpj,
+            'telefone' => $telefone,
+            'celular' => $celular,
         ];
 
         /*
@@ -249,7 +329,7 @@ class UserController extends Controller
 
         if (!empty($request->password)) {
 
-            $data['password'] = $request->password;
+            $data['password'] = Hash::make($request->password);
 
         }
 
@@ -269,7 +349,7 @@ class UserController extends Controller
                 'complemento' => $request->complemento,
                 'cidade' => $request->cidade,
                 'estado' => $request->estado,
-                'cep' => $request->cep,
+                'cep' => $cep,
             ]);
 
         } else {
@@ -280,7 +360,7 @@ class UserController extends Controller
                 'complemento' => $request->complemento,
                 'cidade' => $request->cidade,
                 'estado' => $request->estado,
-                'cep' => $request->cep,
+                'cep' => $cep,
                 'user_id' => $user->id
             ]);
 

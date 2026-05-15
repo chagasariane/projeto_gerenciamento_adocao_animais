@@ -998,7 +998,8 @@ body{
     min-height: calc(100vh - 70px);
     display: flex;
     align-items: center;
-    padding: 40px 0;
+    padding: 0 0 20px;
+    margin-top: -30px;
 }
 
 .auth-wrapper{
@@ -1040,7 +1041,7 @@ body{
 .auth-brand-content{
     position: relative;
     z-index: 2;
-    padding: 70px 55px;
+    padding: 45px 45px;
     color: white;
     height: 100%;
     display: flex;
@@ -1102,7 +1103,7 @@ body{
 }
 
 .auth-form-wrapper{
-    padding: 70px 60px;
+    padding: 45px 45px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -1938,4 +1939,10 @@ body{
         padding: 30px 24px;
     }
 
+}
+
+.required-field{
+    color: #dc2626;
+    font-weight: 700;
+    margin-left: 4px;
 }

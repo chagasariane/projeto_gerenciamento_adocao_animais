@@ -52,15 +52,15 @@ class HomeController extends Controller
 
         /*
         |--------------------------------------------------------------------------
-        | FILTRO POR PORTE
+        | FILTRO POR SEXO
         |--------------------------------------------------------------------------
         */
 
-        if ($request->filled('porte')) {
+        if ($request->filled('sexo')) {
 
             $query->where(
-                'porte',
-                $request->porte
+                'sexo',
+                $request->sexo
             );
 
         }

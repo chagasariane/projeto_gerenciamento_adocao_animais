@@ -94,42 +94,35 @@
 
                     </div>
 
-                    {{-- PORTE --}}
+                    {{-- SEXO --}}
                     <div class="col-md-3">
 
                         <label class="form-label fw-semibold">
 
-                            Porte
+                            Sexo
 
                         </label>
 
-                        <select name="porte"
+                        <select name="sexo"
                                 class="form-select custom-select">
 
                             <option value="">
 
-                                Qualquer porte
+                                Qualquer sexo
 
                             </option>
 
-                            <option value="PEQUENO"
-                                {{ request('porte') == 'PEQUENO' ? 'selected' : '' }}>
+                            <option value="MACHO"
+                                {{ request('sexo') == 'MACHO' ? 'selected' : '' }}>
 
-                                Pequeno
-
-                            </option>
-
-                            <option value="MEDIO"
-                                {{ request('porte') == 'MEDIO' ? 'selected' : '' }}>
-
-                                Médio
+                                Macho
 
                             </option>
 
-                            <option value="GRANDE"
-                                {{ request('porte') == 'GRANDE' ? 'selected' : '' }}>
+                            <option value="FEMEA"
+                                {{ request('sexo') == 'FEMEA' ? 'selected' : '' }}>
 
-                                Grande
+                                Fêmea
 
                             </option>
 

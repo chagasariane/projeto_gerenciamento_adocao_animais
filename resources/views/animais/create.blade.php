@@ -80,7 +80,7 @@
                         <div class="col-lg-6">
 
                             <label class="form-label fw-semibold mb-2">
-                                Data de Nascimento Aproximada
+                                Data de Nascimento
                             </label>
 
                             <input type="date"

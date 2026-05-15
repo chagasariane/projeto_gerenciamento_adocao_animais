@@ -30,7 +30,7 @@ class AuthController extends Controller
         }
 
         return back()->withErrors([
-            'email' => 'Credenciais inválidas.'
+            'email' => 'Não foi possível acessar sua conta. Verifique os dados informados.'
         ]);
     }
 
