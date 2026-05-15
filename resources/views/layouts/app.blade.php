@@ -8,6 +8,9 @@
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0">
 
+    <link rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
     <title>
         MiauDot
     </title>
@@ -90,6 +93,56 @@
 
                     @endauth
 
+                    {{-- ADMIN --}}
+                    @auth
+
+                        @if(auth()->user()->is_admin)
+
+                            <li class="nav-item dropdown">
+
+                                <a class="nav-link dropdown-toggle admin-link"
+                                href="#"
+                                id="adminDropdown"
+                                role="button"
+                                data-bs-toggle="dropdown"
+                                aria-expanded="false">
+
+                                    Administração
+
+                                </a>
+
+                                <ul class="dropdown-menu">
+
+                                    <li>
+
+                                        <a class="dropdown-item"
+                                        href="{{ route('especies.index') }}">
+
+                                            Espécies
+
+                                        </a>
+
+                                    </li>
+
+                                    <li>
+
+                                        <a class="dropdown-item"
+                                        href="{{ route('racas.index') }}">
+
+                                            Raças
+
+                                        </a>
+
+                                    </li>
+
+                                </ul>
+
+                            </li>
+
+                        @endif
+
+                    @endauth
+
                     {{-- COMO FUNCIONA --}}
                     <li class="nav-item">
 
@@ -122,19 +175,19 @@
                     {{-- VISITANTE --}}
                     @guest
 
-                        <a href="{{ route('login.form') }}"
-                           class="login-link">
+                        <a href="{{ route('login') }}"
+                            class="login-link">
 
-                            Entrar
+                                Entrar
 
-                        </a>
+                            </a>
 
-                        <a href="{{ route('register.form') }}"
-                           class="btn btn-signup">
+                            <a href="{{ route('register') }}"
+                            class="btn btn-signup">
 
-                            Cadastrar
+                                Cadastrar
 
-                        </a>
+                            </a>
 
                     @endguest
 

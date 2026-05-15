@@ -196,17 +196,17 @@
                     <div class="animal-card">
 
                         {{-- IMAGEM --}}
-                        @if($animal->foto)
+                        @if($animal->fotoPrincipal)
 
-                            <img src="{{ asset('storage/' . $animal->foto) }}"
-                                 class="animal-image"
-                                 alt="{{ $animal->nome }}">
+                            <img src="{{ asset('storage/' . $animal->fotoPrincipal->caminho) }}"
+                                class="animal-image"
+                                alt="{{ $animal->nome }}">
 
                         @else
 
                             <img src="https://placehold.co/600x400?text=MiauDot"
-                                 class="animal-image"
-                                 alt="{{ $animal->nome }}">
+                                class="animal-image"
+                                alt="{{ $animal->nome }}">
 
                         @endif
 

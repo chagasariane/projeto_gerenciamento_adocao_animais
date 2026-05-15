@@ -98,7 +98,9 @@ class Animal extends Model
      */
     public function fotos(): HasMany
     {
-        return $this->hasMany(AnimalFoto::class);
+        return $this->hasMany(AnimalFoto::class)
+            ->orderByDesc('principal')
+            ->orderBy('id');
     }
 
     /**

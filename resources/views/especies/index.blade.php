@@ -7,16 +7,21 @@
     <div class="container">
 
         {{-- HEADER --}}
-        <div class="page-header">
+        <div class="crud-header mb-5">
 
-            <div>
+            <div class="crud-header-content">
 
-                <h1 class="page-title">
+                <h1 class="crud-title">
+
                     Espécies
+
                 </h1>
 
-                <p class="page-description">
-                    Gerencie as espécies cadastradas no sistema.
+                <p class="crud-description">
+
+                    Gerencie as espécies cadastradas na plataforma
+                    de adoção responsável.
+
                 </p>
 
             </div>
@@ -24,7 +29,7 @@
             <a href="{{ route('especies.create') }}"
                class="btn create-btn">
 
-                + Nova Espécie
+                Nova Espécie
 
             </a>
 
@@ -33,7 +38,7 @@
         {{-- ALERT --}}
         @if(session('success'))
 
-            <div class="custom-alert success-alert">
+            <div class="custom-alert-success mb-4">
 
                 {{ session('success') }}
 
@@ -45,29 +50,29 @@
         <div class="filter-box mb-4">
 
             <form method="GET"
-                action="{{ route('especies.index') }}">
+                  action="{{ route('especies.index') }}">
 
-                <div class="row g-3 align-items-end">
+                <div class="row g-4 align-items-end">
 
-                    <div class="col-lg-10">
+                    <div class="col-lg-9">
 
-                        <label class="custom-label">
+                        <label class="form-label fw-semibold mb-2">
 
                             Buscar espécie
 
                         </label>
 
                         <input type="text"
-                            name="nome"
-                            class="form-control custom-input"
-                            placeholder="Digite o nome da espécie..."
-                            value="{{ request('nome') }}">
+                               name="nome"
+                               class="form-control custom-input"
+                               placeholder="Digite o nome da espécie..."
+                               value="{{ request('nome') }}">
 
                     </div>
 
-                    <div class="col-lg-2">
+                    <div class="col-lg-3">
 
-                        <div class="d-flex gap-2">
+                        <div class="d-flex gap-3">
 
                             <button type="submit"
                                     class="btn filter-btn w-100">
@@ -77,7 +82,7 @@
                             </button>
 
                             <a href="{{ route('especies.index') }}"
-                            class="btn clear-btn w-100">
+                               class="btn clear-btn w-100">
 
                                 Limpar
 
@@ -94,7 +99,7 @@
         </div>
 
         {{-- INFO --}}
-        <div class="animals-info mb-3">
+        <div class="crud-results-info mb-4">
 
             <span>
 
@@ -104,31 +109,33 @@
 
         </div>
 
-        {{-- TABLE CARD --}}
-        <div class="table-card">
+        {{-- TABLE --}}
+        <div class="crud-table-card">
 
             <div class="table-responsive">
 
-                <table class="table custom-table align-middle">
+                <table class="table crud-table align-middle mb-0">
 
                     <thead>
 
                         <tr>
 
-                            <th width="80">
-                                ID
-                            </th>
-
                             <th>
+
                                 Nome
+
                             </th>
 
                             <th>
+
                                 Descrição
+
                             </th>
 
                             <th width="220">
+
                                 Ações
+
                             </th>
 
                         </tr>
@@ -143,19 +150,9 @@
 
                                 <td>
 
-                                    <span class="table-id">
+                                    <div class="crud-table-title">
 
-                                        #{{ $especie->id }}
-
-                                    </span>
-
-                                </td>
-
-                                <td>
-
-                                    <div class="table-title">
-
-                                        {{ $especie->nome }}
+                                        {{ ucfirst(strtolower($especie->nome)) }}
 
                                     </div>
 
@@ -163,7 +160,7 @@
 
                                 <td>
 
-                                    <span class="table-description">
+                                    <span class="crud-table-description">
 
                                         {{ $especie->descricao ?? 'Sem descrição cadastrada.' }}
 
@@ -173,7 +170,7 @@
 
                                 <td>
 
-                                    <div class="table-actions">
+                                    <div class="crud-actions">
 
                                         <a href="{{ route('especies.edit', $especie->id) }}"
                                            class="btn edit-btn">
@@ -189,7 +186,8 @@
                                             @method('DELETE')
 
                                             <button type="submit"
-                                                    class="btn delete-btn">
+                                                    class="btn delete-btn"
+                                                    onclick="return confirm('Deseja realmente excluir esta espécie?')">
 
                                                 Excluir
 
@@ -207,11 +205,27 @@
 
                             <tr>
 
-                                <td colspan="4">
+                                <td colspan="3">
 
-                                    <div class="empty-table">
+                                    <div class="empty-table-state">
 
-                                        Nenhuma espécie cadastrada.
+                                        <div class="empty-table-icon">
+
+                                            🐾
+
+                                        </div>
+
+                                        <h4 class="mb-2">
+
+                                            Nenhuma espécie encontrada
+
+                                        </h4>
+
+                                        <p class="mb-0">
+
+                                            Cadastre uma nova espécie para começar.
+
+                                        </p>
 
                                     </div>
 

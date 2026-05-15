@@ -7,7 +7,7 @@
     <div class="container">
 
         {{-- HEADER --}}
-        <div class="mb-5">
+        <div class="content-card mb-5">
 
             <h1 class="section-title mb-3">
                 Editar Animal
@@ -53,11 +53,15 @@
                 @method('PUT')
 
                 {{-- INFORMAÇÕES BÁSICAS --}}
-                <div class="mb-5">
+                <div class="content-card mb-5">
 
                     <h3 class="animal-section-title">
                         Informações Básicas
                     </h3>
+
+                    <p class="section-helper-text mb-5">
+                        Dados principais de identificação do animal.
+                    </p>
 
                     <div class="row g-4">
 
@@ -111,7 +115,7 @@
                 </div>
 
                 {{-- CARACTERÍSTICAS --}}
-                <div class="mb-5">
+                <div class="content-card mb-5">
 
                     <h3 class="animal-section-title">
                         Características
@@ -325,7 +329,7 @@
                 </div>
 
                 {{-- SAÚDE --}}
-                <div class="mb-5">
+                <div class="content-card mb-5">
 
                     <h3 class="animal-section-title">
                         Saúde e Cuidados
@@ -399,7 +403,7 @@
 
                 </div>
 
-                {{-- BOTÕES --}}
+                                {{-- BOTÕES --}}
                 <div class="d-flex flex-column flex-md-row justify-content-end gap-3">
 
                     <a href="{{ route('animais.index') }}"
@@ -422,95 +426,64 @@
 
         </div>
 
-        {{-- FOTOS --}}
-        <div class="filter-box mt-5">
+        {{-- FOTOS ATUAIS --}}
+        <div class="mb-5 mt-5">
 
-            <div class="mb-4">
+            <div class="d-flex flex-column flex-lg-row
+                        justify-content-between
+                        align-items-lg-center
+                        gap-3
+                        mb-4">
 
-                <h3 class="animal-section-title mb-2">
-                    Fotos do Animal
-                </h3>
+                <div>
 
-                <p class="text-muted mb-0">
-
-                    A primeira imagem enviada será definida automaticamente como foto principal.
-
-                </p>
-
-            </div>
-
-            {{-- UPLOAD --}}
-            <form action="{{ route('animais.fotos.store', $animal->id) }}"
-                  method="POST"
-                  enctype="multipart/form-data"
-                  class="mb-5">
-
-                @csrf
-
-                <div class="mb-4">
-
-                    <input type="file"
-                           name="fotos[]"
-                           multiple
-                           class="form-control custom-input"
-                           accept="image/*"
-                           required>
+                    <h3 class="animal-section-title mb-2">
+                        Fotos Atuais
+                    </h3>
 
                 </div>
 
-                <button type="submit"
-                        class="save-btn">
+            </div>
 
-                    Enviar Fotos
-
-                </button>
-
-            </form>
-
-            {{-- GALERIA --}}
             @if($animal->fotos->count())
 
-                <div class="row g-4">
+                <div class="d-flex flex-wrap gap-4"
+                    id="fotos-atuais">
 
                     @foreach($animal->fotos as $foto)
 
-                        <div class="col-xl-3 col-md-4 col-sm-6">
+                        <div class="animal-card preview-foto-card
+                            {{ $foto->principal ? 'foto-principal-card' : '' }}"
+                            data-foto-id="{{ $foto->id }}">
 
-                            <div class="animal-card h-100">
+                            {{-- BADGE --}}
+                            @if($foto->principal)
 
-                                <img src="{{ asset('storage/' . $foto->caminho) }}"
-                                     class="animal-image"
-                                     alt="Foto do animal">
+                            @endif
 
-                                <div class="animal-body">
+                            {{-- IMAGEM --}}
+                            <img src="{{ asset('storage/' . $foto->caminho) }}"
+                                class="animal-image"
+                                alt="Foto do animal">
 
-                                    @if($foto->principal)
+                            {{-- CORPO --}}
+                            <div class="animal-body">
 
-                                        <span class="animal-tag d-inline-block mb-3">
+                                <form action="{{ route('animais.fotos.destroy', $foto->id) }}"
+                                    method="POST">
 
-                                            Foto Principal
+                                    @csrf
+                                    @method('DELETE')
 
-                                        </span>
+                                    <button type="submit"
+                                            class="delete-btn w-100"
+                                            onclick="return confirm('Deseja remover esta foto?')">
 
-                                    @endif
+                                        Remover
 
-                                    <form action="{{ route('animais.fotos.destroy', $foto->id) }}"
-                                          method="POST">
+                                    </button>
 
-                                        @csrf
-                                        @method('DELETE')
-
-                                        <button type="submit"
-                                                class="delete-btn w-100"
-                                                onclick="return confirm('Deseja remover esta foto?')">
-
-                                            Remover Foto
-
-                                        </button>
-
-                                    </form>
-
-                                </div>
+                                </form>
 
                             </div>
 
@@ -522,21 +495,100 @@
 
             @else
 
-                <div class="animal-info-item text-center py-5">
-
-                    <h5 class="fw-bold mb-2">
-                        Nenhuma foto cadastrada
-                    </h5>
+                <div class="animal-info-item">
 
                     <p class="text-muted mb-0">
-
-                        Adicione imagens para aumentar as chances de adoção.
-
+                        Nenhuma foto cadastrada.
                     </p>
 
                 </div>
 
             @endif
+
+        </div>
+
+        {{-- ADICIONAR NOVAS FOTOS --}}
+        <div class="filter-box mt-5">
+
+            <form action="{{ route('animais.fotos.store', $animal->id) }}"
+                method="POST"
+                enctype="multipart/form-data">
+
+                @csrf
+
+                <div class="mb-4">
+
+                    <h3 class="animal-section-title">
+                        Adicionar Novas Fotos
+                    </h3>
+
+                </div>
+
+                <div class="animal-info-item">
+
+                    <div class="d-flex flex-column flex-lg-row
+                                justify-content-between
+                                align-items-lg-center
+                                gap-3
+                                mb-4">
+
+                        <div>
+
+                            <span class="animal-info-label d-block mb-2">
+
+                                Upload de imagens
+
+                            </span>
+
+                            <p class="text-muted mb-0">
+
+                                Fotos bem iluminadas e naturais aumentam
+                                as chances de adoção.
+
+                            </p>
+
+                        </div>
+
+                        {{-- INPUT --}}
+                        <input type="file"
+                            id="edit-fotos"
+                            name="fotos[]"
+                            multiple
+                            accept="image/*"
+                            hidden>
+
+                        {{-- BOTÃO --}}
+                        <button type="button"
+                                class="create-btn"
+                                id="edit-btn-fotos">
+
+                            Adicionar Fotos
+
+                        </button>
+
+                    </div>
+
+                    {{-- PREVIEW --}}
+                    <div id="edit-preview-fotos"
+                        class="row g-3 mb-4">
+
+                    </div>
+
+                    {{-- ACTIONS --}}
+                    <div class="d-flex justify-content-end">
+
+                        <button type="submit"
+                                class="save-btn">
+
+                            Enviar Fotos
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </form>
 
         </div>
 
@@ -548,40 +600,241 @@
 
 @section('scripts')
 
+<script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.2/Sortable.min.js"></script>
+
 <script>
 
-    const especieSelect = document.getElementById('especie');
-    const racaSelect = document.getElementById('raca');
+    /*
+    |--------------------------------------------------------------------------
+    | FILTRO DE RAÇAS
+    |--------------------------------------------------------------------------
+    */
+
+    const especieSelect =
+        document.getElementById('especie');
+
+    const racaSelect =
+        document.getElementById('raca');
 
     if (especieSelect && racaSelect) {
 
         function filtrarRacas() {
 
-            const especieId = especieSelect.value;
+            const especieId =
+                especieSelect.value;
 
-            Array.from(racaSelect.options).forEach(option => {
+            Array.from(racaSelect.options)
+                .forEach(option => {
 
-                if (!option.value) return;
+                    if (!option.value) return;
 
-                const pertence =
-                    option.getAttribute('data-especie') === especieId;
+                    const pertence =
+                        option.getAttribute('data-especie') === especieId;
 
-                option.style.display =
-                    (!especieId || pertence) ? 'block' : 'none';
-            });
+                    option.style.display =
+                        (!especieId || pertence)
+                            ? 'block'
+                            : 'none';
+                });
 
-            racaSelect.disabled = !especieId;
+            racaSelect.disabled =
+                !especieId;
         }
 
-        especieSelect.addEventListener('change', function () {
+        especieSelect.addEventListener(
+            'change',
+            function () {
 
-            racaSelect.value = "";
-            filtrarRacas();
+                racaSelect.value = "";
+
+                filtrarRacas();
+
+            }
+        );
+
+        window.addEventListener(
+            'load',
+            filtrarRacas
+        );
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | PREVIEW DE NOVAS FOTOS
+    |--------------------------------------------------------------------------
+    */
+
+    const inputFotos =
+        document.getElementById('edit-fotos');
+
+    const btnFotos =
+        document.getElementById('edit-btn-fotos');
+
+    const previewFotos =
+        document.getElementById('edit-preview-fotos');
+
+    let arquivos = [];
+
+    /*
+    |--------------------------------------------------------------------------
+    | ABRIR INPUT
+    |--------------------------------------------------------------------------
+    */
+
+    btnFotos.addEventListener('click', () => {
+
+        inputFotos.click();
+
+    });
+
+    /*
+    |--------------------------------------------------------------------------
+    | ADICIONAR IMAGENS
+    |--------------------------------------------------------------------------
+    */
+
+    inputFotos.addEventListener('change', (event) => {
+
+        Array.from(event.target.files)
+            .forEach(file => {
+
+                arquivos.push({
+
+                    file: file,
+
+                    preview: URL.createObjectURL(file)
+
+                });
+
+            });
+
+        atualizarInputFiles();
+
+        renderizarPreview();
+
+    });
+
+    /*
+    |--------------------------------------------------------------------------
+    | ATUALIZA INPUT FILES
+    |--------------------------------------------------------------------------
+    */
+
+    function atualizarInputFiles() {
+
+        const dataTransfer =
+            new DataTransfer();
+
+        arquivos.forEach(item => {
+
+            dataTransfer.items.add(item.file);
 
         });
 
-        window.addEventListener('load', filtrarRacas);
+        inputFotos.files =
+            dataTransfer.files;
     }
+
+    /*
+    |--------------------------------------------------------------------------
+    | RENDERIZA PREVIEW
+    |--------------------------------------------------------------------------
+    */
+
+    function renderizarPreview() {
+
+        previewFotos.innerHTML = '';
+
+        arquivos.forEach((item, index) => {
+
+            const coluna =
+                document.createElement('div');
+
+            coluna.className =
+                'col-auto preview-item';
+
+            coluna.innerHTML = `
+
+                <div class="animal-card preview-foto-card ${index === 0 ? 'foto-principal-card' : ''}">
+
+                    <img src="${item.preview}"
+                         class="animal-image"
+                         alt="Preview">
+
+                    <div class="animal-body">
+
+                        ${index === 0
+                            ? `
+                              `
+                            : ''
+                        }
+
+                        <button type="button"
+                                class="delete-btn w-100"
+                                onclick="removerFoto(${index})">
+
+                            Remover
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            `;
+
+            previewFotos.appendChild(coluna);
+
+        });
+
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | REMOVER FOTO
+    |--------------------------------------------------------------------------
+    */
+
+    function removerFoto(index) {
+
+        arquivos.splice(index, 1);
+
+        atualizarInputFiles();
+
+        renderizarPreview();
+
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | SORTABLE
+    |--------------------------------------------------------------------------
+    */
+
+    new Sortable(previewFotos, {
+
+        animation: 200,
+
+        ghostClass: 'sortable-ghost',
+
+        onEnd: function (event) {
+
+            const itemMovido =
+                arquivos.splice(event.oldIndex, 1)[0];
+
+            arquivos.splice(
+                event.newIndex,
+                0,
+                itemMovido
+            );
+
+            atualizarInputFiles();
+
+            renderizarPreview();
+
+        }
+
+    });
 
 </script>
 

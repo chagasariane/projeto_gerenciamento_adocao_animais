@@ -7,7 +7,7 @@
     <div class="container">
 
         {{-- HEADER --}}
-        <div class="mb-5">
+        <div class="mb-5 text-center d-flex flex-column align-items-center">
 
             <h1 class="section-title mb-3">
                 Cadastrar Animal

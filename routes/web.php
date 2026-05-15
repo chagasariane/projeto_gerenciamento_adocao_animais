@@ -26,13 +26,12 @@ Route::get('/', [HomeController::class, 'index']);
 */
 
 Route::get('/login', [AuthController::class, 'loginForm'])
-    ->name('login.form');
-
-Route::post('/login', [AuthController::class, 'login'])
     ->name('login');
 
+Route::post('/login', [AuthController::class, 'login']);
+
 Route::get('/register', [AuthController::class, 'registerForm'])
-    ->name('register.form');
+    ->name('register');
 
 Route::post('/logout', [AuthController::class, 'logout'])
     ->name('logout');
@@ -98,6 +97,11 @@ Route::middleware(['auth'])->group(function () {
         '/animais/fotos/{foto}',
         [AnimalFotoController::class, 'destroy']
     )->name('animais.fotos.destroy');
+
+    Route::patch(
+        '/animais/{animal}/fotos/reordenar',
+        [AnimalFotoController::class, 'reordenar']
+    )->name('animais.fotos.reordenar');
 
     /*
     |--------------------------------------------------------------------------

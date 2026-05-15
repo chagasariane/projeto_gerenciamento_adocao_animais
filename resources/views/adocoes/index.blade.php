@@ -2,188 +2,231 @@
 
 @section('content')
 
-<div class="container">
+<section class="animal-show-page">
 
-    {{-- HEADER --}}
-    <div class="mb-4">
+    <div class="container">
 
-        <h1>
-            Solicitações de Adoção
-        </h1>
+        {{-- HEADER --}}
+        <div class="mb-5">
 
-        <p class="text-muted mb-0">
-            Gerencie suas solicitações e os pedidos recebidos.
-        </p>
+            <h1 class="section-title mb-3">
 
-    </div>
+                Solicitações de Adoção
 
-    {{-- ALERTAS --}}
-    @if(session('success'))
+            </h1>
 
-        <div class="alert alert-success">
+            <p class="section-description m-0">
 
-            {{ session('success') }}
+                Gerencie solicitações enviadas e acompanhe
+                o andamento dos pedidos de adoção.
+
+            </p>
 
         </div>
 
-    @endif
+        {{-- ALERTAS --}}
+        @if(session('success'))
 
-    {{-- ERROS --}}
-    @if ($errors->any())
+            <div class="alert custom-alert-success mb-4">
 
-        <div class="alert alert-danger">
+                {{ session('success') }}
 
-            <ul class="mb-0">
+            </div>
 
-                @foreach ($errors->all() as $erro)
+        @endif
 
-                    <li>{{ $erro }}</li>
+        {{-- ERROS --}}
+        @if ($errors->any())
 
-                @endforeach
+            <div class="alert custom-alert-danger mb-4">
 
-            </ul>
+                <ul class="mb-0">
 
-        </div>
+                    @foreach ($errors->all() as $erro)
 
-    @endif
+                        <li>{{ $erro }}</li>
 
-    {{-- LISTAGEM --}}
-    @if($adocoes->count())
+                    @endforeach
 
-        <div class="row">
+                </ul>
 
-            @foreach($adocoes as $adocao)
+            </div>
 
-                @php
+        @endif
 
-                    $souDonoAnimal =
-                        $adocao->animal &&
-                        $adocao->animal->user_id == auth()->id();
+        {{-- LISTAGEM --}}
+        @if($adocoes->count())
 
-                @endphp
+            <div class="row">
 
-                <div class="col-lg-6 mb-4">
+                @foreach($adocoes as $adocao)
 
-                    <div class="card shadow-sm h-100">
+                    @php
 
-                        <div class="card-body">
+                        $souDonoAnimal =
+                            $adocao->animal &&
+                            $adocao->animal->user_id == auth()->id();
 
-                            {{-- ANIMAL --}}
-                            <h4 class="mb-3">
+                    @endphp
 
-                                {{ $adocao->animal->nome ?? 'Animal removido' }}
+                    <div class="col-lg-6 mb-4">
 
-                            </h4>
+                        <div class="adoption-card h-100">
 
-                            {{-- ADOTANTE --}}
-                            <p class="mb-1">
+                        {{-- TOPO --}}
+                        <div class="adoption-top">
 
-                                <strong>
-                                    Solicitante:
-                                </strong>
+                            {{-- FOTO --}}
+                            <div class="adoption-photo-wrapper">
 
-                                {{ $adocao->user->name ?? 'Usuário removido' }}
+                                @if($adocao->animal && $adocao->animal->fotoPrincipal)
 
-                            </p>
-
-                            {{-- STATUS --}}
-                            <p class="mb-3">
-
-                                <strong>
-                                    Status:
-                                </strong>
-
-                                @if($adocao->status == 'PENDENTE')
-
-                                    <span class="badge bg-warning text-dark">
-
-                                        Pendente
-
-                                    </span>
-
-                                @elseif($adocao->status == 'APROVADA')
-
-                                    <span class="badge bg-success">
-
-                                        Aprovada
-
-                                    </span>
-
-                                @elseif($adocao->status == 'RECUSADA')
-
-                                    <span class="badge bg-danger">
-
-                                        Recusada
-
-                                    </span>
+                                    <img src="{{ asset('storage/' . $adocao->animal->fotoPrincipal->caminho) }}"
+                                        class="adoption-photo"
+                                        alt="{{ $adocao->animal->nome }}">
 
                                 @else
 
-                                    <span class="badge bg-secondary">
-
-                                        Cancelada
-
-                                    </span>
+                                    <img src="{{ asset('imagem/sem-foto.png') }}"
+                                        class="adoption-photo"
+                                        alt="Sem foto">
 
                                 @endif
 
-                            </p>
+                            </div>
 
-                            {{-- MENSAGEM --}}
-                            @if($adocao->mensagem)
+                            {{-- INFO --}}
+                            <div class="flex-grow-1">
 
-                                <div class="border rounded p-3 bg-light">
+                                <div class="d-flex justify-content-between align-items-start mb-2">
 
-                                    <strong>
-                                        Mensagem:
-                                    </strong>
+                                    <div>
 
-                                    <p class="mb-0 mt-2">
+                                        <h3 class="adoption-animal-name">
 
-                                        {{ $adocao->mensagem }}
+                                            {{ $adocao->animal->nome ?? 'Animal removido' }}
 
-                                    </p>
+                                        </h3>
+
+                                        <span class="adoption-role">
+
+                                            @if($souDonoAnimal)
+
+                                                Você recebeu esta solicitação
+
+                                            @else
+
+                                                Você enviou esta solicitação
+
+                                            @endif
+
+                                        </span>
+
+                                    </div>
+
+                                    {{-- STATUS --}}
+                                    @if($adocao->status == 'PENDENTE')
+
+                                        <span class="status-badge pending-badge">
+                                            Pendente
+                                        </span>
+
+                                    @elseif($adocao->status == 'APROVADA')
+
+                                        <span class="status-badge approved-badge">
+                                            Aprovada
+                                        </span>
+
+                                    @elseif($adocao->status == 'RECUSADA')
+
+                                        <span class="status-badge refused-badge">
+                                            Recusada
+                                        </span>
+
+                                    @else
+
+                                        <span class="status-badge canceled-badge">
+                                            Cancelada
+                                        </span>
+
+                                    @endif
 
                                 </div>
 
-                            @endif
+                                {{-- META --}}
+                                <div class="adoption-meta">
+
+                                    <div class="adoption-meta-item">
+
+                                        👤
+                                        <strong>
+                                            {{ $adocao->user->name ?? 'Usuário removido' }}
+                                        </strong>
+
+                                    </div>
+
+                                    <div class="adoption-meta-item">
+
+                                        📅
+                                        {{ $adocao->created_at->format('d/m/Y \à\s H:i') }}
+
+                                    </div>
+
+                                </div>
+
+                            </div>
 
                         </div>
 
-                        {{-- AÇÕES --}}
-                        <div class="card-footer bg-white border-0">
+                        {{-- MENSAGEM --}}
+                        @if($adocao->mensagem)
 
-                            {{-- DONO DO ANIMAL --}}
+                            <div class="adoption-message-box">
+
+                                <span class="message-label">
+
+                                    Mensagem enviada
+
+                                </span>
+
+                                <p class="message-content mb-0">
+
+                                    {{ $adocao->mensagem }}
+
+                                </p>
+
+                            </div>
+
+                        @endif
+
+                        {{-- AÇÕES --}}
+                        <div class="adoption-card-footer">
+
                             @if(
                                 $souDonoAnimal &&
                                 $adocao->status == 'PENDENTE'
                             )
 
-                                <div class="d-flex gap-2">
+                                <a href="{{ route('adocoes.edit', $adocao->id) }}"
+                                class="btn animal-btn w-100">
 
-                                    <a href="{{ route('adocoes.edit', $adocao->id) }}"
-                                       class="btn btn-primary w-100">
+                                    Gerenciar Solicitação
 
-                                        Gerenciar Solicitação
+                                </a>
 
-                                    </a>
-
-                                </div>
-
-                            {{-- SOLICITANTE --}}
                             @elseif(
                                 $adocao->user_id == auth()->id() &&
                                 $adocao->status == 'PENDENTE'
                             )
 
                                 <form action="{{ route('adocoes.destroy', $adocao->id) }}"
-                                      method="POST">
+                                    method="POST">
 
                                     @csrf
                                     @method('DELETE')
 
                                     <button type="submit"
-                                            class="btn btn-danger w-100"
+                                            class="btn delete-btn w-100"
                                             onclick="return confirm('Deseja cancelar esta solicitação?')">
 
                                         Cancelar Solicitação
@@ -198,22 +241,35 @@
 
                     </div>
 
-                </div>
+                    </div>
 
-            @endforeach
+                @endforeach
 
-        </div>
+            </div>
 
-    @else
+        @else
 
-        <div class="alert alert-info">
+            <div class="empty-state-box">
 
-            Nenhuma solicitação encontrada.
+                <h4 class="mb-3">
 
-        </div>
+                    Nenhuma solicitação encontrada
 
-    @endif
+                </h4>
 
-</div>
+                <p class="mb-0">
+
+                    Quando houver solicitações de adoção,
+                    elas aparecerão aqui.
+
+                </p>
+
+            </div>
+
+        @endif
+
+    </div>
+
+</section>
 
 @endsection

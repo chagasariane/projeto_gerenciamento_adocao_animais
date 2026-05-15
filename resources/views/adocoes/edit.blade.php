@@ -2,142 +2,204 @@
 
 @section('content')
 
-<div class="container">
+<section class="animal-show-page">
 
-    {{-- HEADER --}}
-    <div class="mb-4">
+    <div class="container">
 
-        <h1>
-            Gerenciar Solicitação
-        </h1>
+        {{-- HEADER --}}
+        <div class="mb-5">
 
-        <p class="text-muted mb-0">
-            Avalie a solicitação de adoção recebida.
-        </p>
+            <h1 class="section-title mb-3">
 
-    </div>
+                Gerenciar Solicitação
 
-    {{-- ERROS --}}
-    @if ($errors->any())
+            </h1>
 
-        <div class="alert alert-danger">
+            <p class="section-description m-0">
 
-            <ul class="mb-0">
+                Avalie a solicitação de adoção recebida
+                e defina o andamento do processo.
 
-                @foreach ($errors->all() as $erro)
-
-                    <li>{{ $erro }}</li>
-
-                @endforeach
-
-            </ul>
+            </p>
 
         </div>
 
-    @endif
+        {{-- ERROS --}}
+        @if ($errors->any())
 
-    {{-- CARD --}}
-    <div class="card shadow-sm">
+            <div class="alert custom-alert-danger mb-4">
 
-        <div class="card-body">
+                <ul class="mb-0">
 
-            {{-- ANIMAL --}}
-            <h3 class="mb-4">
+                    @foreach ($errors->all() as $erro)
 
-                {{ $adocao->animal->nome }}
+                        <li>{{ $erro }}</li>
 
-            </h3>
+                    @endforeach
 
-            {{-- SOLICITANTE --}}
-            <div class="mb-4">
-
-                <h5>
-                    Solicitante
-                </h5>
-
-                <p class="mb-1">
-
-                    <strong>
-                        Nome:
-                    </strong>
-
-                    {{ $adocao->user->name }}
-
-                </p>
-
-                <p class="mb-0">
-
-                    <strong>
-                        Email:
-                    </strong>
-
-                    {{ $adocao->user->email }}
-
-                </p>
+                </ul>
 
             </div>
 
-            {{-- STATUS --}}
-            <div class="mb-4">
+        @endif
 
-                <h5>
-                    Status Atual
-                </h5>
+        {{-- CARD --}}
+        <div class="adoption-manage-card">
 
-                <p class="mb-0">
+            {{-- TOPO --}}
+            <div class="adoption-manage-top">
 
-                    @if($adocao->status == 'PENDENTE')
+                {{-- FOTO --}}
+                <div class="manage-photo-wrapper">
 
-                        <span class="badge bg-warning text-dark">
+                    @if($adocao->animal->fotoPrincipal)
 
-                            Pendente
-
-                        </span>
-
-                    @elseif($adocao->status == 'APROVADA')
-
-                        <span class="badge bg-success">
-
-                            Aprovada
-
-                        </span>
-
-                    @elseif($adocao->status == 'RECUSADA')
-
-                        <span class="badge bg-danger">
-
-                            Recusada
-
-                        </span>
+                        <img src="{{ asset('storage/' . $adocao->animal->fotoPrincipal->caminho) }}"
+                             class="manage-photo"
+                             alt="{{ $adocao->animal->nome }}">
 
                     @else
 
-                        <span class="badge bg-secondary">
-
-                            Cancelada
-
-                        </span>
+                        <img src="{{ asset('imagem/sem-foto.png') }}"
+                             class="manage-photo"
+                             alt="Sem foto">
 
                     @endif
 
-                </p>
+                </div>
+
+                {{-- INFO --}}
+                <div class="flex-grow-1">
+
+                    <div class="d-flex justify-content-between align-items-start flex-wrap gap-3">
+
+                        <div>
+
+                            <h2 class="manage-animal-name">
+
+                                {{ $adocao->animal->nome }}
+
+                            </h2>
+
+                            <p class="manage-animal-meta mb-0">
+
+                                {{ $adocao->animal->especie->nome ?? '-' }}
+                                ·
+                                {{ ucfirst(strtolower($adocao->animal->porte ?? '-')) }}
+
+                            </p>
+
+                        </div>
+
+                        {{-- STATUS --}}
+                        @if($adocao->status == 'PENDENTE')
+
+                            <span class="status-badge pending-badge">
+
+                                Pendente
+
+                            </span>
+
+                        @elseif($adocao->status == 'APROVADA')
+
+                            <span class="status-badge approved-badge">
+
+                                Aprovada
+
+                            </span>
+
+                        @elseif($adocao->status == 'RECUSADA')
+
+                            <span class="status-badge refused-badge">
+
+                                Recusada
+
+                            </span>
+
+                        @else
+
+                            <span class="status-badge canceled-badge">
+
+                                Cancelada
+
+                            </span>
+
+                        @endif
+
+                    </div>
+
+                    <div class="manage-meta-grid mt-4">
+
+                        <div class="manage-meta-item">
+
+                            <span class="manage-meta-label">
+
+                                Solicitante
+
+                            </span>
+
+                            <span class="manage-meta-value">
+
+                                {{ $adocao->user->name }}
+
+                            </span>
+
+                        </div>
+
+                        <div class="manage-meta-item">
+
+                            <span class="manage-meta-label">
+
+                                E-mail
+
+                            </span>
+
+                            <span class="manage-meta-value">
+
+                                {{ $adocao->user->email }}
+
+                            </span>
+
+                        </div>
+
+                        <div class="manage-meta-item">
+
+                            <span class="manage-meta-label">
+
+                                Data da Solicitação
+
+                            </span>
+
+                            <span class="manage-meta-value">
+
+                                {{ $adocao->created_at->format('d/m/Y \à\s H:i') }}
+
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
 
             </div>
 
             {{-- MENSAGEM --}}
             @if($adocao->mensagem)
 
-                <div class="mb-4">
+                <div class="manage-message-box">
 
-                    <h5>
-                        Mensagem do Solicitante
-                    </h5>
+                    <span class="message-label">
 
-                    <div class="border rounded p-3 bg-light">
+                        Mensagem enviada pelo solicitante
+
+                    </span>
+
+                    <p class="message-content mb-0">
 
                         {{ $adocao->mensagem }}
 
-                    </div>
+                    </p>
 
                 </div>
 
@@ -146,71 +208,77 @@
             {{-- FORM --}}
             @if($adocao->status == 'PENDENTE')
 
-                <form action="{{ route('adocoes.update', $adocao->id) }}"
-                      method="POST">
+                <div class="manage-form-wrapper">
 
-                    @csrf
-                    @method('PUT')
+                    <form action="{{ route('adocoes.update', $adocao->id) }}"
+                          method="POST">
 
-                    <div class="mb-4">
+                        @csrf
+                        @method('PUT')
 
-                        <label class="form-label">
+                        <div class="mb-4">
 
-                            Decisão
+                            <label class="form-label fw-semibold">
 
-                        </label>
+                                Decisão da solicitação
 
-                        <select name="status"
-                                class="form-select"
-                                required>
+                            </label>
 
-                            <option value="">
-                                Selecione
-                            </option>
+                            <select name="status"
+                                    class="form-select custom-select"
+                                    required>
 
-                            <option value="APROVADA">
+                                <option value="">
 
-                                Aprovar Solicitação
+                                    Selecione uma opção
 
-                            </option>
+                                </option>
 
-                            <option value="RECUSADA">
+                                <option value="APROVADA">
 
-                                Recusar Solicitação
+                                    Aprovar Solicitação
 
-                            </option>
+                                </option>
 
-                        </select>
+                                <option value="RECUSADA">
 
-                    </div>
+                                    Recusar Solicitação
 
-                    <div class="d-flex justify-content-between">
+                                </option>
 
-                        <a href="{{ route('adocoes.index') }}"
-                           class="btn btn-secondary">
+                            </select>
 
-                            Voltar
+                        </div>
 
-                        </a>
+                        <div class="d-flex gap-3 flex-wrap">
 
-                        <button type="submit"
-                                class="btn btn-primary"
-                                onclick="return confirm('Confirma esta decisão? Essa ação não poderá ser revertida.')">
+                            <a href="{{ route('adocoes.index') }}"
+                               class="btn back-btn">
 
-                            Confirmar Decisão
+                                Voltar
 
-                        </button>
+                            </a>
 
-                    </div>
+                            <button type="submit"
+                                    class="btn save-btn"
+                                    onclick="return confirm('Confirma esta decisão? Essa ação não poderá ser revertida.')">
 
-                </form>
+                                Confirmar Decisão
+
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </div>
 
             @else
 
-                <div class="d-flex justify-content-between">
+                <div class="manage-form-wrapper">
 
                     <a href="{{ route('adocoes.index') }}"
-                       class="btn btn-secondary">
+                       class="btn back-btn">
 
                         Voltar
 
@@ -224,6 +292,6 @@
 
     </div>
 
-</div>
+</section>
 
 @endsection

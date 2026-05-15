@@ -80,7 +80,7 @@ class UserController extends Controller
         ]);
 
         return redirect()
-            ->route('login.form')
+            ->route('login')
             ->with('success', 'Conta criada com sucesso!');
     }
 
