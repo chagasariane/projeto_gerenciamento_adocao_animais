@@ -135,6 +135,17 @@
 
                                     </li>
 
+                                    <li>
+
+                                        <a class="dropdown-item"
+                                        href="{{ route('users.index') }}">
+
+                                            Usuários
+
+                                        </a>
+
+                                    </li>
+
                                 </ul>
 
                             </li>
@@ -194,11 +205,25 @@
                     {{-- AUTENTICADO --}}
                     @auth
 
-                        <span class="me-2 fw-semibold">
+                        <div class="d-flex align-items-center gap-2">
+
+                        <span class="fw-semibold user-name">
 
                             {{ auth()->user()->name }}
 
                         </span>
+
+                        @if(auth()->user()->is_admin)
+
+                            <span class="admin-badge">
+
+                                ADMIN
+
+                            </span>
+
+                        @endif
+
+                    </div>
 
                         <form method="POST"
                               action="{{ route('logout') }}">

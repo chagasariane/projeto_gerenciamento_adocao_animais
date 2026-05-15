@@ -135,6 +135,7 @@ class UserController extends Controller
             'cnpj' => $request->cnpj ?: null,
             'telefone' => $request->telefone,
             'celular' => $request->celular,
+            'is_admin' => $request->is_admin,
         ];
 
         /*

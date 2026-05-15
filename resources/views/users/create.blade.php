@@ -9,13 +9,7 @@
         <div class="auth-register-wrapper">
 
             {{-- HEADER --}}
-            <div class="register-header text-center">
-
-                <span class="auth-badge mb-4">
-
-                    Plataforma de Adoção Responsável
-
-                </span>
+            <div class="register-header text-center mb-5">
 
                 <h1 class="section-title mb-3">
 
@@ -318,12 +312,25 @@
                 {{-- BOTÕES --}}
                 <div class="d-flex justify-content-between flex-wrap gap-3">
 
-                    <a href="{{ url('/') }}"
-                       class="btn back-btn">
+                    @if(auth()->check() && auth()->user()->is_admin)
 
-                        Voltar
+                        <a href="{{ route('users.index') }}"
+                        class="btn back-btn">
 
-                    </a>
+                            Voltar
+
+                        </a>
+
+                    @else
+
+                        <a href="{{ url('/') }}"
+                        class="btn back-btn">
+
+                            Voltar
+
+                        </a>
+
+                    @endif
 
                     <button type="submit"
                             class="btn save-btn">
