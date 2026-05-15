@@ -8,9 +8,19 @@ use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $users = User::latest()->get();
+        $query = User::latest();
+
+        if ($request->filled('name')) {
+            $query->where('name', 'like', '%' . $request->name . '%');
+        }
+
+        if ($request->filled('email')) {
+            $query->where('email', 'like', '%' . $request->email . '%');
+        }
+
+        $users = $query->get();
 
         return view('users.index', compact('users'));
     }
