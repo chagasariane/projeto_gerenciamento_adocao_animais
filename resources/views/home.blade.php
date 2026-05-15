@@ -13,7 +13,7 @@
 
                 <h1 class="hero-title">
 
-                    Encontre um companheiro,
+                    Encontre um amigo,
                     mude uma vida.
 
                 </h1>

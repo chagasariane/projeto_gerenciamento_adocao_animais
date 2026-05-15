@@ -121,7 +121,7 @@ Route::middleware(['auth'])->group(function () {
     | ANIMAIS
     |--------------------------------------------------------------------------
     */
-
+    Route::get('/especies/{id}/racas',[AnimalController::class, 'racasPorEspecie'])->name('especies.racas');
     Route::resource('animais', AnimalController::class);
 
     /*

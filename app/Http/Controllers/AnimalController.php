@@ -390,4 +390,16 @@ class AnimalController extends Controller
                 'Animal removido com sucesso!'
             );
     }
+
+    public function racasPorEspecie($especieId)
+    {
+        $racas = Raca::where(
+                'especie_id',
+                $especieId
+            )
+            ->orderBy('nome')
+            ->get();
+
+        return response()->json($racas);
+    }
 }

@@ -206,25 +206,26 @@
                             </label>
 
                             <select name="especie_id"
-                                    class="form-select custom-select"
-                                    required>
+                                id="especie_id"
+                                class="form-select custom-select"
+                                required>
 
-                                <option value="">
-                                    Selecione
+                            <option value="">
+                                Selecione
+                            </option>
+
+                            @foreach ($especies as $especie)
+
+                                <option value="{{ $especie->id }}"
+                                    {{ old('especie_id') == $especie->id ? 'selected' : '' }}>
+
+                                    {{ ucfirst(strtolower($especie->nome)) }}
+
                                 </option>
 
-                                @foreach ($especies as $especie)
+                            @endforeach
 
-                                    <option value="{{ $especie->id }}"
-                                        {{ old('especie_id') == $especie->id ? 'selected' : '' }}>
-
-                                        {{ ucfirst(strtolower($especie->nome)) }}
-
-                                    </option>
-
-                                @endforeach
-
-                            </select>
+                        </select>
 
                         </div>
 
@@ -236,23 +237,13 @@
                             </label>
 
                             <select name="raca_id"
+                                    id="raca_id"
                                     class="form-select custom-select"
                                     required>
 
                                 <option value="">
-                                    Selecione
+                                    Primeiro selecione uma espécie
                                 </option>
-
-                                @foreach ($racas as $raca)
-
-                                    <option value="{{ $raca->id }}"
-                                        {{ old('raca_id') == $raca->id ? 'selected' : '' }}>
-
-                                        {{ ucfirst(strtolower($raca->nome)) }}
-
-                                    </option>
-
-                                @endforeach
 
                             </select>
 
@@ -641,6 +632,133 @@
             atualizarInputFiles();
 
             renderizarPreview();
+
+        }
+
+    });
+
+    /*
+    |--------------------------------------------------------------------------
+    | FILTRO DINÂMICO DE RAÇAS
+    |--------------------------------------------------------------------------
+    */
+
+    const selectEspecie =
+        document.getElementById('especie_id');
+
+    const selectRaca =
+        document.getElementById('raca_id');
+
+    /*
+    |--------------------------------------------------------------------------
+    | CARREGA RAÇAS
+    |--------------------------------------------------------------------------
+    */
+
+    async function carregarRacas(especieId, racaSelecionada = null) {
+
+        selectRaca.innerHTML = `
+            <option value="">
+                Carregando...
+            </option>
+        `;
+
+        try {
+
+            const response = await fetch(
+                `/especies/${especieId}/racas`
+            );
+
+            const racas = await response.json();
+
+            selectRaca.innerHTML = `
+                <option value="">
+                    Selecione
+                </option>
+            `;
+
+            racas.forEach(raca => {
+
+                const option =
+                    document.createElement('option');
+
+                option.value = raca.id;
+
+                option.textContent =
+                    raca.nome.charAt(0).toUpperCase() +
+                    raca.nome.slice(1).toLowerCase();
+
+                /*
+                |--------------------------------------------------------------------------
+                | MANTÉM OLD()
+                |--------------------------------------------------------------------------
+                */
+
+                if (racaSelecionada == raca.id) {
+
+                    option.selected = true;
+
+                }
+
+                selectRaca.appendChild(option);
+
+            });
+
+        } catch (error) {
+
+            selectRaca.innerHTML = `
+                <option value="">
+                    Erro ao carregar raças
+                </option>
+            `;
+
+        }
+
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | ALTERAÇÃO DE ESPÉCIE
+    |--------------------------------------------------------------------------
+    */
+
+    selectEspecie.addEventListener('change', () => {
+
+        const especieId =
+            selectEspecie.value;
+
+        selectRaca.innerHTML = `
+            <option value="">
+                Selecione
+            </option>
+        `;
+
+        if (!especieId) return;
+
+        carregarRacas(especieId);
+
+    });
+
+    /*
+    |--------------------------------------------------------------------------
+    | OLD INPUT
+    |--------------------------------------------------------------------------
+    */
+
+    document.addEventListener('DOMContentLoaded', () => {
+
+        const especieOld =
+            "{{ old('especie_id') }}";
+
+        const racaOld =
+            "{{ old('raca_id') }}";
+
+        if (especieOld) {
+
+            carregarRacas(
+                especieOld,
+                racaOld
+            );
 
         }
 
