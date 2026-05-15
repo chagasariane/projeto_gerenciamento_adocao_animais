@@ -1624,15 +1624,6 @@ body{
     line-height: 1.9;
 }
 
-.about-image-card{
-    background-color: white;
-    border-radius: 36px;
-    min-height: 420px;
-    overflow: hidden;
-    border: 1px solid #ececec;
-    box-shadow: 0 15px 40px rgba(0,0,0,0.05);
-}
-
 .about-image-placeholder{
     font-size: 7rem;
 }
@@ -1816,11 +1807,11 @@ body{
 
 }
 
-.about-image{
+.about-side-image{
     width: 100%;
-    height: 100%;
+    border-radius: 30px;
     object-fit: cover;
-    border-radius: 36px;
+    display: block;
 }
 
 /* =========================

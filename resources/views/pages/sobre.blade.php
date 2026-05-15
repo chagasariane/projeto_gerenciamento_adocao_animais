@@ -65,13 +65,9 @@
 
                 <div class="col-lg-6">
 
-                    <div class="about-image-card">
-
-                        <img src="{{ asset('imagem/sobre.png') }}"
-                            alt="Adoção responsável"
-                            class="about-image">
-
-                    </div>
+                    <img src="{{ asset('imagem/sobre.png') }}"
+                        alt="Adoção responsável"
+                        class="about-side-image">
 
                 </div>
 
