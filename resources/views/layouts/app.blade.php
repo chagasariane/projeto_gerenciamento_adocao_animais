@@ -164,7 +164,7 @@
                     <li class="nav-item">
 
                         <a class="nav-link"
-                           href="#">
+                        href="{{ route('como-funciona') }}">
 
                             Como Funciona
 
@@ -176,7 +176,7 @@
                     <li class="nav-item">
 
                         <a class="nav-link"
-                           href="#">
+                        href="{{ route('sobre') }}">
 
                             Sobre
 

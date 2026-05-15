@@ -1574,3 +1574,377 @@ body{
     margin-left: 4px;
     vertical-align: 0.15em;
 }
+
+/* =========================
+   PÁGINAS INSTITUCIONAIS
+========================= */
+
+.institutional-page{
+    padding: 40px 0 100px;
+}
+
+.institutional-hero{
+    max-width: 900px;
+    margin: 0 auto 90px;
+}
+
+.institutional-title{
+    font-size: 4rem;
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -2px;
+    color: #0f172a;
+}
+
+.institutional-description{
+    max-width: 760px;
+    margin: 0 auto;
+    font-size: 1.18rem;
+    line-height: 1.9;
+    color: #64748b;
+}
+
+/* =========================
+   SOBRE
+========================= */
+
+.about-section-custom{
+    margin-top: 20px;
+    margin-bottom: 110px;
+}
+
+.about-content-card{
+    padding-right: 25px;
+}
+
+.about-text{
+    margin: 0 0 24px 0;
+    max-width: 100%;
+    text-align: left;
+    line-height: 1.9;
+}
+
+.about-image-card{
+    background-color: white;
+    border-radius: 36px;
+    min-height: 420px;
+    overflow: hidden;
+    border: 1px solid #ececec;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.05);
+}
+
+.about-image-placeholder{
+    font-size: 7rem;
+}
+
+/* =========================
+   IMPACTO
+========================= */
+
+.impact-section{
+    margin-top: 20px;
+    margin-bottom: 110px;
+}
+
+.impact-card{
+    background-color: white;
+    border-radius: 28px;
+    padding: 42px 34px;
+    border: 1px solid #ececec;
+    height: 100%;
+    transition: 0.35s;
+}
+
+.impact-card:hover{
+    transform: translateY(-8px);
+    box-shadow: 0 18px 40px rgba(0,0,0,0.08);
+}
+
+.impact-icon{
+    font-size: 3rem;
+    margin-bottom: 24px;
+}
+
+.impact-title{
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 18px;
+    color: #0f172a;
+}
+
+.impact-description{
+    color: #64748b;
+    line-height: 1.9;
+}
+
+/* =========================
+   ACADÊMICO
+========================= */
+
+.academic-section{
+    margin-top: 20px;
+    margin-bottom: 110px;
+}
+
+.academic-card{
+    background-color: white;
+    border-radius: 36px;
+    padding: 70px 50px;
+    border: 1px solid #ececec;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.05);
+}
+
+.academic-description{
+    max-width: 850px;
+}
+
+.academic-info-card{
+    background-color: #f8fafc;
+    border-radius: 24px;
+    padding: 34px;
+    height: 100%;
+}
+
+.academic-info-title{
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 16px;
+    color: #0f172a;
+}
+
+.academic-info-description{
+    color: #64748b;
+    line-height: 1.85;
+}
+
+/* =========================
+   CTA
+========================= */
+
+.institutional-cta{
+    margin-top: 10px;
+}
+
+.cta-card{
+    background:
+        linear-gradient(
+            135deg,
+            rgba(27,67,50,0.98),
+            rgba(22,56,40,0.98)
+        );
+    border-radius: 36px;
+    padding: 80px 45px;
+    color: white;
+    position: relative;
+    overflow: hidden;
+}
+
+.cta-card::before{
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(
+            circle at top right,
+            rgba(255,255,255,0.10),
+            transparent 40%
+        );
+}
+
+.cta-title{
+    position: relative;
+    z-index: 2;
+    font-size: 3rem;
+    font-weight: 800;
+    letter-spacing: -1.5px;
+}
+
+.cta-description{
+    position: relative;
+    z-index: 2;
+    max-width: 760px;
+    margin: 0 auto;
+    font-size: 1.1rem;
+    line-height: 1.9;
+    color: rgba(255,255,255,0.82);
+}
+
+.cta-card .btn{
+    position: relative;
+    z-index: 2;
+}
+
+/* =========================
+   RESPONSIVO
+========================= */
+
+@media(max-width: 768px){
+
+    .institutional-page{
+        padding: 20px 0 80px;
+    }
+
+    .institutional-hero{
+        margin-bottom: 60px;
+    }
+
+    .institutional-title{
+        font-size: 2.5rem;
+    }
+
+    .about-section-custom,
+    .impact-section,
+    .academic-section{
+        margin-bottom: 80px;
+    }
+
+    .academic-card{
+        padding: 45px 25px;
+    }
+
+    .cta-card{
+        padding: 55px 25px;
+    }
+
+    .cta-title{
+        font-size: 2rem;
+    }
+
+    .about-image-card{
+        min-height: 280px;
+    }
+
+}
+
+.about-image{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 36px;
+}
+
+/* =========================
+   COMO FUNCIONA
+========================= */
+
+.how-it-works-section{
+    margin-bottom: 110px;
+}
+
+.step-card{
+    background-color: white;
+    border-radius: 30px;
+    padding: 38px 28px;
+    border: 1px solid #ececec;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+    transition: 0.35s;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.04);
+}
+
+.step-card:hover{
+    transform: translateY(-8px);
+    box-shadow: 0 18px 40px rgba(0,0,0,0.08);
+}
+
+.step-number{
+    position: absolute;
+    top: 18px;
+    right: 22px;
+    font-size: 1rem;
+    font-weight: 800;
+    color: #cbd5e1;
+    letter-spacing: 1px;
+}
+
+.step-icon{
+    width: 78px;
+    height: 78px;
+    background-color: #ecfdf3;
+    border-radius: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    margin-bottom: 28px;
+}
+
+.step-title{
+    font-size: 1.45rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 18px;
+}
+
+.step-description{
+    color: #64748b;
+    line-height: 1.9;
+    margin-bottom: 0;
+}
+
+/* =========================
+   BENEFÍCIOS
+========================= */
+
+.benefits-section{
+    margin-bottom: 110px;
+}
+
+.benefit-card{
+    background-color: white;
+    border-radius: 30px;
+    padding: 42px 34px;
+    border: 1px solid #ececec;
+    height: 100%;
+    transition: 0.35s;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.04);
+}
+
+.benefit-card:hover{
+    transform: translateY(-8px);
+    box-shadow: 0 18px 40px rgba(0,0,0,0.08);
+}
+
+.benefit-icon{
+    width: 82px;
+    height: 82px;
+    background-color: #ecfdf3;
+    border-radius: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.2rem;
+    margin-bottom: 28px;
+}
+
+.benefit-title{
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 18px;
+}
+
+.benefit-description{
+    color: #64748b;
+    line-height: 1.9;
+    margin-bottom: 0;
+}
+
+/* =========================
+   RESPONSIVO
+========================= */
+
+@media(max-width: 768px){
+
+    .how-it-works-section,
+    .benefits-section{
+        margin-bottom: 80px;
+    }
+
+    .step-card,
+    .benefit-card{
+        padding: 30px 24px;
+    }
+
+}
