@@ -186,6 +186,111 @@ class UserController extends Controller
             ->with('success', 'Usuário atualizado com sucesso!');
     }
 
+    public function perfil()
+    {
+        $user = auth()->user();
+
+        return view('users.perfil', compact('user'));
+    }
+
+    public function editarPerfil()
+    {
+        $user = auth()->user();
+
+        return view('users.editar-perfil', compact('user'));
+    }
+
+    public function atualizarPerfil(Request $request)
+    {
+        $user = auth()->user();
+
+        $request->validate([
+            'name' => 'required|max:255',
+            'email' => 'required|email|unique:users,email,' . $user->id,
+        ]);
+
+        /*
+        |--------------------------------------------------------------------------
+        | REGRA DE NEGÓCIO
+        |--------------------------------------------------------------------------
+        */
+
+        if (
+            empty($request->cpf) &&
+            empty($request->cnpj)
+        ) {
+            return back()
+                ->withErrors([
+                    'cpf' => 'Informe CPF ou CNPJ.'
+                ])
+                ->withInput();
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | ATUALIZAÇÃO
+        |--------------------------------------------------------------------------
+        */
+
+        $data = [
+            'name' => $request->name,
+            'email' => $request->email,
+            'cpf' => $request->cpf ?: null,
+            'cnpj' => $request->cnpj ?: null,
+            'telefone' => $request->telefone,
+            'celular' => $request->celular,
+        ];
+
+        /*
+        |--------------------------------------------------------------------------
+        | SENHA OPCIONAL
+        |--------------------------------------------------------------------------
+        */
+
+        if (!empty($request->password)) {
+
+            $data['password'] = $request->password;
+
+        }
+
+        $user->update($data);
+
+        /*
+        |--------------------------------------------------------------------------
+        | ENDEREÇO
+        |--------------------------------------------------------------------------
+        */
+
+        if ($user->endereco) {
+
+            $user->endereco->update([
+                'logradouro' => $request->logradouro,
+                'numero' => $request->numero,
+                'complemento' => $request->complemento,
+                'cidade' => $request->cidade,
+                'estado' => $request->estado,
+                'cep' => $request->cep,
+            ]);
+
+        } else {
+
+            Endereco::create([
+                'logradouro' => $request->logradouro,
+                'numero' => $request->numero,
+                'complemento' => $request->complemento,
+                'cidade' => $request->cidade,
+                'estado' => $request->estado,
+                'cep' => $request->cep,
+                'user_id' => $user->id
+            ]);
+
+        }
+
+        return redirect()
+            ->route('perfil')
+            ->with('success', 'Perfil atualizado com sucesso!');
+    }
+
     public function destroy(string $id)
     {
         $user = User::findOrFail($id);

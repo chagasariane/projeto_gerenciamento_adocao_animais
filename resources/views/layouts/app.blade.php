@@ -100,16 +100,22 @@
 
                             <li class="nav-item dropdown">
 
-                                <a class="nav-link dropdown-toggle admin-link"
-                                href="#"
-                                id="adminDropdown"
-                                role="button"
-                                data-bs-toggle="dropdown"
-                                aria-expanded="false">
+                                <a class="nav-link dropdown-toggle admin-link d-flex align-items-center gap-1"
+                                    href="#"
+                                    id="adminDropdown"
+                                    role="button"
+                                    data-bs-toggle="dropdown"
+                                    aria-expanded="false">
 
-                                    Administração
+                                        <i class="bi bi-shield-lock"></i>
 
-                                </a>
+                                        <span>
+
+                                            Admin
+
+                                        </span>
+
+                                    </a>
 
                                 <ul class="dropdown-menu">
 
@@ -205,39 +211,60 @@
                     {{-- AUTENTICADO --}}
                     @auth
 
-                        <div class="d-flex align-items-center gap-2">
+                        <div class="dropdown">
 
-                        <span class="fw-semibold user-name">
+                            <a class="nav-link dropdown-toggle user-dropdown d-flex align-items-center gap-1"
+                                href="#"
+                                role="button"
+                                data-bs-toggle="dropdown"
+                                aria-expanded="false">
 
-                            {{ auth()->user()->name }}
+                                <span class="user-name">
 
-                        </span>
+                                    {{ auth()->user()->name }}
 
-                        @if(auth()->user()->is_admin)
+                                </span>
 
-                            <span class="admin-badge">
+                            </a>
 
-                                ADMIN
+                            <ul class="dropdown-menu dropdown-menu-end">
 
-                            </span>
+                                <li>
 
-                        @endif
+                                    <a class="dropdown-item"
+                                    href="{{ route('perfil') }}">
 
-                    </div>
+                                        Meu Perfil
 
-                        <form method="POST"
-                              action="{{ route('logout') }}">
+                                    </a>
 
-                            @csrf
+                                </li>
 
-                            <button type="submit"
-                                    class="btn btn-danger">
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
 
-                                Sair
+                                <li>
 
-                            </button>
+                                    <form method="POST"
+                                        action="{{ route('logout') }}">
 
-                        </form>
+                                        @csrf
+
+                                        <button type="submit"
+                                                class="dropdown-item text-danger">
+
+                                            Sair
+
+                                        </button>
+
+                                    </form>
+
+                                </li>
+
+                            </ul>
+
+                        </div>
 
                     @endauth
 
