@@ -2,82 +2,296 @@
 
 @section('content')
 
-<div class="container">
+<section class="animal-show-page">
 
-    <h1 class="mb-4">Editar Adoção</h1>
+    <div class="container">
 
-    {{-- Erros --}}
-    @if ($errors->any())
-        <div class="alert alert-danger">
-            <ul class="mb-0">
-                @foreach ($errors->all() as $erro)
-                    <li>{{ $erro }}</li>
-                @endforeach
-            </ul>
+        {{-- HEADER --}}
+        <div class="mb-5">
+
+            <h1 class="section-title mb-3">
+
+                Gerenciar Solicitação
+
+            </h1>
+
+            <p class="section-description m-0">
+
+                Avalie a solicitação de adoção recebida
+                e defina o andamento do processo.
+
+            </p>
+
         </div>
-    @endif
 
-    <form action="{{ route('adocoes.update', $adocao->id) }}" method="POST">
-        @csrf
-        @method('PUT')
+        {{-- ERROS --}}
+        @if ($errors->any())
 
-        <div class="row">
+            <div class="alert custom-alert-danger mb-4">
 
-            <div class="col-md-6 mb-3">
-                <label class="form-label">Adotante</label>
-                <select name="user_id" class="form-control" required>
-                    <option value="">Selecione</option>
-                    @foreach($users as $user)
-                        <option value="{{ $user->id }}"
-                            {{ old('user_id', $adocao->user_id) == $user->id ? 'selected' : '' }}>
-                            {{ $user->name }}
-                        </option>
+                <ul class="mb-0">
+
+                    @foreach ($errors->all() as $erro)
+
+                        <li>{{ $erro }}</li>
+
                     @endforeach
-                </select>
+
+                </ul>
+
             </div>
 
-            <div class="col-md-6 mb-3">
-                <label class="form-label">Animal</label>
-                <select name="animal_id" class="form-control" required>
-                    <option value="">Selecione</option>
-                    @foreach($animais as $animal)
-                        <option value="{{ $animal->id }}"
-                            {{ old('animal_id', $adocao->animal_id) == $animal->id ? 'selected' : '' }}>
-                            {{ $animal->nome }}
-                        </option>
-                    @endforeach
-                </select>
+        @endif
+
+        {{-- CARD --}}
+        <div class="adoption-manage-card">
+
+            {{-- TOPO --}}
+            <div class="adoption-manage-top">
+
+                {{-- FOTO --}}
+                <div class="manage-photo-wrapper">
+
+                    @if($adocao->animal->fotoPrincipal)
+
+                        <img src="{{ asset('storage/' . $adocao->animal->fotoPrincipal->caminho) }}"
+                             class="manage-photo"
+                             alt="{{ $adocao->animal->nome }}">
+
+                    @else
+
+                        <img src="{{ asset('imagem/sem-foto.png') }}"
+                             class="manage-photo"
+                             alt="Sem foto">
+
+                    @endif
+
+                </div>
+
+                {{-- INFO --}}
+                <div class="flex-grow-1">
+
+                    <div class="d-flex justify-content-between align-items-start flex-wrap gap-3">
+
+                        <div>
+
+                            <h2 class="manage-animal-name">
+
+                                {{ $adocao->animal->nome }}
+
+                            </h2>
+
+                            <p class="manage-animal-meta mb-0">
+
+                                {{ $adocao->animal->especie->nome ?? '-' }}
+                                ·
+                                {{ ucfirst(strtolower($adocao->animal->porte ?? '-')) }}
+
+                            </p>
+
+                        </div>
+
+                        {{-- STATUS --}}
+                        @if($adocao->status == 'PENDENTE')
+
+                            <span class="status-badge pending-badge">
+
+                                Pendente
+
+                            </span>
+
+                        @elseif($adocao->status == 'APROVADA')
+
+                            <span class="status-badge approved-badge">
+
+                                Aprovada
+
+                            </span>
+
+                        @elseif($adocao->status == 'RECUSADA')
+
+                            <span class="status-badge refused-badge">
+
+                                Recusada
+
+                            </span>
+
+                        @else
+
+                            <span class="status-badge canceled-badge">
+
+                                Cancelada
+
+                            </span>
+
+                        @endif
+
+                    </div>
+
+                    <div class="manage-meta-grid mt-4">
+
+                        <div class="manage-meta-item">
+
+                            <span class="manage-meta-label">
+
+                                Solicitante
+
+                            </span>
+
+                            <span class="manage-meta-value">
+
+                                {{ $adocao->user->name }}
+
+                            </span>
+
+                        </div>
+
+                        <div class="manage-meta-item">
+
+                            <span class="manage-meta-label">
+
+                                E-mail
+
+                            </span>
+
+                            <span class="manage-meta-value">
+
+                                {{ $adocao->user->email }}
+
+                            </span>
+
+                        </div>
+
+                        <div class="manage-meta-item">
+
+                            <span class="manage-meta-label">
+
+                                Data da Solicitação
+
+                            </span>
+
+                            <span class="manage-meta-value">
+
+                                {{ $adocao->created_at->format('d/m/Y \à\s H:i') }}
+
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
             </div>
 
+            {{-- MENSAGEM --}}
+            @if($adocao->mensagem)
+
+                <div class="manage-message-box">
+
+                    <span class="message-label">
+
+                        Mensagem enviada pelo solicitante
+
+                    </span>
+
+                    <p class="message-content mb-0">
+
+                        {{ $adocao->mensagem }}
+
+                    </p>
+
+                </div>
+
+            @endif
+
+            {{-- FORM --}}
+            @if($adocao->status == 'PENDENTE')
+
+                <div class="manage-form-wrapper">
+
+                    <form action="{{ route('adocoes.update', $adocao->id) }}"
+                          method="POST">
+
+                        @csrf
+                        @method('PUT')
+
+                        <div class="mb-4">
+
+                            <label class="form-label fw-semibold">
+
+                                Decisão da solicitação
+
+                            </label>
+
+                            <select name="status"
+                                    class="form-select custom-select"
+                                    required>
+
+                                <option value="">
+
+                                    Selecione uma opção
+
+                                </option>
+
+                                <option value="APROVADA">
+
+                                    Aprovar Solicitação
+
+                                </option>
+
+                                <option value="RECUSADA">
+
+                                    Recusar Solicitação
+
+                                </option>
+
+                            </select>
+
+                        </div>
+
+                        <div class="d-flex gap-3 flex-wrap">
+
+                            <a href="{{ route('adocoes.index') }}"
+                               class="btn back-btn">
+
+                                Voltar
+
+                            </a>
+
+                            <button type="submit"
+                                    class="btn save-btn"
+                                    onclick="return confirm('Confirma esta decisão? Essa ação não poderá ser revertida.')">
+
+                                Confirmar Decisão
+
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            @else
+
+                <div class="manage-form-wrapper">
+
+                    <a href="{{ route('adocoes.index') }}"
+                       class="btn back-btn">
+
+                        Voltar
+
+                    </a>
+
+                </div>
+
+            @endif
+
         </div>
 
-        <div class="mb-3">
-            <label class="form-label">Status</label>
-            <select name="status" class="form-control">
-                <option value="PENDENTE" {{ old('status', $adocao->status) == 'PENDENTE' ? 'selected' : '' }}>Pendente</option>
-                <option value="APROVADO" {{ old('status', $adocao->status) == 'APROVADO' ? 'selected' : '' }}>Aprovado</option>
-                <option value="RECUSADO" {{ old('status', $adocao->status) == 'RECUSADO' ? 'selected' : '' }}>Recusado</option>
-                <option value="FINALIZADO" {{ old('status', $adocao->status) == 'FINALIZADO' ? 'selected' : '' }}>Finalizado</option>
-            </select>
-        </div>
+    </div>
 
-        <div class="mb-3">
-            <label class="form-label">Observações</label>
-            <textarea name="descricao" class="form-control" rows="3">{{ old('descricao', $adocao->descricao) }}</textarea>
-        </div>
-
-        <div class="d-flex justify-content-between mt-4">
-            <a href="{{ route('adocoes.index') }}" class="btn btn-secondary">
-                Voltar
-            </a>
-
-            <button type="submit" class="btn btn-primary">
-                Atualizar
-            </button>
-        </div>
-
-    </form>
-
-</div>
+</section>
 
 @endsection

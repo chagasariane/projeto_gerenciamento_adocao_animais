@@ -2,81 +2,236 @@
 
 @section('content')
 
-<div class="container">
+<section class="animal-show-page">
 
-    <h1 class="mb-4">Cadastrar Adoção</h1>
+    <div class="container">
 
-    {{-- Erros --}}
-    @if ($errors->any())
-        <div class="alert alert-danger">
-            <ul class="mb-0">
-                @foreach ($errors->all() as $erro)
-                    <li>{{ $erro }}</li>
-                @endforeach
-            </ul>
+        {{-- HEADER --}}
+        <div class="mb-5">
+
+            <h1 class="section-title mb-3">
+
+                Solicitar Adoção
+
+            </h1>
+
+            <p class="section-description m-0">
+
+                Envie uma solicitação demonstrando
+                seu interesse em adotar este animal.
+
+            </p>
+
         </div>
-    @endif
 
-    <form action="{{ route('adocoes.store') }}" method="POST">
-        @csrf
+        {{-- ERROS --}}
+        @if ($errors->any())
 
-        <div class="row">
+            <div class="alert custom-alert-danger mb-4">
 
-            <div class="col-md-6 mb-3">
-                <label class="form-label">Adotante</label>
-                <select name="user_id" class="form-control" required>
-                    <option value="">Selecione</option>
-                    @foreach($users as $user)
-                        <option value="{{ $user->id }}"
-                            {{ old('user_id') == $user->id ? 'selected' : '' }}>
-                            {{ $user->name }}
-                        </option>
+                <ul class="mb-0">
+
+                    @foreach ($errors->all() as $erro)
+
+                        <li>{{ $erro }}</li>
+
                     @endforeach
-                </select>
+
+                </ul>
+
             </div>
 
-            <div class="col-md-6 mb-3">
-                <label class="form-label">Animal</label>
-                <select name="animal_id" class="form-control" required>
-                    <option value="">Selecione</option>
-                    @foreach($animais as $animal)
-                        <option value="{{ $animal->id }}"
-                            {{ old('animal_id') == $animal->id ? 'selected' : '' }}>
-                            {{ $animal->nome }}
-                        </option>
-                    @endforeach
-                </select>
+        @endif
+
+        <div class="row g-4">
+
+            {{-- CARD ANIMAL --}}
+            <div class="col-lg-5">
+
+                <div class="request-animal-card">
+
+                    {{-- FOTO --}}
+                    @if($animal->fotoPrincipal)
+
+                        <img src="{{ asset('storage/' . $animal->fotoPrincipal->caminho) }}"
+                             class="request-animal-image"
+                             alt="{{ $animal->nome }}">
+
+                    @else
+
+                        <img src="{{ asset('imagem/sem-foto.png') }}"
+                             class="request-animal-image"
+                             alt="Sem foto">
+
+                    @endif
+
+                    <div class="request-animal-body">
+
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+
+                            <h2 class="request-animal-name">
+
+                                {{ $animal->nome }}
+
+                            </h2>
+
+                            <span class="animal-tag">
+
+                                {{ $animal->especie->nome }}
+
+                            </span>
+
+                        </div>
+
+                        <div class="request-info-grid">
+
+                            <div class="request-info-item">
+
+                                <span class="request-info-label">
+
+                                    Raça
+
+                                </span>
+
+                                <span class="request-info-value">
+
+                                    {{ $animal->raca->nome }}
+
+                                </span>
+
+                            </div>
+
+                            <div class="request-info-item">
+
+                                <span class="request-info-label">
+
+                                    Porte
+
+                                </span>
+
+                                <span class="request-info-value">
+
+                                    {{ ucfirst(strtolower($animal->porte)) }}
+
+                                </span>
+
+                            </div>
+
+                            <div class="request-info-item">
+
+                                <span class="request-info-label">
+
+                                    Localização
+
+                                </span>
+
+                                <span class="request-info-value">
+
+                                    {{ $animal->cidade }} - {{ $animal->estado }}
+
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                        <div class="request-description-box">
+
+                            <span class="request-info-label d-block mb-2">
+
+                                Sobre o animal
+
+                            </span>
+
+                            <p class="mb-0">
+
+                                {{ $animal->descricao }}
+
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            {{-- FORM --}}
+            <div class="col-lg-7">
+
+                <div class="request-form-card">
+
+                    <div class="request-form-body">
+
+                        <h3 class="request-form-title">
+
+                            Sua mensagem ao protetor
+
+                        </h3>
+
+                        <p class="request-form-description">
+
+                            Explique seu interesse na adoção,
+                            experiência com animais e como pretende
+                            cuidar deste pet.
+
+                        </p>
+
+                        <form action="{{ route('adocoes.store') }}"
+                              method="POST">
+
+                            @csrf
+
+                            <input type="hidden"
+                                   name="animal_id"
+                                   value="{{ $animal->id }}">
+
+                            <div class="mb-4">
+
+                                <label class="form-label fw-semibold">
+
+                                    Mensagem
+
+                                </label>
+
+                                <textarea name="mensagem"
+                                          rows="8"
+                                          class="form-control custom-textarea"
+                                          placeholder="Descreva por que você deseja adotar este animal...">{{ old('mensagem') }}</textarea>
+
+                            </div>
+
+                            <div class="d-flex gap-3 flex-wrap">
+
+                                <a href="{{ route('animais.show', $animal->id) }}"
+                                   class="btn back-btn">
+
+                                    Voltar
+
+                                </a>
+
+                                <button type="submit"
+                                        class="btn adopt-btn">
+
+                                    Enviar Solicitação
+
+                                </button>
+
+                            </div>
+
+                        </form>
+
+                    </div>
+
+                </div>
+
             </div>
 
         </div>
 
-        <div class="mb-3">
-            <label class="form-label">Status</label>
-            <select name="status" class="form-control">
-                <option value="PENDENTE" {{ old('status') == 'PENDENTE' ? 'selected' : '' }}>Pendente</option>
-                <option value="APROVADO" {{ old('status') == 'APROVADO' ? 'selected' : '' }}>Aprovado</option>
-                <option value="RECUSADO" {{ old('status') == 'RECUSADO' ? 'selected' : '' }}>Recusado</option>
-                <option value="FINALIZADO" {{ old('status') == 'FINALIZADO' ? 'selected' : '' }}>Finalizado</option>
-            </select>
-        </div>
+    </div>
 
-        <div class="mb-3">
-            <label class="form-label">Observações</label>
-            <textarea name="descricao" class="form-control" rows="3">{{ old('descricao') }}</textarea>
-        </div>
-
-        <div class="d-flex justify-content-between mt-4">
-            <a href="{{ route('adocoes.index') }}" class="btn btn-secondary">
-                Voltar
-            </a>
-
-            <button type="submit" class="btn btn-primary">
-                Salvar
-            </button>
-        </div>
-
-    </form>
-
-</div>
+</section>
 
 @endsection

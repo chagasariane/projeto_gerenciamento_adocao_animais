@@ -8,12 +8,51 @@ use App\Models\Especie;
 
 class RacaController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        // 🔹 Eager Loading para evitar N+1
-        $racas = Raca::with('especie')->get();
+        $query = Raca::with('especie');
 
-        return view('racas.index', compact('racas'));
+        /*
+        |--------------------------------------------------------------------------
+        | FILTRO POR NOME
+        |--------------------------------------------------------------------------
+        */
+
+        if ($request->filled('nome')) {
+
+            $query->where(
+                'nome',
+                'like',
+                '%' . $request->nome . '%'
+            );
+
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | FILTRO POR ESPÉCIE
+        |--------------------------------------------------------------------------
+        */
+
+        if ($request->filled('especie_id')) {
+
+            $query->where(
+                'especie_id',
+                $request->especie_id
+            );
+
+        }
+
+        $racas = $query
+            ->orderBy('nome')
+            ->get();
+
+        $especies = Especie::orderBy('nome')->get();
+
+        return view(
+            'racas.index',
+            compact('racas', 'especies')
+        );
     }
 
     public function create()

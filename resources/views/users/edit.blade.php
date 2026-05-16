@@ -2,149 +2,413 @@
 
 @section('content')
 
-<div class="container">
+<section class="animal-show-page">
 
-    <h1 class="mb-4">Editar Usuário</h1>
+    <div class="container">
 
-    {{-- Erros --}}
-    @if ($errors->any())
-        <div class="alert alert-danger">
-            <ul class="mb-0">
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
+        <div class="form-page-wrapper">
+
+            {{-- HEADER --}}
+            <div class="register-header text-center mb-5">
+
+                <h1 class="section-title mb-3">
+
+                    Editar Usuário
+
+                </h1>
+
+                <p class="section-description register-description">
+
+                    Atualize os dados do usuário cadastrado
+                    na plataforma de adoção responsável.
+
+                </p>
+
+            </div>
+
+            {{-- ERROS --}}
+            @if ($errors->any())
+
+                <div class="alert custom-alert-danger mb-4">
+
+                    <ul class="mb-0">
+
+                        @foreach ($errors->all() as $error)
+
+                            <li>{{ $error }}</li>
+
+                        @endforeach
+
+                    </ul>
+
+                </div>
+
+            @endif
+
+            <form id="userEditForm"
+                action="{{ route('users.update', $user->id) }}"
+                method="POST">
+
+                @csrf
+                @method('PUT')
+
+                {{-- DADOS PRINCIPAIS --}}
+                <div class="form-section-card mb-4">
+
+                    <h3 class="form-section-title">
+
+                        Informações da Conta
+
+                    </h3>
+
+                    <div class="row">
+
+                        {{-- NOME --}}
+                        <div class="col-md-6 mb-4">
+
+                            <label class="form-label fw-semibold">
+
+                                Nome
+
+                            </label>
+
+                            <input type="text"
+                                   name="name"
+                                   class="form-control custom-input"
+                                   value="{{ old('name', $user->name) }}"
+                                   placeholder="Digite o nome">
+
+                        </div>
+
+                        {{-- EMAIL --}}
+                        <div class="col-md-6 mb-4">
+
+                            <label class="form-label fw-semibold">
+
+                                E-mail
+
+                            </label>
+
+                            <input type="email"
+                                   name="email"
+                                   class="form-control custom-input"
+                                   value="{{ old('email', $user->email) }}"
+                                   placeholder="Digite o e-mail">
+
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+
+                        {{-- SENHA --}}
+                        <div class="col-md-6 mb-4">
+
+                            <label class="form-label fw-semibold">
+
+                                Nova Senha
+
+                            </label>
+
+                            <input type="password"
+                                   name="password"
+                                   class="form-control custom-input"
+                                   placeholder="Deixe em branco para não alterar">
+
+                        </div>
+
+                        {{-- TIPO --}}
+                        <div class="col-md-6 mb-4">
+
+                            <label class="form-label fw-semibold">
+
+                                Tipo de Usuário
+
+                            </label>
+
+                            <select name="is_admin"
+                                    id="is_admin"
+                                    class="form-select custom-select">
+
+                            <option value="1"
+                                {{ old('is_admin', $user->is_admin) ? 'selected' : '' }}>
+
+                                Administrador
+
+                            </option>
+
+                            <option value="0"
+                                {{ !old('is_admin', $user->is_admin) ? 'selected' : '' }}>
+
+                                Usuário Comum
+
+                            </option>
+
+                        </select>
+
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+
+                        {{-- CPF --}}
+                        <div class="col-md-6 mb-4">
+
+                            <label class="form-label fw-semibold">
+
+                                CPF
+
+                            </label>
+
+                            <input type="text"
+                                   name="cpf"
+                                   class="form-control custom-input"
+                                   value="{{ old('cpf', $user->cpf) }}"
+                                   placeholder="Digite o CPF">
+
+                        </div>
+
+                        {{-- CNPJ --}}
+                        <div class="col-md-6 mb-4">
+
+                            <label class="form-label fw-semibold">
+
+                                CNPJ
+
+                            </label>
+
+                            <input type="text"
+                                   name="cnpj"
+                                   class="form-control custom-input"
+                                   value="{{ old('cnpj', $user->cnpj) }}"
+                                   placeholder="Digite o CNPJ">
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                {{-- CONTATO --}}
+                <div class="form-section-card mb-4">
+
+                    <h3 class="form-section-title">
+
+                        Contato
+
+                    </h3>
+
+                    <div class="row">
+
+                        <div class="col-md-6 mb-4">
+
+                            <label class="form-label fw-semibold">
+
+                                Telefone
+
+                            </label>
+
+                            <input type="text"
+                                   name="telefone"
+                                   class="form-control custom-input"
+                                   value="{{ old('telefone', $user->telefone) }}"
+                                   placeholder="Digite o telefone">
+
+                        </div>
+
+                        <div class="col-md-6 mb-0">
+
+                            <label class="form-label fw-semibold">
+
+                                Celular
+
+                            </label>
+
+                            <input type="text"
+                                   name="celular"
+                                   class="form-control custom-input"
+                                   value="{{ old('celular', $user->celular) }}"
+                                   placeholder="Digite o celular">
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                {{-- ENDEREÇO --}}
+                <div class="form-section-card mb-5">
+
+                    <h3 class="form-section-title">
+
+                        Endereço
+
+                    </h3>
+
+                    <div class="row">
+
+                        <div class="col-md-4 mb-4">
+
+                            <label class="form-label fw-semibold">
+
+                                CEP
+
+                            </label>
+
+                            <input type="text"
+                                   name="cep"
+                                   class="form-control custom-input"
+                                   value="{{ old('cep', $user->endereco->cep ?? '') }}"
+                                   placeholder="Digite o CEP">
+
+                        </div>
+
+                        <div class="col-md-8 mb-4">
+
+                            <label class="form-label fw-semibold">
+
+                                Logradouro
+
+                            </label>
+
+                            <input type="text"
+                                   name="logradouro"
+                                   class="form-control custom-input"
+                                   value="{{ old('logradouro', $user->endereco->logradouro ?? '') }}"
+                                   placeholder="Digite o logradouro">
+
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+
+                        <div class="col-md-3 mb-4">
+
+                            <label class="form-label fw-semibold">
+
+                                Número
+
+                            </label>
+
+                            <input type="text"
+                                   name="numero"
+                                   class="form-control custom-input"
+                                   value="{{ old('numero', $user->endereco->numero ?? '') }}"
+                                   placeholder="Número">
+
+                        </div>
+
+                        <div class="col-md-5 mb-4">
+
+                            <label class="form-label fw-semibold">
+
+                                Complemento
+
+                            </label>
+
+                            <input type="text"
+                                   name="complemento"
+                                   class="form-control custom-input"
+                                   value="{{ old('complemento', $user->endereco->complemento ?? '') }}"
+                                   placeholder="Complemento">
+
+                        </div>
+
+                        <div class="col-md-4 mb-4">
+
+                            <label class="form-label fw-semibold">
+
+                                Cidade
+
+                            </label>
+
+                            <input type="text"
+                                   name="cidade"
+                                   class="form-control custom-input"
+                                   value="{{ old('cidade', $user->endereco->cidade ?? '') }}"
+                                   placeholder="Cidade">
+
+                        </div>
+
+                    </div>
+
+                    <div class="mb-0">
+
+                        <label class="form-label fw-semibold">
+
+                            Estado
+
+                        </label>
+
+                        <input type="text"
+                               name="estado"
+                               class="form-control custom-input"
+                               value="{{ old('estado', $user->endereco->estado ?? '') }}"
+                               placeholder="Estado">
+
+                    </div>
+
+                </div>
+
+                {{-- BOTÕES --}}
+                <div class="d-flex justify-content-between flex-wrap gap-3">
+
+                    <a href="{{ route('users.index') }}"
+                       class="btn back-btn">
+
+                        Voltar
+
+                    </a>
+
+                    <button type="submit"
+                            class="btn save-btn">
+
+                        Atualizar Usuário
+
+                    </button>
+
+                </div>
+
+            </form>
+
         </div>
-    @endif
 
-    <form action="{{ route('users.update', $user->id) }}" method="POST">
-        @csrf
-        @method('PUT')
+    </div>
 
-        <div class="row">
-            <div class="col-md-6 mb-3">
-                <label class="form-label">Nome</label>
-                <input type="text" name="name" class="form-control" value="{{ old('name', $user->name) }}">
-            </div>
-
-            <div class="col-md-6 mb-3">
-                <label class="form-label">Email</label>
-                <input type="email" name="email" class="form-control" value="{{ old('email', $user->email) }}">
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-md-6 mb-3">
-                <label class="form-label">Senha (deixe em branco para não alterar)</label>
-                <input type="password" name="password" class="form-control">
-            </div>
-
-            <div class="col-md-6 mb-3">
-                <label class="form-label">Tipo</label>
-                <select name="role" id="role" class="form-control">
-                    <option value="ADOTANTE" {{ old('role', $user->role) == 'ADOTANTE' ? 'selected' : '' }}>Adotante</option>
-                    <option value="PROTETOR" {{ old('role', $user->role) == 'PROTETOR' ? 'selected' : '' }}>Protetor</option>
-                </select>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-md-6 mb-3" id="campo-cpf">
-                <label class="form-label">CPF</label>
-                <input type="text" name="cpf" class="form-control" value="{{ old('cpf', $user->cpf) }}">
-            </div>
-
-            <div class="col-md-6 mb-3" id="campo-cnpj">
-                <label class="form-label">CNPJ</label>
-                <input type="text" name="cnpj" class="form-control" value="{{ old('cnpj', $user->cnpj) }}">
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-md-6 mb-3">
-                <label class="form-label">Telefone</label>
-                <input type="text" name="telefone" class="form-control" value="{{ old('telefone', $user->telefone) }}">
-            </div>
-
-            <div class="col-md-6 mb-3">
-                <label class="form-label">Celular</label>
-                <input type="text" name="celular" class="form-control" value="{{ old('celular', $user->celular) }}">
-            </div>
-        </div>
-
-        <hr>
-        <h5 class="mb-3">Endereço</h5>
-
-        <div class="row">
-            <div class="col-md-4 mb-3">
-                <label class="form-label">CEP</label>
-                <input type="text" name="cep" class="form-control" value="{{ old('cep', $user->endereco->cep ?? '') }}">
-            </div>
-
-            <div class="col-md-8 mb-3">
-                <label class="form-label">Logradouro</label>
-                <input type="text" name="logradouro" class="form-control" value="{{ old('logradouro', $user->endereco->logradouro ?? '') }}">
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-md-3 mb-3">
-                <label class="form-label">Número</label>
-                <input type="text" name="numero" class="form-control" value="{{ old('numero', $user->endereco->numero ?? '') }}">
-            </div>
-
-            <div class="col-md-5 mb-3">
-                <label class="form-label">Complemento</label>
-                <input type="text" name="complemento" class="form-control" value="{{ old('complemento', $user->endereco->complemento ?? '') }}">
-            </div>
-
-            <div class="col-md-4 mb-3">
-                <label class="form-label">Cidade</label>
-                <input type="text" name="cidade" class="form-control" value="{{ old('cidade', $user->endereco->cidade ?? '') }}">
-            </div>
-        </div>
-
-        <div class="mb-3">
-            <label class="form-label">Estado</label>
-            <input type="text" name="estado" class="form-control" value="{{ old('estado', $user->endereco->estado ?? '') }}">
-        </div>
-
-        <div class="d-flex justify-content-between mt-4">
-            <a href="{{ route('users.index') }}" class="btn btn-secondary">
-                Voltar
-            </a>
-
-            <button type="submit" class="btn btn-primary">
-                Atualizar
-            </button>
-        </div>
-
-    </form>
-</div>
-
-@endsection
+</section>
 
 @section('scripts')
+
 <script>
-    function ajustarCampos() {
-        const role = document.getElementById('role').value;
-        const campoCpf = document.getElementById('campo-cpf');
-        const campoCnpj = document.getElementById('campo-cnpj');
 
-        if (role === 'ADOTANTE') {
-            campoCpf.style.display = 'block';
-            campoCnpj.style.display = 'none';
-        } else {
-            campoCpf.style.display = 'block';
-            campoCnpj.style.display = 'block';
+    const form = document.getElementById('userEditForm');
+
+    const adminSelect = document.getElementById('is_admin');
+
+    form.addEventListener('submit', function(event){
+
+        const isAdmin = adminSelect.value;
+
+        const currentUserIsAdmin = {{ $user->is_admin ? 'true' : 'false' }};
+
+        if(currentUserIsAdmin && isAdmin == '0'){
+
+            const confirmacao = confirm(
+                'Ao salvar, este usuário perderá as permissões administrativas. Deseja continuar?'
+            );
+
+            if(!confirmacao){
+
+                event.preventDefault();
+
+            }
+
         }
-    }
 
-    document.addEventListener('DOMContentLoaded', function () {
-        const roleSelect = document.getElementById('role');
-
-        ajustarCampos();
-        roleSelect.addEventListener('change', ajustarCampos);
     });
+
 </script>
+
 @endsection

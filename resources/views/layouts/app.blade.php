@@ -4,14 +4,22 @@
 <head>
 
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>MiauDot</title>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <title>
+        MiauDot
+    </title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
           rel="stylesheet">
 
-    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+    <link rel="stylesheet"
+          href="{{ asset('css/style.css') }}">
 
 </head>
 
@@ -22,6 +30,7 @@
 
         <div class="container">
 
+            {{-- LOGO --}}
             <a class="navbar-brand logo-text"
                href="{{ url('/') }}">
 
@@ -29,6 +38,7 @@
 
             </a>
 
+            {{-- TOGGLER --}}
             <button class="navbar-toggler"
                     type="button"
                     data-bs-toggle="collapse"
@@ -38,52 +48,225 @@
 
             </button>
 
+            {{-- MENU --}}
             <div class="collapse navbar-collapse"
                  id="navbarNav">
 
                 <ul class="navbar-nav mx-auto">
 
+                    {{-- HOME --}}
                     <li class="nav-item">
+
                         <a class="nav-link"
                            href="{{ url('/') }}">
+
                             Home
+
                         </a>
+
                     </li>
 
-                    <li class="nav-item">
-                        <a class="nav-link"
-                           href="{{ route('animais.index') }}">
-                            Animais
-                        </a>
-                    </li>
+                    {{-- AUTENTICADO --}}
+                    @auth
 
+                        <li class="nav-item">
+
+                            <a class="nav-link"
+                               href="{{ route('animais.index') }}">
+
+                                Meus Animais
+
+                            </a>
+
+                        </li>
+
+                        <li class="nav-item">
+
+                            <a class="nav-link"
+                               href="{{ route('adocoes.index') }}">
+
+                                Adoções
+
+                            </a>
+
+                        </li>
+
+                    @endauth
+
+                    {{-- ADMIN --}}
+                    @auth
+
+                        @if(auth()->user()->is_admin)
+
+                            <li class="nav-item dropdown">
+
+                                <a class="nav-link dropdown-toggle admin-link d-flex align-items-center gap-1"
+                                    href="#"
+                                    id="adminDropdown"
+                                    role="button"
+                                    data-bs-toggle="dropdown"
+                                    aria-expanded="false">
+
+                                        <i class="bi bi-shield-lock"></i>
+
+                                        <span>
+
+                                            Admin
+
+                                        </span>
+
+                                    </a>
+
+                                <ul class="dropdown-menu">
+
+                                    <li>
+
+                                        <a class="dropdown-item"
+                                        href="{{ route('especies.index') }}">
+
+                                            Espécies
+
+                                        </a>
+
+                                    </li>
+
+                                    <li>
+
+                                        <a class="dropdown-item"
+                                        href="{{ route('racas.index') }}">
+
+                                            Raças
+
+                                        </a>
+
+                                    </li>
+
+                                    <li>
+
+                                        <a class="dropdown-item"
+                                        href="{{ route('users.index') }}">
+
+                                            Usuários
+
+                                        </a>
+
+                                    </li>
+
+                                </ul>
+
+                            </li>
+
+                        @endif
+
+                    @endauth
+
+                    {{-- COMO FUNCIONA --}}
                     <li class="nav-item">
+
                         <a class="nav-link"
-                           href="#">
+                        href="{{ route('como-funciona') }}">
+
                             Como Funciona
+
                         </a>
+
                     </li>
 
+                    {{-- SOBRE --}}
                     <li class="nav-item">
+
                         <a class="nav-link"
-                           href="#">
+                        href="{{ route('sobre') }}">
+
                             Sobre
+
                         </a>
+
                     </li>
 
                 </ul>
 
+                {{-- AUTH --}}
                 <div class="d-flex align-items-center gap-3">
 
-                    <a href="#"
-                       class="login-link">
-                        Entrar
-                    </a>
+                    {{-- VISITANTE --}}
+                    @guest
 
-                    <a href="#"
-                       class="btn btn-signup">
-                        Cadastrar
-                    </a>
+                        <a href="{{ route('login') }}"
+                            class="login-link">
+
+                                Entrar
+
+                            </a>
+
+                            <a href="{{ route('register') }}"
+                            class="btn btn-signup">
+
+                                Cadastrar
+
+                            </a>
+
+                    @endguest
+
+                    {{-- AUTENTICADO --}}
+                    @auth
+
+                        <div class="dropdown">
+
+                            <a class="nav-link dropdown-toggle user-dropdown d-flex align-items-center gap-1"
+                                href="#"
+                                role="button"
+                                data-bs-toggle="dropdown"
+                                aria-expanded="false">
+
+                                <span class="user-name">
+
+                                    {{ auth()->user()->name }}
+
+                                </span>
+
+                            </a>
+
+                            <ul class="dropdown-menu dropdown-menu-end">
+
+                                <li>
+
+                                    <a class="dropdown-item"
+                                    href="{{ route('perfil') }}">
+
+                                        Meu Perfil
+
+                                    </a>
+
+                                </li>
+
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+
+                                <li>
+
+                                    <form method="POST"
+                                        action="{{ route('logout') }}">
+
+                                        @csrf
+
+                                        <button type="submit"
+                                                class="dropdown-item text-danger">
+
+                                            Sair
+
+                                        </button>
+
+                                    </form>
+
+                                </li>
+
+                            </ul>
+
+                        </div>
+
+                    @endauth
 
                 </div>
 
@@ -94,7 +277,7 @@
     </nav>
 
     {{-- CONTEÚDO --}}
-    <main class="flex-grow-1">
+    <main class="flex-grow-1 pt-5">
 
         @yield('content')
 
@@ -107,7 +290,7 @@
 
             <div class="row gy-5">
 
-                {{-- LOGO / DESCRIÇÃO --}}
+                {{-- SOBRE --}}
                 <div class="col-lg-4 col-md-6">
 
                     <h3 class="footer-logo">
@@ -119,27 +302,9 @@
                     <p class="footer-description">
 
                         Plataforma web desenvolvida para facilitar
-                        a adoção responsável de animais, conectando
-                        adotantes, ONGs e protetores independentes
-                        de forma prática, segura e organizada.
+                        a adoção responsável de animais.
 
                     </p>
-
-                    <div class="footer-badges">
-
-                        <span class="footer-badge">
-                            Laravel
-                        </span>
-
-                        <span class="footer-badge">
-                            Bootstrap
-                        </span>
-
-                        <span class="footer-badge">
-                            MariaDB
-                        </span>
-
-                    </div>
 
                 </div>
 
@@ -153,24 +318,29 @@
                     </h5>
 
                     <a href="{{ url('/') }}"
-                    class="footer-link">
+                       class="footer-link">
+
                         Home
+
                     </a>
 
-                    <a href="{{ route('animais.index') }}"
-                    class="footer-link">
-                        Animais
-                    </a>
+                    @auth
 
-                    <a href="#"
-                    class="footer-link">
-                        Como Funciona
-                    </a>
+                        <a href="{{ route('animais.index') }}"
+                           class="footer-link">
 
-                    <a href="#"
-                    class="footer-link">
-                        Sobre
-                    </a>
+                            Meus Animais
+
+                        </a>
+
+                        <a href="{{ route('adocoes.index') }}"
+                           class="footer-link">
+
+                            Adoções
+
+                        </a>
+
+                    @endauth
 
                 </div>
 
@@ -184,19 +354,21 @@
                     </h5>
 
                     <span class="footer-text-item">
+
                         Cadastro de animais
+
                     </span>
 
                     <span class="footer-text-item">
+
                         Busca avançada
+
                     </span>
 
                     <span class="footer-text-item">
+
                         Solicitações de adoção
-                    </span>
 
-                    <span class="footer-text-item">
-                        Comunicação entre usuários
                     </span>
 
                 </div>
@@ -212,16 +384,7 @@
 
                     <p class="footer-description-small">
 
-                        Sistema desenvolvido como Trabalho
-                        de Conclusão de Curso em Análise
-                        e Desenvolvimento de Sistemas.
-
-                    </p>
-
-                    <p class="footer-description-small mb-0">
-
-                        Objetivo: facilitar a adoção responsável
-                        por meio de uma plataforma digital moderna.
+                        Sistema acadêmico de adoção responsável.
 
                     </p>
 
@@ -234,7 +397,9 @@
             <div class="footer-bottom">
 
                 <span>
-                    © {{ date('Y') }} MiauDot. Todos os direitos reservados.
+
+                    © {{ date('Y') }} MiauDot
+
                 </span>
 
             </div>
@@ -242,6 +407,12 @@
         </div>
 
     </footer>
+
+    {{-- SCRIPTS --}}
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 

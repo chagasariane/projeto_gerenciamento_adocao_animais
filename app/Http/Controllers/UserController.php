@@ -5,12 +5,25 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\Endereco;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $users = User::all();
+        $users = User::latest()->get();
+        $query = User::latest();
+
+        if ($request->filled('name')) {
+            $query->where('name', 'like', '%' . $request->name . '%');
+        }
+
+        if ($request->filled('email')) {
+            $query->where('email', 'like', '%' . $request->email . '%');
+        }
+
+        $users = $query->get();
+
         return view('users.index', compact('users'));
     }
 
@@ -21,58 +34,95 @@ class UserController extends Controller
 
     public function store(Request $request)
     {
-        // 1. Validação básica
         $request->validate([
-            'name' => 'required',
+            'name' => 'required|max:255',
             'email' => 'required|email|unique:users,email',
-            'password' => 'required',
-            'role' => 'required|in:ADOTANTE,PROTETOR',
+
+            'password' => 'required|string|min:6|confirmed',
+
+            'celular' => 'required',
+
+            'cep' => 'required',
+            'logradouro' => 'required|max:255',
+            'numero' => 'required|max:20',
+            'cidade' => 'required|max:255',
+            'estado' => 'required|max:2',
         ]);
 
-        $data = $request->all();
+        /*
+        |--------------------------------------------------------------------------
+        | REGRA DE NEGÓCIO
+        |--------------------------------------------------------------------------
+        | Usuário deve possuir CPF ou CNPJ
+        */
 
-        // 2. Normalizar CPF e CNPJ
-        $data['cpf'] = $request->cpf ?: null;
-        $data['cnpj'] = $request->cnpj ?: null;
-
-        // 3. Regra de negócio
-        if ($data['role'] === 'ADOTANTE') {
-            if (empty($data['cpf'])) {
-                return back()
-                    ->withErrors(['cpf' => 'CPF é obrigatório para adotantes'])
-                    ->withInput();
-            }
-            $data['cnpj'] = null;
+        if (
+            empty($request->cpf) &&
+            empty($request->cnpj)
+        ) {
+            return back()
+                ->withErrors([
+                    'cpf' => 'Informe CPF ou CNPJ.'
+                ])
+                ->withInput();
         }
 
-        if ($data['role'] === 'PROTETOR') {
-            if (empty($data['cpf']) && empty($data['cnpj'])) {
-                return back()
-                    ->withErrors(['cpf' => 'Informe CPF ou CNPJ para protetor'])
-                    ->withInput();
-            }
-        }
+        /*
+        |--------------------------------------------------------------------------
+        | CRIAÇÃO DO USUÁRIO
+        |--------------------------------------------------------------------------
+        */
 
-        // 4. Criptografar senha
-        $data['password'] = bcrypt($data['password']);
+        $cpf = $request->cpf
+            ? preg_replace('/\D/', '', $request->cpf)
+            : null;
 
-        // 5. Criar usuário
-        $user = User::create($data);
+        $cnpj = $request->cnpj
+            ? preg_replace('/\D/', '', $request->cnpj)
+            : null;
 
-        // 6. Criar endereço
+        $telefone = $request->telefone
+            ? preg_replace('/\D/', '', $request->telefone)
+            : null;
+
+        $celular = $request->celular
+            ? preg_replace('/\D/', '', $request->celular)
+            : null;
+
+        $cep = $request->cep
+            ? preg_replace('/\D/', '', $request->cep)
+            : null;
+
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'cpf' => $cpf,
+            'cnpj' => $cnpj,
+            'telefone' => $telefone,
+            'celular' => $celular,
+            'is_admin' => false,
+        ]);
+
+        /*
+        |--------------------------------------------------------------------------
+        | ENDEREÇO
+        |--------------------------------------------------------------------------
+        */
+
         Endereco::create([
             'logradouro' => $request->logradouro,
             'numero' => $request->numero,
             'complemento' => $request->complemento,
             'cidade' => $request->cidade,
             'estado' => $request->estado,
-            'cep' => $request->cep,
+            'cep' => $cep,
             'user_id' => $user->id
         ]);
 
         return redirect()
-            ->route('users.index')
-            ->with('success', 'Usuário cadastrado com sucesso!');
+            ->route('login')
+            ->with('success', 'Conta criada com sucesso!');
     }
 
     public function show(string $id)
@@ -83,6 +133,7 @@ class UserController extends Controller
     public function edit(string $id)
     {
         $user = User::findOrFail($id);
+
         return view('users.edit', compact('user'));
     }
 
@@ -90,69 +141,105 @@ class UserController extends Controller
     {
         $user = User::findOrFail($id);
 
-        // 1. Validação básica
         $request->validate([
-            'name' => 'required',
+            'name' => 'required|max:255',
             'email' => 'required|email|unique:users,email,' . $id,
-            'role' => 'required|in:ADOTANTE,PROTETOR',
         ]);
 
-        $data = $request->all();
+        /*
+        |--------------------------------------------------------------------------
+        | REGRA DE NEGÓCIO
+        |--------------------------------------------------------------------------
+        */
 
-        // 2. Normalizar CPF e CNPJ
-        $data['cpf'] = $request->cpf ?: null;
-        $data['cnpj'] = $request->cnpj ?: null;
-
-        // 3. Regra de negócio
-        if ($data['role'] === 'ADOTANTE') {
-            if (empty($data['cpf'])) {
-                return back()
-                    ->withErrors(['cpf' => 'CPF é obrigatório para adotantes'])
-                    ->withInput();
-            }
-            $data['cnpj'] = null;
+        if (
+            empty($request->cpf) &&
+            empty($request->cnpj)
+        ) {
+            return back()
+                ->withErrors([
+                    'cpf' => 'Informe CPF ou CNPJ.'
+                ])
+                ->withInput();
         }
 
-        if ($data['role'] === 'PROTETOR') {
-            if (empty($data['cpf']) && empty($data['cnpj'])) {
-                return back()
-                    ->withErrors(['cpf' => 'Informe CPF ou CNPJ para protetor'])
-                    ->withInput();
-            }
+        /*
+        |--------------------------------------------------------------------------
+        | ATUALIZAÇÃO
+        |--------------------------------------------------------------------------
+        */
+
+        $cpf = $request->cpf
+            ? preg_replace('/\D/', '', $request->cpf)
+            : null;
+
+        $cnpj = $request->cnpj
+            ? preg_replace('/\D/', '', $request->cnpj)
+            : null;
+
+        $telefone = $request->telefone
+            ? preg_replace('/\D/', '', $request->telefone)
+            : null;
+
+        $celular = $request->celular
+            ? preg_replace('/\D/', '', $request->celular)
+            : null;
+
+        $cep = $request->cep
+            ? preg_replace('/\D/', '', $request->cep)
+            : null;
+
+        $data = [
+            'name' => $request->name,
+            'email' => $request->email,
+            'cpf' => $cpf,
+            'cnpj' => $cnpj,
+            'telefone' => $telefone,
+            'celular' => $celular,
+            'is_admin' => $request->is_admin,
+        ];
+
+        /*
+        |--------------------------------------------------------------------------
+        | SENHA OPCIONAL
+        |--------------------------------------------------------------------------
+        */
+
+        if (!empty($request->password)) {
+            $data['password'] = Hash::make($request->password);
         }
 
-        // 4. Atualizar senha (se preenchida)
-        if (!empty($data['password'])) {
-            $data['password'] = bcrypt($data['password']);
-        } else {
-            unset($data['password']);
-        }
-
-        // 5. Atualizar usuário
         $user->update($data);
 
-        // 6. Atualizar ou criar endereço
-        $endereco = $user->endereco;
+        /*
+        |--------------------------------------------------------------------------
+        | ENDEREÇO
+        |--------------------------------------------------------------------------
+        */
 
-        if ($endereco) {
-            $endereco->update([
+        if ($user->endereco) {
+
+            $user->endereco->update([
                 'logradouro' => $request->logradouro,
                 'numero' => $request->numero,
                 'complemento' => $request->complemento,
                 'cidade' => $request->cidade,
                 'estado' => $request->estado,
-                'cep' => $request->cep,
+                'cep' => $cep,
             ]);
+
         } else {
+
             Endereco::create([
                 'logradouro' => $request->logradouro,
                 'numero' => $request->numero,
                 'complemento' => $request->complemento,
                 'cidade' => $request->cidade,
                 'estado' => $request->estado,
-                'cep' => $request->cep,
+                'cep' => $cep,
                 'user_id' => $user->id
             ]);
+
         }
 
         return redirect()
@@ -160,9 +247,134 @@ class UserController extends Controller
             ->with('success', 'Usuário atualizado com sucesso!');
     }
 
-    public function destroy($id)
+    public function perfil()
+    {
+        $user = auth()->user();
+
+        return view('users.perfil', compact('user'));
+    }
+
+    public function editarPerfil()
+    {
+        $user = auth()->user();
+
+        return view('users.editar-perfil', compact('user'));
+    }
+
+    public function atualizarPerfil(Request $request)
+    {
+        $user = auth()->user();
+
+        $request->validate([
+            'name' => 'required|max:255',
+            'email' => 'required|email|unique:users,email,' . $user->id,
+        ]);
+
+        /*
+        |--------------------------------------------------------------------------
+        | REGRA DE NEGÓCIO
+        |--------------------------------------------------------------------------
+        */
+
+        if (
+            empty($request->cpf) &&
+            empty($request->cnpj)
+        ) {
+            return back()
+                ->withErrors([
+                    'cpf' => 'Informe CPF ou CNPJ.'
+                ])
+                ->withInput();
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | ATUALIZAÇÃO
+        |--------------------------------------------------------------------------
+        */
+        $cpf = $request->cpf
+            ? preg_replace('/\D/', '', $request->cpf)
+            : null;
+
+        $cnpj = $request->cnpj
+            ? preg_replace('/\D/', '', $request->cnpj)
+            : null;
+
+        $telefone = $request->telefone
+            ? preg_replace('/\D/', '', $request->telefone)
+            : null;
+
+        $celular = $request->celular
+            ? preg_replace('/\D/', '', $request->celular)
+            : null;
+
+        $cep = $request->cep
+            ? preg_replace('/\D/', '', $request->cep)
+            : null;
+
+        $data = [
+            'name' => $request->name,
+            'email' => $request->email,
+            'cpf' => $cpf,
+            'cnpj' => $cnpj,
+            'telefone' => $telefone,
+            'celular' => $celular,
+        ];
+
+        /*
+        |--------------------------------------------------------------------------
+        | SENHA OPCIONAL
+        |--------------------------------------------------------------------------
+        */
+
+        if (!empty($request->password)) {
+
+            $data['password'] = Hash::make($request->password);
+
+        }
+
+        $user->update($data);
+
+        /*
+        |--------------------------------------------------------------------------
+        | ENDEREÇO
+        |--------------------------------------------------------------------------
+        */
+
+        if ($user->endereco) {
+
+            $user->endereco->update([
+                'logradouro' => $request->logradouro,
+                'numero' => $request->numero,
+                'complemento' => $request->complemento,
+                'cidade' => $request->cidade,
+                'estado' => $request->estado,
+                'cep' => $cep,
+            ]);
+
+        } else {
+
+            Endereco::create([
+                'logradouro' => $request->logradouro,
+                'numero' => $request->numero,
+                'complemento' => $request->complemento,
+                'cidade' => $request->cidade,
+                'estado' => $request->estado,
+                'cep' => $cep,
+                'user_id' => $user->id
+            ]);
+
+        }
+
+        return redirect()
+            ->route('perfil')
+            ->with('success', 'Perfil atualizado com sucesso!');
+    }
+
+    public function destroy(string $id)
     {
         $user = User::findOrFail($id);
+
         $user->delete();
 
         return redirect()

@@ -13,7 +13,7 @@
 
                 <h1 class="hero-title">
 
-                    Encontre um companheiro,
+                    Encontre um amigo,
                     mude uma vida.
 
                 </h1>
@@ -26,7 +26,7 @@
 
                 </p>
 
-                <a href="{{ route('animais.index') }}"
+                <a href="#animais-disponiveis"
                    class="btn hero-btn">
 
                     Ver animais disponíveis
@@ -56,49 +56,270 @@
 
         <div class="filter-box">
 
-            <div class="row g-3">
+            <form method="GET"
+                  action="{{ url('/') }}">
 
-                <div class="col-md-3">
+                <div class="row g-3 align-items-end">
 
-                    <select class="form-select custom-select">
+                    {{-- ESPÉCIE --}}
+                    <div class="col-md-3">
 
-                        <option>Todas as espécies</option>
+                        <label class="form-label fw-semibold">
 
-                    </select>
+                            Espécie
+
+                        </label>
+
+                        <select name="especie_id"
+                                class="form-select custom-select">
+
+                            <option value="">
+
+                                Todas as espécies
+
+                            </option>
+
+                            @foreach($especies as $especie)
+
+                                <option value="{{ $especie->id }}"
+                                    {{ request('especie_id') == $especie->id ? 'selected' : '' }}>
+
+                                    {{ $especie->nome }}
+
+                                </option>
+
+                            @endforeach
+
+                        </select>
+
+                    </div>
+
+                    {{-- SEXO --}}
+                    <div class="col-md-3">
+
+                        <label class="form-label fw-semibold">
+
+                            Sexo
+
+                        </label>
+
+                        <select name="sexo"
+                                class="form-select custom-select">
+
+                            <option value="">
+
+                                Qualquer sexo
+
+                            </option>
+
+                            <option value="MACHO"
+                                {{ request('sexo') == 'MACHO' ? 'selected' : '' }}>
+
+                                Macho
+
+                            </option>
+
+                            <option value="FEMEA"
+                                {{ request('sexo') == 'FEMEA' ? 'selected' : '' }}>
+
+                                Fêmea
+
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                    {{-- CIDADE --}}
+                    <div class="col-md-3">
+
+                        <label class="form-label fw-semibold">
+
+                            Cidade
+
+                        </label>
+
+                        <input type="text"
+                               name="cidade"
+                               class="form-control custom-input"
+                               placeholder="Digite a cidade"
+                               value="{{ request('cidade') }}">
+
+                    </div>
+
+                    {{-- BUSCA --}}
+                    <div class="col-md-3">
+
+                        <label class="form-label fw-semibold">
+
+                            Buscar
+
+                        </label>
+
+                        <input type="text"
+                               name="busca"
+                               class="form-control custom-input"
+                               placeholder="Nome do animal"
+                               value="{{ request('busca') }}">
+
+                    </div>
+
+                    {{-- BOTÕES --}}
+                    <div class="col-12">
+
+                        <div class="d-flex gap-3 mt-2">
+
+                            <button type="submit"
+                                    class="btn filter-btn">
+
+                                Filtrar
+
+                            </button>
+
+                            <a href="{{ url('/') }}"
+                                class="btn clear-btn">
+
+                                Limpar filtros
+
+                            </a>
+
+                        </div>
+
+                    </div>
 
                 </div>
 
-                <div class="col-md-3">
+            </form>
 
-                    <select class="form-select custom-select">
+        </div>
 
-                        <option>Qualquer porte</option>
+    </div>
 
-                    </select>
+</section>
 
-                </div>
+{{-- ANIMAIS --}}
+<section class="animals-section"
+         id="animais-disponiveis">
 
-                <div class="col-md-3">
+    <div class="container">
 
-                    <select class="form-select custom-select">
+        <div class="d-flex justify-content-between align-items-center mb-4">
 
-                        <option>Qualquer idade</option>
+            <h2 class="section-title mb-0">
 
-                    </select>
+                Animais disponíveis
 
-                </div>
+            </h2>
 
-                <div class="col-md-3">
+            <span class="animals-count">
 
-                    <input type="text"
-                           class="form-control custom-input"
-                           placeholder="Buscar animal...">
+                {{ $animais->total() }} animais encontrados
 
-                </div>
+            </span>
+
+        </div>
+
+        @if($animais->count())
+
+            <div class="row">
+
+                @foreach($animais as $animal)
+
+                    <div class="col-lg-3 col-md-6 mb-4">
+
+                        <div class="animal-card">
+
+                            {{-- IMAGEM --}}
+                            @if($animal->fotoPrincipal)
+
+                                <img src="{{ asset('storage/' . $animal->fotoPrincipal->caminho) }}"
+                                    class="animal-image"
+                                    alt="{{ $animal->nome }}">
+
+                            @else
+
+                                <img src="{{ asset('imagem/sem-foto.png') }}{{ $animal->id }}"
+                                    class="animal-image"
+                                    alt="{{ $animal->nome }}">
+
+                            @endif
+
+                            <div class="animal-body">
+
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+
+                                    <h4 class="animal-name">
+
+                                        {{ $animal->nome }}
+
+                                    </h4>
+
+                                    <span class="animal-tag">
+
+                                        {{ $animal->especie->nome }}
+
+                                    </span>
+
+                                </div>
+
+                                {{-- LOCALIZAÇÃO / IDADE --}}
+                                <p class="animal-location">
+
+                                    📍 {{ $animal->cidade }} - {{ $animal->estado }}
+
+                                    <br>
+
+                                    🐾 {{ $animal->idade_formatada }}
+
+                                </p>
+
+                                {{-- RAÇA / PORTE --}}
+                                <p class="animal-breed">
+
+                                    {{ $animal->raca->nome }}
+                                    ·
+                                    {{ ucfirst(strtolower($animal->porte)) }}
+
+                                </p>
+
+                                {{-- DESCRIÇÃO --}}
+                                <p class="animal-description">
+
+                                    {{ \Illuminate\Support\Str::limit($animal->descricao, 90) }}
+
+                                </p>
+
+                                {{-- BOTÃO --}}
+                                <a href="{{ route('animais.show', $animal->id) }}"
+                                class="btn animal-btn">
+
+                                    Ver detalhes
+
+                                </a>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                @endforeach
 
             </div>
 
-        </div>
+            <div class="d-flex justify-content-center mt-4">
+                {{ $animais->links() }}
+            </div>
+
+        @else
+
+            <div class="alert alert-info">
+
+                Nenhum animal disponível no momento.
+
+            </div>
+
+        @endif
 
     </div>
 
@@ -188,90 +409,6 @@
                 </div>
 
             </div>
-
-        </div>
-
-    </div>
-
-</section>
-
-{{-- ANIMAIS --}}
-<section class="animals-section">
-
-    <div class="container">
-
-        <div class="d-flex justify-content-between align-items-center mb-4">
-
-            <h2 class="section-title mb-0">
-
-                Animais disponíveis
-
-            </h2>
-
-            <span class="animals-count">
-
-                8 animais encontrados
-
-            </span>
-
-        </div>
-
-        <div class="row">
-
-            @for ($i = 0; $i < 4; $i++)
-
-            <div class="col-lg-3 col-md-6 mb-4">
-
-                <div class="animal-card">
-
-                    <img src="https://placedog.net/500/400"
-                         class="animal-image"
-                         alt="Animal">
-
-                    <div class="animal-body">
-
-                        <div class="d-flex justify-content-between align-items-center mb-2">
-
-                            <h4 class="animal-name">
-
-                                Thor
-
-                            </h4>
-
-                            <span class="animal-tag">
-
-                                Cachorro
-
-                            </span>
-
-                        </div>
-
-                        <p class="animal-location">
-
-                            📍 Presidente Prudente - SP · 2 anos
-
-                        </p>
-
-                        <p class="animal-breed">
-
-                            Labrador · Grande
-
-                        </p>
-
-                        <a href="#"
-                           class="btn animal-btn">
-
-                            Ver detalhes
-
-                        </a>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-            @endfor
 
         </div>
 

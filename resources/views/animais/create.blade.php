@@ -2,37 +2,33 @@
 
 @section('content')
 
-<section class="form-page">
+<section class="animal-show-page">
 
     <div class="container">
 
         {{-- HEADER --}}
-        <div class="page-header mb-5">
+        <div class="mb-5 text-center d-flex flex-column align-items-center">
 
-            <div>
+            <h1 class="section-title mb-3">
+                Cadastrar Animal
+            </h1>
 
-                <h1 class="page-title">
-                    Cadastrar Animal
-                </h1>
-
-                <p class="page-description">
-                    Preencha as informações do animal disponível para adoção.
-                </p>
-
-            </div>
+            <p class="section-description m-0">
+                Preencha as informações do animal disponível para adoção responsável.
+            </p>
 
         </div>
 
-        {{-- ERROS --}}
+        {{-- ALERTAS --}}
         @if ($errors->any())
 
-            <div class="custom-alert error-alert">
+            <div class="alert alert-danger border-0 shadow-sm rounded-4 mb-5">
 
-                <strong>
-                    Foram encontrados erros:
+                <strong class="d-block mb-2">
+                    Foram encontrados erros no formulário:
                 </strong>
 
-                <ul class="mb-0 mt-2">
+                <ul class="mb-0 ps-3">
 
                     @foreach ($errors->all() as $erro)
 
@@ -46,28 +42,28 @@
 
         @endif
 
-        {{-- FORM CARD --}}
-        <div class="form-card">
+        {{-- FORMULÁRIO --}}
+        <div class="filter-box">
 
             <form action="{{ route('animais.store') }}"
-                  method="POST">
+                method="POST"
+                enctype="multipart/form-data">
 
                 @csrf
 
-                {{-- DADOS BÁSICOS --}}
-                <div class="form-section">
+                {{-- INFORMAÇÕES BÁSICAS --}}
+                <div class="mb-5">
 
-                    <h3 class="form-section-title">
-
+                    <h3 class="animal-section-title">
                         Informações Básicas
-
                     </h3>
 
-                    <div class="row">
+                    <div class="row g-4">
 
-                        <div class="col-md-6 mb-4">
+                        {{-- NOME --}}
+                        <div class="col-lg-6">
 
-                            <label class="custom-label">
+                            <label class="form-label fw-semibold mb-2">
                                 Nome
                             </label>
 
@@ -75,13 +71,15 @@
                                    name="nome"
                                    class="form-control custom-input"
                                    value="{{ old('nome') }}"
+                                   placeholder="Digite o nome do animal"
                                    required>
 
                         </div>
 
-                        <div class="col-md-6 mb-4">
+                        {{-- DATA --}}
+                        <div class="col-lg-6">
 
-                            <label class="custom-label">
+                            <label class="form-label fw-semibold mb-2">
                                 Data de Nascimento
                             </label>
 
@@ -92,24 +90,38 @@
 
                         </div>
 
+                        {{-- DESCRIÇÃO --}}
+                        <div class="col-12">
+
+                            <label class="form-label fw-semibold mb-2">
+                                Descrição
+                            </label>
+
+                            <textarea name="descricao"
+                                      rows="5"
+                                      class="form-control custom-input"
+                                      placeholder="Descreva comportamento, personalidade e informações importantes do animal."
+                                      required>{{ old('descricao') }}</textarea>
+
+                        </div>
+
                     </div>
 
                 </div>
 
                 {{-- CARACTERÍSTICAS --}}
-                <div class="form-section">
+                <div class="mb-5">
 
-                    <h3 class="form-section-title">
-
+                    <h3 class="animal-section-title">
                         Características
-
                     </h3>
 
-                    <div class="row">
+                    <div class="row g-4">
 
-                        <div class="col-md-4 mb-4">
+                        {{-- SEXO --}}
+                        <div class="col-lg-3">
 
-                            <label class="custom-label">
+                            <label class="form-label fw-semibold mb-2">
                                 Sexo
                             </label>
 
@@ -135,18 +147,27 @@
 
                                 </option>
 
+                                <option value="NAO_IDENTIFICADO"
+                                    {{ old('sexo') == 'NAO_IDENTIFICADO' ? 'selected' : '' }}>
+
+                                    Não Identificado
+
+                                </option>
+
                             </select>
 
                         </div>
 
-                        <div class="col-md-4 mb-4">
+                        {{-- PORTE --}}
+                        <div class="col-lg-3">
 
-                            <label class="custom-label">
+                            <label class="form-label fw-semibold mb-2">
                                 Porte
                             </label>
 
                             <select name="porte"
-                                    class="form-select custom-select">
+                                    class="form-select custom-select"
+                                    required>
 
                                 <option value="">
                                     Selecione
@@ -177,145 +198,52 @@
 
                         </div>
 
-                        <div class="col-md-4 mb-4">
+                        {{-- ESPÉCIE --}}
+                        <div class="col-lg-3">
 
-                            <label class="custom-label">
-                                Status
-                            </label>
-
-                            <select name="status"
-                                    class="form-select custom-select">
-
-                                <option value="DISPONIVEL"
-                                    {{ old('status') == 'DISPONIVEL' ? 'selected' : '' }}>
-
-                                    Disponível
-
-                                </option>
-
-                                <option value="EM_PROCESSO"
-                                    {{ old('status') == 'EM_PROCESSO' ? 'selected' : '' }}>
-
-                                    Em processo
-
-                                </option>
-
-                                <option value="ADOTADO"
-                                    {{ old('status') == 'ADOTADO' ? 'selected' : '' }}>
-
-                                    Adotado
-
-                                </option>
-
-                            </select>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-                {{-- RELACIONAMENTOS --}}
-                <div class="form-section">
-
-                    <h3 class="form-section-title">
-
-                        Relacionamentos
-
-                    </h3>
-
-                    <div class="row">
-
-                        <div class="col-md-6 mb-4">
-
-                            <label class="custom-label">
-                                Protetor
-                            </label>
-
-                            <select name="user_id"
-                                    class="form-select custom-select"
-                                    required>
-
-                                <option value="">
-                                    Selecione
-                                </option>
-
-                                @foreach($protetores as $user)
-
-                                    <option value="{{ $user->id }}"
-                                        {{ old('user_id') == $user->id ? 'selected' : '' }}>
-
-                                        {{ $user->name }}
-
-                                    </option>
-
-                                @endforeach
-
-                            </select>
-
-                        </div>
-
-                        <div class="col-md-6 mb-4">
-
-                            <label class="custom-label">
+                            <label class="form-label fw-semibold mb-2">
                                 Espécie
                             </label>
 
-                            <select id="especie"
-                                    name="especie_id"
+                            <select name="especie_id"
+                                id="especie_id"
+                                class="form-select custom-select"
+                                required>
+
+                            <option value="">
+                                Selecione
+                            </option>
+
+                            @foreach ($especies as $especie)
+
+                                <option value="{{ $especie->id }}"
+                                    {{ old('especie_id') == $especie->id ? 'selected' : '' }}>
+
+                                    {{ ucfirst(strtolower($especie->nome)) }}
+
+                                </option>
+
+                            @endforeach
+
+                        </select>
+
+                        </div>
+
+                        {{-- RAÇA --}}
+                        <div class="col-lg-3">
+
+                            <label class="form-label fw-semibold mb-2">
+                                Raça
+                            </label>
+
+                            <select name="raca_id"
+                                    id="raca_id"
                                     class="form-select custom-select"
                                     required>
 
                                 <option value="">
-                                    Selecione
+                                    Primeiro selecione uma espécie
                                 </option>
-
-                                @foreach($especies as $especie)
-
-                                    <option value="{{ $especie->id }}"
-                                        {{ old('especie_id') == $especie->id ? 'selected' : '' }}>
-
-                                        {{ $especie->nome }}
-
-                                    </option>
-
-                                @endforeach
-
-                            </select>
-
-                        </div>
-
-                    </div>
-
-                    <div class="row">
-
-                        <div class="col-md-12 mb-4">
-
-                            <label class="custom-label">
-                                Raça
-                            </label>
-
-                            <select id="raca"
-                                    name="raca_id"
-                                    class="form-select custom-select"
-                                    required
-                                    disabled>
-
-                                <option value="">
-                                    Selecione a espécie primeiro
-                                </option>
-
-                                @foreach($racas as $raca)
-
-                                    <option value="{{ $raca->id }}"
-                                            data-especie="{{ $raca->especie_id }}"
-                                        {{ old('raca_id') == $raca->id ? 'selected' : '' }}>
-
-                                        {{ $raca->nome }}
-
-                                    </option>
-
-                                @endforeach
 
                             </select>
 
@@ -325,41 +253,196 @@
 
                 </div>
 
-                {{-- DESCRIÇÃO --}}
-                <div class="form-section">
+                {{-- LOCALIZAÇÃO --}}
+                <div class="mb-5">
 
-                    <h3 class="form-section-title">
-
-                        Descrição
-
+                    <h3 class="animal-section-title">
+                        Localização
                     </h3>
 
-                    <div class="mb-4">
+                    <div class="row g-4">
 
-                        <textarea name="descricao"
-                                  rows="5"
-                                  class="form-control custom-textarea"
-                                  placeholder="Descreva comportamento, histórico, temperamento e observações importantes...">{{ old('descricao') }}</textarea>
+                        {{-- CIDADE --}}
+                        <div class="col-lg-6">
+
+                            <label class="form-label fw-semibold mb-2">
+                                Cidade
+                            </label>
+
+                            <input type="text"
+                                   name="cidade"
+                                   class="form-control custom-input"
+                                   value="{{ old('cidade') }}"
+                                   placeholder="Digite a cidade"
+                                   required>
+
+                        </div>
+
+                        {{-- ESTADO --}}
+                        <div class="col-lg-6">
+
+                            <label class="form-label fw-semibold mb-2">
+                                Estado
+                            </label>
+
+                            <input type="text"
+                                   name="estado"
+                                   class="form-control custom-input"
+                                   value="{{ old('estado') }}"
+                                   placeholder="UF do estado"
+                                   required>
+
+                        </div>
 
                     </div>
 
                 </div>
 
-                {{-- ACTIONS --}}
-                <div class="form-actions">
+                {{-- SAÚDE --}}
+                <div class="mb-5">
+
+                    <h3 class="animal-section-title">
+                        Saúde e Cuidados
+                    </h3>
+
+                    <div class="row g-4 mb-4">
+
+                        {{-- CASTRADO --}}
+                        <div class="col-lg-6">
+
+                            <div class="animal-info-item h-100 justify-content-center">
+
+                                <div class="form-check">
+
+                                    <input type="checkbox"
+                                           name="castrado"
+                                           class="form-check-input"
+                                           {{ old('castrado') ? 'checked' : '' }}>
+
+                                    <label class="form-check-label fw-semibold">
+
+                                        Animal castrado
+
+                                    </label>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        {{-- VACINADO --}}
+                        <div class="col-lg-6">
+
+                            <div class="animal-info-item h-100 justify-content-center">
+
+                                <div class="form-check">
+
+                                    <input type="checkbox"
+                                           name="vacinado"
+                                           class="form-check-input"
+                                           {{ old('vacinado') ? 'checked' : '' }}>
+
+                                    <label class="form-check-label fw-semibold">
+
+                                        Animal vacinado
+
+                                    </label>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    {{-- NECESSIDADES --}}
+                    <div>
+
+                        <label class="form-label fw-semibold mb-2">
+                            Necessidades Especiais
+                        </label>
+
+                        <textarea name="necessidades_especiais"
+                                  rows="5"
+                                  class="form-control custom-input"
+                                  placeholder="Informe medicações, cuidados especiais ou observações relevantes.">{{ old('necessidades_especiais') }}</textarea>
+
+                    </div>
+
+                </div>
+
+                {{-- FOTOS --}}
+                <div class="mb-5">
+
+                    <h3 class="animal-section-title">
+                        Fotos do Animal
+                    </h3>
+
+                    <div class="animal-info-item">
+
+                        <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-3 mb-4">
+
+                            <div>
+
+                                <span class="animal-info-label d-block mb-2">
+                                    Upload de imagens
+                                </span>
+
+                                <p class="text-muted mb-0">
+
+                                    Você pode enviar até 10 fotos.
+                                    A primeira imagem será definida automaticamente
+                                    como foto principal.
+
+                                </p>
+
+                            </div>
+
+                            {{-- INPUT --}}
+                            <input type="file"
+                                id="fotos"
+                                name="fotos[]"
+                                multiple
+                                accept="image/*"
+                                hidden>
+
+                            {{-- BOTÃO --}}
+                            <button type="button"
+                                    class="create-btn"
+                                    id="btn-fotos">
+
+                                Adicionar Fotos
+
+                            </button>
+
+                        </div>
+
+                        {{-- PREVIEW --}}
+                        <div id="preview-fotos"
+                            class="row g-3">
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                {{-- BOTÕES --}}
+                <div class="d-flex flex-column flex-md-row justify-content-end gap-3">
 
                     <a href="{{ route('animais.index') }}"
-                       class="btn back-btn">
+                       class="back-btn text-decoration-none text-center">
 
-                        Voltar
+                        Cancelar
 
                     </a>
 
                     <button type="submit"
-                            class="btn save-btn"
-                            id="btnSalvar">
+                            class="save-btn">
 
-                        Salvar Animal
+                        Cadastrar Animal
 
                     </button>
 
@@ -377,50 +460,309 @@
 
 @section('scripts')
 
+<script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.2/Sortable.min.js"></script>
+
 <script>
 
-    const especieSelect = document.getElementById('especie');
-    const racaSelect = document.getElementById('raca');
-    const form = document.querySelector('form');
-    const btn = document.getElementById('btnSalvar');
+    const inputFotos =
+        document.getElementById('fotos');
 
-    if (especieSelect && racaSelect) {
+    const btnFotos =
+        document.getElementById('btn-fotos');
 
-        function filtrarRacas() {
+    const previewFotos =
+        document.getElementById('preview-fotos');
 
-            const especieId = especieSelect.value;
+    /*
+    |--------------------------------------------------------------------------
+    | ARRAY DE IMAGENS
+    |--------------------------------------------------------------------------
+    */
 
-            racaSelect.value = "";
+    let arquivos = [];
 
-            Array.from(racaSelect.options).forEach(option => {
+    /*
+    |--------------------------------------------------------------------------
+    | ABRIR INPUT
+    |--------------------------------------------------------------------------
+    */
 
-                if (!option.value) return;
+    btnFotos.addEventListener('click', () => {
 
-                const pertence =
-                    option.getAttribute('data-especie') === especieId;
+        inputFotos.click();
 
-                option.hidden = !pertence;
+    });
+
+    /*
+    |--------------------------------------------------------------------------
+    | ADICIONAR IMAGENS
+    |--------------------------------------------------------------------------
+    */
+
+    inputFotos.addEventListener('change', (event) => {
+
+        Array.from(event.target.files)
+            .forEach(file => {
+
+                arquivos.push({
+
+                    file: file,
+
+                    preview: URL.createObjectURL(file)
+
+                });
 
             });
 
-            racaSelect.disabled = !especieId;
-        }
+        atualizarInputFiles();
 
-        especieSelect.addEventListener('change', filtrarRacas);
+        renderizarPreview();
 
-        window.addEventListener('load', filtrarRacas);
+    });
+
+    /*
+    |--------------------------------------------------------------------------
+    | ATUALIZA INPUT FILES
+    |--------------------------------------------------------------------------
+    */
+
+    function atualizarInputFiles() {
+
+        const dataTransfer =
+            new DataTransfer();
+
+        arquivos.forEach(item => {
+
+            dataTransfer.items.add(item.file);
+
+        });
+
+        inputFotos.files =
+            dataTransfer.files;
+
     }
 
-    if (form && btn) {
+    /*
+    |--------------------------------------------------------------------------
+    | RENDERIZA PREVIEW
+    |--------------------------------------------------------------------------
+    */
 
-        form.addEventListener('submit', function () {
+    function renderizarPreview() {
 
-            btn.disabled = true;
-            btn.innerText = 'Salvando...';
+        previewFotos.innerHTML = '';
+
+        arquivos.forEach((item, index) => {
+
+            const coluna =
+                document.createElement('div');
+
+            coluna.className =
+                'col-auto preview-item';
+
+            coluna.innerHTML = `
+
+                <div class="animal-card preview-foto-card ${index === 0 ? 'foto-principal-card' : ''}">
+
+                    <img src="${item.preview}"
+                         class="animal-image"
+                         alt="Preview">
+
+                    <div class="animal-body">
+
+                        <button type="button"
+                                class="delete-btn w-100"
+                                onclick="removerFoto(${index})">
+
+                            Remover
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            `;
+
+            previewFotos.appendChild(coluna);
 
         });
 
     }
+
+    /*
+    |--------------------------------------------------------------------------
+    | REMOVER FOTO
+    |--------------------------------------------------------------------------
+    */
+
+    function removerFoto(index) {
+
+        arquivos.splice(index, 1);
+
+        atualizarInputFiles();
+
+        renderizarPreview();
+
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | SORTABLE
+    |--------------------------------------------------------------------------
+    */
+
+    new Sortable(previewFotos, {
+
+        animation: 200,
+
+        ghostClass: 'sortable-ghost',
+
+        onEnd: function (event) {
+
+            const itemMovido =
+                arquivos.splice(event.oldIndex, 1)[0];
+
+            arquivos.splice(
+                event.newIndex,
+                0,
+                itemMovido
+            );
+
+            atualizarInputFiles();
+
+            renderizarPreview();
+
+        }
+
+    });
+
+    /*
+    |--------------------------------------------------------------------------
+    | FILTRO DINÂMICO DE RAÇAS
+    |--------------------------------------------------------------------------
+    */
+
+    const selectEspecie =
+        document.getElementById('especie_id');
+
+    const selectRaca =
+        document.getElementById('raca_id');
+
+    /*
+    |--------------------------------------------------------------------------
+    | CARREGA RAÇAS
+    |--------------------------------------------------------------------------
+    */
+
+    async function carregarRacas(especieId, racaSelecionada = null) {
+
+        selectRaca.innerHTML = `
+            <option value="">
+                Carregando...
+            </option>
+        `;
+
+        try {
+
+            const response = await fetch(
+                `/especies/${especieId}/racas`
+            );
+
+            const racas = await response.json();
+
+            selectRaca.innerHTML = `
+                <option value="">
+                    Selecione
+                </option>
+            `;
+
+            racas.forEach(raca => {
+
+                const option =
+                    document.createElement('option');
+
+                option.value = raca.id;
+
+                option.textContent =
+                    raca.nome.charAt(0).toUpperCase() +
+                    raca.nome.slice(1).toLowerCase();
+
+                /*
+                |--------------------------------------------------------------------------
+                | MANTÉM OLD()
+                |--------------------------------------------------------------------------
+                */
+
+                if (racaSelecionada == raca.id) {
+
+                    option.selected = true;
+
+                }
+
+                selectRaca.appendChild(option);
+
+            });
+
+        } catch (error) {
+
+            selectRaca.innerHTML = `
+                <option value="">
+                    Erro ao carregar raças
+                </option>
+            `;
+
+        }
+
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | ALTERAÇÃO DE ESPÉCIE
+    |--------------------------------------------------------------------------
+    */
+
+    selectEspecie.addEventListener('change', () => {
+
+        const especieId =
+            selectEspecie.value;
+
+        selectRaca.innerHTML = `
+            <option value="">
+                Selecione
+            </option>
+        `;
+
+        if (!especieId) return;
+
+        carregarRacas(especieId);
+
+    });
+
+    /*
+    |--------------------------------------------------------------------------
+    | OLD INPUT
+    |--------------------------------------------------------------------------
+    */
+
+    document.addEventListener('DOMContentLoaded', () => {
+
+        const especieOld =
+            "{{ old('especie_id') }}";
+
+        const racaOld =
+            "{{ old('raca_id') }}";
+
+        if (especieOld) {
+
+            carregarRacas(
+                especieOld,
+                racaOld
+            );
+
+        }
+
+    });
 
 </script>
 

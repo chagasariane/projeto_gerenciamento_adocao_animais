@@ -2,156 +2,428 @@
 
 @section('content')
 
-<div class="container">
+<section class="animal-show-page">
 
-    <h1 class="mb-4">Cadastrar Usuário</h1>
+    <div class="container">
 
-    {{-- Erros --}}
-    @if ($errors->any())
-        <div class="alert alert-danger">
-            <ul class="mb-0">
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
+        <div class="auth-register-wrapper">
+
+            {{-- HEADER --}}
+            <div class="register-header text-center mb-5">
+
+                <h1 class="section-title mb-3">
+
+                    Criar Conta
+
+                </h1>
+
+                <p class="section-description register-description">
+
+                    Cadastre-se para encontrar animais disponíveis,
+                    acompanhar solicitações e participar do processo
+                    de adoção responsável.
+
+                </p>
+
+            </div>
+
+            {{-- ERROS --}}
+            @if ($errors->any())
+
+                <div class="alert custom-alert-danger mb-4">
+
+                    <ul class="mb-0">
+
+                        @foreach ($errors->all() as $error)
+
+                            <li>{{ $error }}</li>
+
+                        @endforeach
+
+                    </ul>
+
+                </div>
+
+            @endif
+
+            <form action="{{ route('users.store') }}"
+                  method="POST">
+
+                @csrf
+
+                {{-- DADOS PRINCIPAIS --}}
+                <div class="form-section-card mb-4">
+
+                    <h3 class="form-section-title">
+                        Informações da Conta
+                    </h3>
+
+                    <div class="row">
+
+                        <div class="col-md-6 mb-4">
+
+                            <label class="form-label fw-semibold">
+
+                                Nome
+                                <span class="required-field">*</span>
+
+                            </label>
+
+                            <input type="text"
+                                   name="name"
+                                   class="form-control custom-input"
+                                   value="{{ old('name') }}"
+                                   placeholder="Digite seu nome">
+
+                        </div>
+
+                        <div class="col-md-6 mb-4">
+
+                            <label class="form-label fw-semibold">
+
+                                E-mail
+                                <span class="required-field">*</span>
+
+                            </label>
+
+                            <input type="email"
+                                   name="email"
+                                   class="form-control custom-input"
+                                   value="{{ old('email') }}"
+                                   placeholder="Digite seu e-mail">
+
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+
+                        <div class="col-md-6 mb-4">
+
+                            <label class="form-label fw-semibold">
+
+                                Senha
+                                <span class="required-field">*</span>
+
+                            </label>
+
+                            <input type="password"
+                                name="password"
+                                class="form-control custom-input"
+                                placeholder="Digite sua senha">
+
+                        </div>
+
+                        <div class="col-md-6 mb-4">
+
+                            <label class="form-label fw-semibold">
+
+                                Confirmar Senha
+                                <span class="required-field">*</span>
+
+                            </label>
+
+                            <input type="password"
+                                name="password_confirmation"
+                                class="form-control custom-input"
+                                placeholder="Confirme sua senha">
+
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+
+                        <div class="col-md-6 mb-4">
+
+                            <label class="form-label fw-semibold">
+
+                                CPF
+
+                            </label>
+
+                            <input type="text"
+                                name="cpf"
+                                class="form-control custom-input"
+                                value="{{ old('cpf') }}"
+                                placeholder="Digite seu CPF">
+
+                        </div>
+
+                        <div class="col-md-6 mb-0">
+
+                            <label class="form-label fw-semibold">
+
+                                CNPJ
+
+                            </label>
+
+                            <input type="text"
+                                name="cnpj"
+                                class="form-control custom-input"
+                                value="{{ old('cnpj') }}"
+                                placeholder="Digite seu CNPJ (opcional)">
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                {{-- CONTATO --}}
+                <div class="form-section-card mb-4">
+
+                    <h3 class="form-section-title">
+
+                        Contato
+
+                    </h3>
+
+                    <div class="row">
+
+                        <div class="col-md-6 mb-4">
+
+                            <label class="form-label fw-semibold">
+
+                                Telefone
+
+                            </label>
+
+                            <input type="text"
+                                   name="telefone"
+                                   class="form-control custom-input"
+                                   value="{{ old('telefone') }}"
+                                   placeholder="Digite seu telefone (opcional)">
+
+                        </div>
+
+                        <div class="col-md-6 mb-0">
+
+                            <label class="form-label fw-semibold">
+
+                                Celular
+                                <span class="required-field">*</span>
+
+                            </label>
+
+                            <input type="text"
+                                   name="celular"
+                                   class="form-control custom-input"
+                                   value="{{ old('celular') }}"
+                                   placeholder="Digite seu celular">
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                {{-- ENDEREÇO --}}
+                <div class="form-section-card mb-5">
+
+                    <h3 class="form-section-title">
+
+                        Endereço
+                        <span class="required-field">*</span>
+
+                    </h3>
+
+                    <div class="row">
+
+                        <div class="col-md-4 mb-4">
+
+                            <label class="form-label fw-semibold">
+
+                                CEP
+                                <span class="required-field">*</span>
+
+                            </label>
+
+                            <input type="text"
+                                   name="cep"
+                                   class="form-control custom-input"
+                                   value="{{ old('cep') }}"
+                                   placeholder="Digite o CEP">
+
+                        </div>
+
+                        <div class="col-md-8 mb-4">
+
+                            <label class="form-label fw-semibold">
+
+                                Logradouro
+                                <span class="required-field">*</span>
+
+                            </label>
+
+                            <input type="text"
+                                   name="logradouro"
+                                   class="form-control custom-input"
+                                   value="{{ old('logradouro') }}"
+                                   placeholder="Digite o logradouro">
+
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+
+                        <div class="col-md-3 mb-4">
+
+                            <label class="form-label fw-semibold">
+
+                                Número
+                                <span class="required-field">*</span>
+
+                            </label>
+
+                            <input type="text"
+                                   name="numero"
+                                   class="form-control custom-input"
+                                   value="{{ old('numero') }}"
+                                   placeholder="Número">
+
+                        </div>
+
+                        <div class="col-md-5 mb-4">
+
+                            <label class="form-label fw-semibold">
+
+                                Complemento
+
+                            </label>
+
+                            <input type="text"
+                                   name="complemento"
+                                   class="form-control custom-input"
+                                   value="{{ old('complemento') }}"
+                                   placeholder="Complemento (opcional)">
+
+                        </div>
+
+                        <div class="col-md-4 mb-4">
+
+                            <label class="form-label fw-semibold">
+
+                                Cidade
+                                <span class="required-field">*</span>
+
+                            </label>
+
+                            <input type="text"
+                                   name="cidade"
+                                   class="form-control custom-input"
+                                   value="{{ old('cidade') }}"
+                                   placeholder="Cidade">
+
+                        </div>
+
+                    </div>
+
+                    <div class="mb-0">
+
+                        <label class="form-label fw-semibold">
+
+                            Estado
+                            <span class="required-field">*</span>
+
+                        </label>
+
+                        <select name="estado"
+                                class="form-select custom-input">
+
+                            <option value="">
+
+                                Selecione o estado
+
+                            </option>
+
+                            @php
+                                $ufs = [
+                                    'AC','AL','AP','AM','BA','CE','DF','ES',
+                                    'GO','MA','MT','MS','MG','PA','PB','PR',
+                                    'PE','PI','RJ','RN','RS','RO','RR','SC',
+                                    'SP','SE','TO'
+                                ];
+                            @endphp
+
+                            @foreach($ufs as $uf)
+
+                                <option value="{{ $uf }}"
+                                    {{ old('estado') == $uf ? 'selected' : '' }}>
+
+                                    {{ $uf }}
+
+                                </option>
+
+                            @endforeach
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+                {{-- BOTÕES --}}
+                <div class="d-flex justify-content-between flex-wrap gap-3">
+
+                    @if(auth()->check() && auth()->user()->is_admin)
+
+                        <a href="{{ route('users.index') }}"
+                        class="btn back-btn">
+
+                            Voltar
+
+                        </a>
+
+                    @else
+
+                        <a href="{{ url('/') }}"
+                        class="btn back-btn">
+
+                            Voltar
+
+                        </a>
+
+                    @endif
+
+                    <button type="submit"
+                            class="btn save-btn">
+
+                        Criar Conta
+
+                    </button>
+
+                </div>
+
+            </form>
+
         </div>
-    @endif
 
-    <form action="{{ route('users.store') }}" method="POST">
-        @csrf
+    </div>
 
-        <div class="row">
-            <div class="col-md-6 mb-3">
-                <label class="form-label">Nome</label>
-                <input type="text" name="name" class="form-control" value="{{ old('name') }}">
-            </div>
-
-            <div class="col-md-6 mb-3">
-                <label class="form-label">Email</label>
-                <input type="email" name="email" class="form-control" value="{{ old('email') }}">
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-md-6 mb-3">
-                <label class="form-label">Senha</label>
-                <input type="password" name="password" class="form-control">
-            </div>
-
-            <div class="col-md-6 mb-3">
-                <label class="form-label">Tipo</label>
-                <select name="role" id="role" class="form-control">
-                    <option value="ADOTANTE" {{ old('role') == 'ADOTANTE' ? 'selected' : '' }}>Adotante</option>
-                    <option value="PROTETOR" {{ old('role') == 'PROTETOR' ? 'selected' : '' }}>Protetor</option>
-                </select>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-md-6 mb-3" id="campo-cpf">
-                <label class="form-label">CPF</label>
-                <input type="text" name="cpf" class="form-control" value="{{ old('cpf') }}">
-            </div>
-
-            <div class="col-md-6 mb-3" id="campo-cnpj">
-                <label class="form-label">CNPJ</label>
-                <input type="text" name="cnpj" class="form-control" value="{{ old('cnpj') }}">
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-md-6 mb-3">
-                <label class="form-label">Telefone</label>
-                <input type="text" name="telefone" class="form-control" value="{{ old('telefone') }}">
-            </div>
-
-            <div class="col-md-6 mb-3">
-                <label class="form-label">Celular</label>
-                <input type="text" name="celular" class="form-control" value="{{ old('celular') }}">
-            </div>
-        </div>
-
-        <hr>
-        <h5 class="mb-3">Endereço</h5>
-
-        <div class="row">
-            <div class="col-md-4 mb-3">
-                <label class="form-label">CEP</label>
-                <input type="text" name="cep" class="form-control" value="{{ old('cep') }}">
-            </div>
-
-            <div class="col-md-8 mb-3">
-                <label class="form-label">Logradouro</label>
-                <input type="text" name="logradouro" class="form-control" value="{{ old('logradouro') }}">
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-md-3 mb-3">
-                <label class="form-label">Número</label>
-                <input type="text" name="numero" class="form-control" value="{{ old('numero') }}">
-            </div>
-
-            <div class="col-md-5 mb-3">
-                <label class="form-label">Complemento</label>
-                <input type="text" name="complemento" class="form-control" value="{{ old('complemento') }}">
-            </div>
-
-            <div class="col-md-4 mb-3">
-                <label class="form-label">Cidade</label>
-                <input type="text" name="cidade" class="form-control" value="{{ old('cidade') }}">
-            </div>
-        </div>
-
-        <div class="mb-3">
-            <label class="form-label">Estado</label>
-            <input type="text" name="estado" class="form-control" value="{{ old('estado') }}">
-        </div>
-
-        <div class="d-flex justify-content-between mt-4">
-            <a href="{{ route('users.index') }}" class="btn btn-secondary">
-                Voltar
-            </a>
-
-            <button type="submit" class="btn btn-primary" id="btnSalvar">
-                Salvar
-            </button>
-        </div>
-
-    </form>
-</div>
+</section>
 
 @endsection
 
 @section('scripts')
+
 <script>
-    function ajustarCampos() {
-        const role = document.getElementById('role').value;
-        const campoCpf = document.getElementById('campo-cpf');
-        const campoCnpj = document.getElementById('campo-cnpj');
 
-        if (role === 'ADOTANTE') {
-            campoCpf.style.display = 'block';
-            campoCnpj.style.display = 'none';
-        } else {
-            campoCpf.style.display = 'block';
-            campoCnpj.style.display = 'block';
-        }
-    }
+    $(document).ready(function(){
 
-    document.addEventListener('DOMContentLoaded', function () {
-        const roleSelect = document.getElementById('role');
-        const form = document.querySelector('form');
-        const btn = document.getElementById('btnSalvar');
+        $('input[name="cpf"]').mask('000.000.000-00');
 
-        ajustarCampos();
+        $('input[name="cnpj"]').mask('00.000.000/0000-00');
 
-        roleSelect.addEventListener('change', ajustarCampos);
+        $('input[name="cep"]').mask('00000-000');
 
-        form.addEventListener('submit', function () {
-            btn.disabled = true;
-            btn.innerText = 'Salvando...';
-        });
+        $('input[name="telefone"]').mask('(00) 0000-0000');
+
+        $('input[name="celular"]').mask('(00) 00000-0000');
+
     });
+
 </script>
+
 @endsection
