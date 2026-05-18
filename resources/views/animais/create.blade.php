@@ -65,6 +65,7 @@
 
                             <label class="form-label fw-semibold mb-2">
                                 Nome
+                                <span class="required-field">*</span>
                             </label>
 
                             <input type="text"
@@ -81,6 +82,7 @@
 
                             <label class="form-label fw-semibold mb-2">
                                 Data de Nascimento
+                                <span class="required-field">*</span>
                             </label>
 
                             <input type="date"
@@ -95,6 +97,7 @@
 
                             <label class="form-label fw-semibold mb-2">
                                 Descrição
+                                <span class="required-field">*</span>
                             </label>
 
                             <textarea name="descricao"
@@ -123,6 +126,7 @@
 
                             <label class="form-label fw-semibold mb-2">
                                 Sexo
+                                <span class="required-field">*</span>
                             </label>
 
                             <select name="sexo"
@@ -163,6 +167,7 @@
 
                             <label class="form-label fw-semibold mb-2">
                                 Porte
+                                <span class="required-field">*</span>
                             </label>
 
                             <select name="porte"
@@ -203,6 +208,7 @@
 
                             <label class="form-label fw-semibold mb-2">
                                 Espécie
+                                <span class="required-field">*</span>
                             </label>
 
                             <select name="especie_id"
@@ -234,6 +240,7 @@
 
                             <label class="form-label fw-semibold mb-2">
                                 Raça
+                                <span class="required-field">*</span>
                             </label>
 
                             <select name="raca_id"
@@ -267,6 +274,7 @@
 
                             <label class="form-label fw-semibold mb-2">
                                 Cidade
+                                <span class="required-field">*</span>
                             </label>
 
                             <input type="text"
@@ -283,14 +291,38 @@
 
                             <label class="form-label fw-semibold mb-2">
                                 Estado
+                                <span class="required-field">*</span>
                             </label>
 
-                            <input type="text"
-                                   name="estado"
-                                   class="form-control custom-input"
-                                   value="{{ old('estado') }}"
-                                   placeholder="UF do estado"
-                                   required>
+                            <select name="estado"
+                                    class="form-select custom-select"
+                                    required>
+
+                                <option value="">
+                                    Selecione o estado
+                                </option>
+
+                                @php
+                                    $ufs = [
+                                        'AC','AL','AP','AM','BA','CE','DF','ES',
+                                        'GO','MA','MT','MS','MG','PA','PB','PR',
+                                        'PE','PI','RJ','RN','RS','RO','RR','SC',
+                                        'SP','SE','TO'
+                                    ];
+                                @endphp
+
+                                @foreach($ufs as $uf)
+
+                                    <option value="{{ $uf }}"
+                                        {{ old('estado') == $uf ? 'selected' : '' }}>
+
+                                        {{ $uf }}
+
+                                    </option>
+
+                                @endforeach
+
+                            </select>
 
                         </div>
 

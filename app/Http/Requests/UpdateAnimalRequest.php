@@ -95,7 +95,7 @@ class UpdateAnimalRequest extends FormRequest
             ],
 
             'data_nascimento' => [
-                'nullable',
+                'required',
                 'date'
             ],
 
@@ -151,6 +151,12 @@ class UpdateAnimalRequest extends FormRequest
 
             'especie_id.exists' =>
                 'Espécie inválida.',
+
+            'data_nascimento.required' =>
+                'A data de nascimento é obrigatória.',
+
+            'data_nascimento.date' =>
+                'Informe uma data válida.',
         ];
     }
 }

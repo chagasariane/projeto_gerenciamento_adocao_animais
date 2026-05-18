@@ -142,8 +142,23 @@ class UserController extends Controller
         $user = User::findOrFail($id);
 
         $request->validate([
+
             'name' => 'required|max:255',
+
             'email' => 'required|email|unique:users,email,' . $id,
+
+            'celular' => 'required',
+
+            'cep' => 'required',
+
+            'logradouro' => 'required|max:255',
+
+            'numero' => 'required|max:20',
+
+            'cidade' => 'required|max:255',
+
+            'estado' => 'required|size:2',
+
         ]);
 
         /*
@@ -156,16 +171,18 @@ class UserController extends Controller
             empty($request->cpf) &&
             empty($request->cnpj)
         ) {
+
             return back()
                 ->withErrors([
                     'cpf' => 'Informe CPF ou CNPJ.'
                 ])
                 ->withInput();
+
         }
 
         /*
         |--------------------------------------------------------------------------
-        | ATUALIZAÇÃO
+        | NORMALIZAÇÃO
         |--------------------------------------------------------------------------
         */
 
@@ -189,14 +206,28 @@ class UserController extends Controller
             ? preg_replace('/\D/', '', $request->cep)
             : null;
 
+        /*
+        |--------------------------------------------------------------------------
+        | DADOS DO USUÁRIO
+        |--------------------------------------------------------------------------
+        */
+
         $data = [
-            'name' => $request->name,
-            'email' => $request->email,
+
+            'name' => trim($request->name),
+
+            'email' => trim($request->email),
+
             'cpf' => $cpf,
+
             'cnpj' => $cnpj,
+
             'telefone' => $telefone,
+
             'celular' => $celular,
+
             'is_admin' => $request->is_admin,
+
         ];
 
         /*
@@ -206,7 +237,10 @@ class UserController extends Controller
         */
 
         if (!empty($request->password)) {
-            $data['password'] = Hash::make($request->password);
+
+            $data['password'] =
+                Hash::make($request->password);
+
         }
 
         $user->update($data);
@@ -217,34 +251,47 @@ class UserController extends Controller
         |--------------------------------------------------------------------------
         */
 
+        $dadosEndereco = [
+
+            'logradouro' => trim($request->logradouro),
+
+            'numero' => trim($request->numero),
+
+            'complemento' => $request->complemento
+                ? trim($request->complemento)
+                : null,
+
+            'cidade' => trim($request->cidade),
+
+            'estado' => strtoupper(trim($request->estado)),
+
+            'cep' => $cep,
+
+        ];
+
         if ($user->endereco) {
 
-            $user->endereco->update([
-                'logradouro' => $request->logradouro,
-                'numero' => $request->numero,
-                'complemento' => $request->complemento,
-                'cidade' => $request->cidade,
-                'estado' => $request->estado,
-                'cep' => $cep,
-            ]);
+            $user->endereco->update(
+                $dadosEndereco
+            );
 
         } else {
 
-            Endereco::create([
-                'logradouro' => $request->logradouro,
-                'numero' => $request->numero,
-                'complemento' => $request->complemento,
-                'cidade' => $request->cidade,
-                'estado' => $request->estado,
-                'cep' => $cep,
-                'user_id' => $user->id
-            ]);
+            $dadosEndereco['user_id'] =
+                $user->id;
+
+            Endereco::create(
+                $dadosEndereco
+            );
 
         }
 
         return redirect()
             ->route('users.index')
-            ->with('success', 'Usuário atualizado com sucesso!');
+            ->with(
+                'success',
+                'Usuário atualizado com sucesso!'
+            );
     }
 
     public function perfil()
@@ -266,8 +313,23 @@ class UserController extends Controller
         $user = auth()->user();
 
         $request->validate([
+
             'name' => 'required|max:255',
+
             'email' => 'required|email|unique:users,email,' . $user->id,
+
+            'celular' => 'required',
+
+            'cep' => 'required',
+
+            'logradouro' => 'required|max:255',
+
+            'numero' => 'required|max:20',
+
+            'cidade' => 'required|max:255',
+
+            'estado' => 'required|size:2',
+
         ]);
 
         /*
@@ -280,18 +342,21 @@ class UserController extends Controller
             empty($request->cpf) &&
             empty($request->cnpj)
         ) {
+
             return back()
                 ->withErrors([
                     'cpf' => 'Informe CPF ou CNPJ.'
                 ])
                 ->withInput();
+
         }
 
         /*
         |--------------------------------------------------------------------------
-        | ATUALIZAÇÃO
+        | NORMALIZAÇÃO
         |--------------------------------------------------------------------------
         */
+
         $cpf = $request->cpf
             ? preg_replace('/\D/', '', $request->cpf)
             : null;
@@ -312,13 +377,26 @@ class UserController extends Controller
             ? preg_replace('/\D/', '', $request->cep)
             : null;
 
+        /*
+        |--------------------------------------------------------------------------
+        | DADOS DO USUÁRIO
+        |--------------------------------------------------------------------------
+        */
+
         $data = [
-            'name' => $request->name,
-            'email' => $request->email,
+
+            'name' => trim($request->name),
+
+            'email' => trim($request->email),
+
             'cpf' => $cpf,
+
             'cnpj' => $cnpj,
+
             'telefone' => $telefone,
+
             'celular' => $celular,
+
         ];
 
         /*
@@ -329,7 +407,8 @@ class UserController extends Controller
 
         if (!empty($request->password)) {
 
-            $data['password'] = Hash::make($request->password);
+            $data['password'] =
+                Hash::make($request->password);
 
         }
 
@@ -341,34 +420,47 @@ class UserController extends Controller
         |--------------------------------------------------------------------------
         */
 
+        $dadosEndereco = [
+
+            'logradouro' => trim($request->logradouro),
+
+            'numero' => trim($request->numero),
+
+            'complemento' => $request->complemento
+                ? trim($request->complemento)
+                : null,
+
+            'cidade' => trim($request->cidade),
+
+            'estado' => strtoupper(trim($request->estado)),
+
+            'cep' => $cep,
+
+        ];
+
         if ($user->endereco) {
 
-            $user->endereco->update([
-                'logradouro' => $request->logradouro,
-                'numero' => $request->numero,
-                'complemento' => $request->complemento,
-                'cidade' => $request->cidade,
-                'estado' => $request->estado,
-                'cep' => $cep,
-            ]);
+            $user->endereco->update(
+                $dadosEndereco
+            );
 
         } else {
 
-            Endereco::create([
-                'logradouro' => $request->logradouro,
-                'numero' => $request->numero,
-                'complemento' => $request->complemento,
-                'cidade' => $request->cidade,
-                'estado' => $request->estado,
-                'cep' => $cep,
-                'user_id' => $user->id
-            ]);
+            $dadosEndereco['user_id'] =
+                $user->id;
+
+            Endereco::create(
+                $dadosEndereco
+            );
 
         }
 
         return redirect()
             ->route('perfil')
-            ->with('success', 'Perfil atualizado com sucesso!');
+            ->with(
+                'success',
+                'Perfil atualizado com sucesso!'
+            );
     }
 
     public function destroy(string $id)

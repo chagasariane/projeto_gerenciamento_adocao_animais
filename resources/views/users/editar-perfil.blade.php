@@ -67,16 +67,16 @@
                         <div class="col-md-6 mb-4">
 
                             <label class="form-label fw-semibold">
-
                                 Nome
-
+                                <span class="required-field">*</span>
                             </label>
 
                             <input type="text"
-                                   name="name"
-                                   class="form-control custom-input"
-                                   value="{{ old('name', $user->name) }}"
-                                   placeholder="Digite o nome">
+                                name="name"
+                                class="form-control custom-input"
+                                value="{{ old('name', $user->name) }}"
+                                placeholder="Digite o nome"
+                                required>
 
                         </div>
 
@@ -84,16 +84,16 @@
                         <div class="col-md-6 mb-4">
 
                             <label class="form-label fw-semibold">
-
                                 E-mail
-
+                                <span class="required-field">*</span>
                             </label>
 
                             <input type="email"
-                                   name="email"
-                                   class="form-control custom-input"
-                                   value="{{ old('email', $user->email) }}"
-                                   placeholder="Digite o e-mail">
+                                name="email"
+                                class="form-control custom-input"
+                                value="{{ old('email', $user->email) }}"
+                                placeholder="Digite o e-mail"
+                                required>
 
                         </div>
 
@@ -125,16 +125,14 @@
                         <div class="col-md-6 mb-4">
 
                             <label class="form-label fw-semibold">
-
                                 CPF
-
                             </label>
 
                             <input type="text"
-                                   name="cpf"
-                                   class="form-control custom-input"
-                                   value="{{ old('cpf', $user->cpf) }}"
-                                   placeholder="Digite o CPF">
+                                name="cpf"
+                                class="form-control custom-input"
+                                value="{{ old('cpf', $user->cpf) }}"
+                                placeholder="Digite o CPF">
 
                         </div>
 
@@ -189,16 +187,16 @@
                         <div class="col-md-6 mb-0">
 
                             <label class="form-label fw-semibold">
-
                                 Celular
-
+                                <span class="required-field">*</span>
                             </label>
 
                             <input type="text"
-                                   name="celular"
-                                   class="form-control custom-input"
-                                   value="{{ old('celular', $user->celular) }}"
-                                   placeholder="Digite o celular">
+                                name="celular"
+                                class="form-control custom-input"
+                                value="{{ old('celular', $user->celular) }}"
+                                placeholder="Digite o celular"
+                                required>
 
                         </div>
 
@@ -220,32 +218,32 @@
                         <div class="col-md-4 mb-4">
 
                             <label class="form-label fw-semibold">
-
                                 CEP
-
+                                <span class="required-field">*</span>
                             </label>
 
                             <input type="text"
-                                   name="cep"
-                                   class="form-control custom-input"
-                                   value="{{ old('cep', $user->endereco->cep ?? '') }}"
-                                   placeholder="Digite o CEP">
+                                name="cep"
+                                class="form-control custom-input"
+                                value="{{ old('cep', $user->endereco->cep ?? '') }}"
+                                placeholder="Digite o CEP"
+                                required>
 
                         </div>
 
                         <div class="col-md-8 mb-4">
 
                             <label class="form-label fw-semibold">
-
                                 Logradouro
-
+                                <span class="required-field">*</span>
                             </label>
 
                             <input type="text"
-                                   name="logradouro"
-                                   class="form-control custom-input"
-                                   value="{{ old('logradouro', $user->endereco->logradouro ?? '') }}"
-                                   placeholder="Digite o logradouro">
+                                name="logradouro"
+                                class="form-control custom-input"
+                                value="{{ old('logradouro', $user->endereco->logradouro ?? '') }}"
+                                placeholder="Digite o logradouro"
+                                required>
 
                         </div>
 
@@ -256,16 +254,16 @@
                         <div class="col-md-3 mb-4">
 
                             <label class="form-label fw-semibold">
-
                                 Número
-
+                                <span class="required-field">*</span>
                             </label>
 
                             <input type="text"
-                                   name="numero"
-                                   class="form-control custom-input"
-                                   value="{{ old('numero', $user->endereco->numero ?? '') }}"
-                                   placeholder="Número">
+                                name="numero"
+                                class="form-control custom-input"
+                                value="{{ old('numero', $user->endereco->numero ?? '') }}"
+                                placeholder="Número"
+                                required>
 
                         </div>
 
@@ -288,16 +286,16 @@
                         <div class="col-md-4 mb-4">
 
                             <label class="form-label fw-semibold">
-
                                 Cidade
-
+                                <span class="required-field">*</span>
                             </label>
 
                             <input type="text"
-                                   name="cidade"
-                                   class="form-control custom-input"
-                                   value="{{ old('cidade', $user->endereco->cidade ?? '') }}"
-                                   placeholder="Cidade">
+                                name="cidade"
+                                class="form-control custom-input"
+                                value="{{ old('cidade', $user->endereco->cidade ?? '') }}"
+                                placeholder="Cidade"
+                                required>
 
                         </div>
 
@@ -308,14 +306,39 @@
                         <label class="form-label fw-semibold">
 
                             Estado
+                            <span class="required-field">*</span>
 
                         </label>
 
-                        <input type="text"
-                               name="estado"
-                               class="form-control custom-input"
-                               value="{{ old('estado', $user->endereco->estado ?? '') }}"
-                               placeholder="Estado">
+                        <select name="estado"
+                                class="form-select custom-select"
+                                required>
+
+                            <option value="">
+                                Selecione o estado
+                            </option>
+
+                            @php
+                                $ufs = [
+                                    'AC','AL','AP','AM','BA','CE','DF','ES',
+                                    'GO','MA','MT','MS','MG','PA','PB','PR',
+                                    'PE','PI','RJ','RN','RS','RO','RR','SC',
+                                    'SP','SE','TO'
+                                ];
+                            @endphp
+
+                            @foreach($ufs as $uf)
+
+                                <option value="{{ $uf }}"
+                                    {{ old('estado', $user->endereco->estado ?? '') == $uf ? 'selected' : '' }}>
+
+                                    {{ $uf }}
+
+                                </option>
+
+                            @endforeach
+
+                        </select>
 
                     </div>
 
@@ -347,5 +370,53 @@
     </div>
 
 </section>
+
+@endsection
+
+@section('scripts')
+
+<script>
+
+    $(document).ready(function(){
+
+        $('input[name="cpf"]').mask('000.000.000-00');
+
+        $('input[name="cnpj"]').mask('00.000.000/0000-00');
+
+        $('input[name="cep"]').mask('00000-000');
+
+        $('input[name="telefone"]').mask('(00) 0000-0000');
+
+        $('input[name="celular"]').mask('(00) 00000-0000');
+
+    });
+
+    const form = document.getElementById('userEditForm');
+
+    const adminSelect = document.getElementById('is_admin');
+
+    form.addEventListener('submit', function(event){
+
+        const isAdmin = adminSelect.value;
+
+        const currentUserIsAdmin = {{ $user->is_admin ? 'true' : 'false' }};
+
+        if(currentUserIsAdmin && isAdmin == '0'){
+
+            const confirmacao = confirm(
+                'Ao salvar, este usuário perderá as permissões administrativas. Deseja continuar?'
+            );
+
+            if(!confirmacao){
+
+                event.preventDefault();
+
+            }
+
+        }
+
+    });
+
+</script>
 
 @endsection

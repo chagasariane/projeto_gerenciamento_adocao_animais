@@ -95,7 +95,7 @@ class StoreAnimalRequest extends FormRequest
             ],
 
             'data_nascimento' => [
-                'nullable',
+                'required',
                 'date'
             ],
 
@@ -139,6 +139,12 @@ class StoreAnimalRequest extends FormRequest
 
             'estado.size' =>
                 'O estado deve possuir 2 caracteres.',
+
+            'data_nascimento.required' =>
+                'A data de nascimento é obrigatória.',
+
+            'data_nascimento.date' =>
+                'Informe uma data válida.',
 
             'raca_id.required' =>
                 'A raça é obrigatória.',

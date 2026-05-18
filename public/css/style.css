@@ -1946,3 +1946,67 @@ body{
     font-weight: 700;
     margin-left: 4px;
 }
+
+/* =========================
+   CARD COMPACTO - MEUS ANIMAIS
+========================= */
+
+.animal-show-page .animal-card{
+    border-radius: 20px;
+}
+
+.animal-show-page .animal-image{
+    height: 260px;
+}
+
+.animal-show-page .animal-body{
+    padding: 18px;
+}
+
+.animal-show-page .animal-name{
+    font-size: 1.25rem;
+    line-height: 1.2;
+}
+
+.animal-show-page .animal-tag{
+    padding: 5px 10px;
+    font-size: 0.72rem;
+}
+
+.animal-show-page .animal-breed,
+.animal-show-page .animal-location{
+    font-size: 0.92rem;
+    margin-bottom: 10px;
+}
+
+.animal-show-page .animal-info-grid{
+    gap: 12px;
+    margin-bottom: 18px !important;
+}
+
+.animal-show-page .animal-info-item{
+    padding: 12px;
+    border-radius: 14px;
+}
+
+.animal-show-page .animal-info-label{
+    font-size: 0.78rem;
+    margin-bottom: 4px;
+}
+
+.animal-show-page .animal-info-value{
+    font-size: 0.92rem;
+}
+
+.animal-show-page .text-muted{
+    font-size: 0.92rem;
+    line-height: 1.6 !important;
+    margin-bottom: 18px !important;
+}
+
+.animal-show-page .animal-btn,
+.animal-show-page .edit-btn,
+.animal-show-page .delete-btn{
+    padding: 10px 14px;
+    font-size: 0.9rem;
+}
