@@ -7,20 +7,24 @@
     <div class="container">
 
         {{-- HEADER --}}
-        <div class="mb-5">
+        <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-4 mb-5">
 
-            <h1 class="section-title mb-3">
+            <div>
 
-                Gerenciar Solicitação
+                <h1 class="section-title mb-2">
 
-            </h1>
+                    Gerenciar Solicitação
 
-            <p class="section-description m-0">
+                </h1>
 
-                Avalie a solicitação de adoção recebida
-                e defina o andamento do processo.
+                <p class="crud-description m-0">
 
-            </p>
+                    Avalie a solicitação de adoção recebida
+                    e defina o andamento do processo.
+
+                </p>
+
+            </div>
 
         </div>
 
@@ -140,7 +144,7 @@
 
                             <span class="manage-meta-value">
 
-                                {{ $adocao->user->name }}
+                                {{ $adocao->user->name ?? 'Usuário removido' }}
 
                             </span>
 
@@ -150,13 +154,54 @@
 
                             <span class="manage-meta-label">
 
-                                E-mail
+                                Contato
 
                             </span>
 
                             <span class="manage-meta-value">
 
-                                {{ $adocao->user->email }}
+                                @php
+
+                                    $telefone = $adocao->user->telefone ?? null;
+                                    $celular = $adocao->user->celular ?? null;
+
+                                    if($telefone){
+                                        $telefone = preg_replace(
+                                            '/(\d{2})(\d{4})(\d{4})/',
+                                            '($1) $2-$3',
+                                            preg_replace('/\D/', '', $telefone)
+                                        );
+                                    }
+
+                                    if($celular){
+                                        $celular = preg_replace(
+                                            '/(\d{2})(\d{5})(\d{4})/',
+                                            '($1) $2-$3',
+                                            preg_replace('/\D/', '', $celular)
+                                        );
+                                    }
+
+                                @endphp
+
+                                @if(!empty($telefone) && !empty($celular))
+
+                                    {{ $telefone }}
+                                    <br>
+                                    {{ $celular }}
+
+                                @elseif(!empty($celular))
+
+                                    {{ $celular }}
+
+                                @elseif(!empty($telefone))
+
+                                    {{ $telefone }}
+
+                                @else
+
+                                    Não informado
+
+                                @endif
 
                             </span>
 

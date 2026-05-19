@@ -352,7 +352,11 @@
                 <div class="info-card">
 
                     <div class="info-icon">
-                        🛡️
+
+                        <img src="{{ asset('imagem/protecao.png') }}"
+                            alt="Proteção"
+                            style="width: 38px; height: 38px; object-fit: contain;">
+
                     </div>
 
                     <h4>

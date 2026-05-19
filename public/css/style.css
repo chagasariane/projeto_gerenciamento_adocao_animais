@@ -180,7 +180,7 @@ body{
 ========================= */
 
 .about-section{
-    margin-bottom: 100px;
+    margin-bottom: 50px;
 }
 
 .info-card{
@@ -198,15 +198,14 @@ body{
 }
 
 .info-icon{
-    width: 65px;
-    height: 65px;
-    background-color: #ecfdf3;
-    border-radius: 18px;
+    width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 2rem;
+
     margin-bottom: 25px;
+
+    font-size: 2.4rem;
 }
 
 .info-card h4{
@@ -529,63 +528,12 @@ body{
     color: white;
 }
 
-.animal-info-card{
-    border-radius: 12px;
-}
-
-.animal-section-title{
-    font-size: 1.5rem;
-    font-weight: 700;
-    margin-bottom: 28px;
-    color: #0f172a;
-}
-
-.animal-info-grid{
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 18px;
-}
-
-.animal-info-item{
-    background-color: #f8fafc;
-    border-radius: 18px;
-    padding: 18px;
-    display: flex;
-    flex-direction: column;
-}
 
 .animal-info-label{
     font-size: 0.9rem;
     font-weight: 600;
     color: #64748b;
     margin-bottom: 6px;
-}
-
-.animal-info-value{
-    font-size: 1.05rem;
-    font-weight: 700;
-    color: #0f172a;
-}
-
-.animal-show-page{
-    padding: 18px 0 80px;
-}
-
-.adopt-btn{
-    background-color: #1b4332;
-    color: white;
-    border-radius: 18px;
-    padding: 18px 24px;
-    font-size: 1.05rem;
-    font-weight: 700;
-    border: none;
-    transition: 0.3s;
-}
-
-.adopt-btn:hover{
-    background-color: #163828;
-    color: white;
-    box-shadow: 0 12px 28px rgba(27,67,50,0.18);
 }
 
 /* =========================
@@ -1989,24 +1937,679 @@ body{
     border-radius: 14px;
 }
 
-.animal-show-page .animal-info-label{
-    font-size: 0.78rem;
+/*
+|--------------------------------------------------------------------------
+| ANIMAL DETAILS PAGE
+|--------------------------------------------------------------------------
+*/
+
+.animal-details-page{
+    padding: 20px 0 70px;
+}
+
+/*
+|--------------------------------------------------------------------------
+| HERO
+|--------------------------------------------------------------------------
+*/
+
+.animal-hero{
+    margin-bottom: 32px;
+}
+
+.animal-details-title{
+    font-size: 3.2rem;
+    font-weight: 800;
+    line-height: 1.05;
+    color: #0f172a;
+    margin-bottom: 10px;
+    letter-spacing: -1.5px;
+}
+
+.animal-details-location{
+    color: #64748b;
+    font-size: 1rem;
+    margin: 0;
+}
+
+/*
+|--------------------------------------------------------------------------
+| LAYOUT
+|--------------------------------------------------------------------------
+*/
+
+.animal-main-layout{
+    display: grid;
+    grid-template-columns: minmax(280px, 430px) 1fr;
+    gap: 1.2rem;
+    align-items: start;
+}
+
+/*
+|--------------------------------------------------------------------------
+| GALERIA
+|--------------------------------------------------------------------------
+*/
+
+.animal-gallery-col{
+    position: relative;
+}
+
+.animal-gallery-main{
+    background: white;
+    border-radius: 28px;
+    overflow: hidden;
+    margin-bottom: 18px;
+    border: 1px solid #ececec;
+
+    box-shadow:
+        0 20px 45px rgba(15,23,42,0.08);
+}
+
+.animal-featured-image{
+    width: 100%;
+    height: 430px;
+    object-fit: cover;
+    display: block;
+    cursor: pointer;
+    transition: .35s ease;
+}
+
+.animal-gallery-main:hover .animal-featured-image{
+    transform: scale(1.02);
+}
+
+/*
+|--------------------------------------------------------------------------
+| THUMBS
+|--------------------------------------------------------------------------
+*/
+
+.animal-thumbs-row{
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    padding-bottom: 6px;
+}
+
+.animal-thumbs-row::-webkit-scrollbar{
+    height: 8px;
+}
+
+.animal-thumbs-row::-webkit-scrollbar-thumb{
+    background: #cbd5e1;
+    border-radius: 999px;
+}
+
+.animal-thumb{
+    width: 72px;
+    height: 72px;
+    border-radius: 18px;
+    overflow: hidden;
+    cursor: pointer;
+    flex-shrink: 0;
+    border: 3px solid transparent;
+    transition: .25s ease;
+}
+
+.animal-thumb img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.animal-thumb:hover{
+    transform: translateY(-3px);
+}
+
+.active-thumb{
+    border-color: #2563eb;
+}
+
+/*
+|--------------------------------------------------------------------------
+| COLUNA DIREITA
+|--------------------------------------------------------------------------
+*/
+
+.animal-info-col{
+    display: flex;
+    flex-direction: column;
+    gap: .60rem;
+}
+
+/*
+|--------------------------------------------------------------------------
+| GRID INFORMAÇÕES
+|--------------------------------------------------------------------------
+*/
+
+.animal-data-grid{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: .9rem;
+}
+
+.animal-data-card{
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 12px 14px;
+    border: 1px solid #ececec;
+
+    min-height: 72px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    transition: .25s ease;
+}
+
+.animal-data-label{
+    font-size: .82rem;
+    font-weight: 700;
+    color: #64748b;
+    margin-bottom: 6px;
+}
+
+.animal-data-value{
+    font-size: 1rem;
+    font-weight: 700;
+    color: #0f172a;
+}
+
+/*
+|--------------------------------------------------------------------------
+| CARDS
+|--------------------------------------------------------------------------
+*/
+
+.modern-section-card{
+    background: white;
+    border-radius: 1rem;
+    padding: .95rem 1rem;
+    border: 1px solid #ececec;
+
+    box-shadow:
+        0 10px 30px rgba(15,23,42,0.04);
+}
+
+.modern-section-warning{
+    border: 1px solid #fde68a;
+    background: #fffdf5;
+}
+
+.modern-section-title{
+    font-size: 1.08rem;
+    font-weight: 800;
+    color: #0f172a;
+    margin-bottom: .8rem;
+}
+
+.modern-section-text{
+    color: #475569;
+    line-height: 1.75;
+    margin: 0;
+    font-size: .96rem;
+}
+
+/*
+|--------------------------------------------------------------------------
+| RESPONSÁVEL
+|--------------------------------------------------------------------------
+*/
+
+.responsavel-box{
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.responsavel-avatar{
+    width: 58px;
+    height: 58px;
+    border-radius: 50%;
+    background: linear-gradient(
+        135deg,
+        #1b4332,
+        #2d6a4f
+    );
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: white;
+    font-weight: 800;
+    font-size: 1rem;
+
+    flex-shrink: 0;
+}
+
+.responsavel-nome{
     margin-bottom: 4px;
+    font-size: 1rem;
+    font-weight: 700;
+    color: #0f172a;
 }
 
-.animal-show-page .animal-info-value{
-    font-size: 0.92rem;
+.responsavel-contato{
+    margin: 0;
+    color: #64748b;
+    font-size: .92rem;
 }
 
-.animal-show-page .text-muted{
-    font-size: 0.92rem;
-    line-height: 1.6 !important;
-    margin-bottom: 18px !important;
+/*
+|--------------------------------------------------------------------------
+| BOTÃO
+|--------------------------------------------------------------------------
+*/
+
+.modern-adopt-btn{
+    background: linear-gradient(
+        135deg,
+        #1b4332,
+        #2d6a4f
+    );
+    text-decoration: none;
+
+    border: none;
+    border-radius: 18px;
+
+    padding: 15px 24px;
+
+    color: white;
+    font-size: .98rem;
+    font-weight: 700;
+
+    transition: .3s ease;
+
+    box-shadow:
+        0 12px 28px rgba(27,67,50,0.18);
 }
 
-.animal-show-page .animal-btn,
-.animal-show-page .edit-btn,
-.animal-show-page .delete-btn{
-    padding: 10px 14px;
-    font-size: 0.9rem;
+.modern-adopt-btn:hover{
+    transform: translateY(-2px);
+    text-decoration: none;
+
+    background: linear-gradient(
+        135deg,
+        #163828,
+        #24543e
+    );
+
+    color: white;
+}
+
+/*
+|--------------------------------------------------------------------------
+| LIGHTBOX MODERNO
+|--------------------------------------------------------------------------
+*/
+
+.lightbox-overlay{
+    position: fixed;
+    inset: 0;
+
+    background:
+        radial-gradient(
+            circle at center,
+            rgba(15,23,42,0.96) 0%,
+            rgba(2,6,23,0.985) 100%
+        );
+
+    backdrop-filter: blur(12px);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    z-index: 99999;
+
+    opacity: 0;
+    visibility: hidden;
+
+    transition: .35s ease;
+}
+
+.lightbox-overlay.active{
+    opacity: 1;
+    visibility: visible;
+}
+
+.lightbox-shell{
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    padding: 24px 40px;
+}
+
+.lightbox-topbar{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    margin-bottom: 18px;
+
+    color: rgba(255,255,255,.92);
+}
+
+.lightbox-title{
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: .3px;
+}
+
+.lightbox-counter{
+    font-size: .92rem;
+    opacity: .75;
+}
+
+.lightbox-main{
+    position: relative;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex: 1;
+}
+
+.lightbox-img-wrap{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.lightbox-image{
+    max-width: 92%;
+    max-height: 82vh;
+
+    border-radius: 26px;
+
+    box-shadow:
+        0 35px 90px rgba(0,0,0,.55);
+
+    animation: fadeZoom .25s ease;
+}
+
+@keyframes fadeZoom{
+
+    from{
+        opacity: 0;
+        transform: scale(.96);
+    }
+
+    to{
+        opacity: 1;
+        transform: scale(1);
+    }
+
+}
+
+/*
+|--------------------------------------------------------------------------
+| BOTÕES
+|--------------------------------------------------------------------------
+*/
+
+.lightbox-close,
+.lightbox-prev,
+.lightbox-next{
+
+    position: absolute;
+
+    border: none;
+
+    background: rgba(255,255,255,.06);
+
+    color: rgba(255,255,255,.92);
+
+    width: 58px;
+    height: 58px;
+
+    border-radius: 50%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    cursor: pointer;
+
+    transition: .25s ease;
+
+    backdrop-filter: blur(12px);
+
+    z-index: 5;
+}
+
+/* FECHAR */
+
+.lightbox-close{
+    top: 24px;
+    right: 24px;
+
+    font-size: 1.15rem;
+}
+
+/* ESQUERDA */
+
+.lightbox-prev{
+    left: 24px;
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    font-size: 1.5rem;
+}
+
+/* DIREITA */
+
+.lightbox-next{
+    right: 24px;
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    font-size: 1.5rem;
+}
+
+.lightbox-close:hover,
+.lightbox-prev:hover,
+.lightbox-next:hover{
+
+    background: rgba(255,255,255,.14);
+
+    transform:
+        translateY(-50%) scale(1.06);
+}
+
+.lightbox-close:hover{
+    transform: scale(1.06);
+}
+
+/*
+|--------------------------------------------------------------------------
+| THUMBS
+|--------------------------------------------------------------------------
+*/
+
+.lightbox-thumbs{
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+
+    margin-top: 18px;
+
+    overflow-x: auto;
+
+    padding-bottom: 6px;
+}
+
+.lightbox-thumbs::-webkit-scrollbar{
+    height: 6px;
+}
+
+.lightbox-thumbs::-webkit-scrollbar-thumb{
+    background: rgba(255,255,255,.18);
+    border-radius: 999px;
+}
+
+.lightbox-lb-thumb{
+    width: 68px;
+    height: 68px;
+
+    border-radius: 14px;
+
+    overflow: hidden;
+
+    cursor: pointer;
+
+    border: 2px solid transparent;
+
+    flex-shrink: 0;
+
+    opacity: .55;
+
+    transition: .25s ease;
+}
+
+.lightbox-lb-thumb img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.lightbox-lb-thumb:hover{
+    opacity: 1;
+}
+
+.active-lb-thumb{
+    border-color: white;
+    opacity: 1;
+}
+
+/*
+|--------------------------------------------------------------------------
+| HINT
+|--------------------------------------------------------------------------
+*/
+
+.lightbox-hint{
+    display: block;
+
+    text-align: center;
+
+    margin-top: 14px;
+
+    color: rgba(255,255,255,.55);
+
+    font-size: .82rem;
+}
+
+/*
+|--------------------------------------------------------------------------
+| RESPONSIVO
+|--------------------------------------------------------------------------
+*/
+
+@media(max-width: 768px){
+
+    .lightbox-shell{
+        padding: 18px;
+    }
+
+    .lightbox-image{
+        max-width: 100%;
+        max-height: 72vh;
+        border-radius: 18px;
+    }
+
+    .lightbox-prev,
+    .lightbox-next{
+        width: 46px;
+        height: 46px;
+    }
+
+    .lightbox-prev{
+        left: 10px;
+    }
+
+    .lightbox-next{
+        right: 10px;
+    }
+
+    .lightbox-close{
+        top: 12px;
+        right: 12px;
+    }
+
+}
+
+/*
+|--------------------------------------------------------------------------
+| RESPONSIVO
+|--------------------------------------------------------------------------
+*/
+
+@media(max-width: 992px){
+
+    .animal-main-layout{
+        grid-template-columns: 1fr;
+    }
+
+    .animal-gallery-col{
+        position: relative;
+        top: 0;
+    }
+
+    .animal-featured-image{
+        height: 460px;
+    }
+
+}
+
+@media(max-width: 768px){
+
+    .animal-details-page{
+        padding: 20px 0 70px;
+    }
+
+    .animal-details-title{
+        font-size: 2.3rem;
+    }
+
+    .animal-featured-image{
+        height: 320px;
+    }
+
+    .animal-data-grid{
+        grid-template-columns: 1fr;
+    }
+
+    .lightbox-main{
+        gap: 10px;
+    }
+
+    .lightbox-prev,
+    .lightbox-next{
+        width: 42px;
+        height: 42px;
+        font-size: 1.1rem;
+    }
+
+    .lightbox-image{
+        border-radius: 18px;
+    }
+
+}
+
+main{
+    padding-bottom: 80px;
 }
