@@ -7,15 +7,19 @@
     <div class="container">
 
         {{-- HEADER --}}
-        <div class="content-card mb-5">
+        <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-4 mb-5">
 
-            <h1 class="section-title mb-3">
-                Editar Animal
-            </h1>
+            <div>
 
-            <p class="section-description m-0">
-                Atualize as informações e mantenha o perfil do animal sempre atualizado.
-            </p>
+                <h1 class="section-title mb-2">
+                    Editar Animal
+                </h1>
+
+                <p class="crud-description m-0">
+                    Atualize as informações e mantenha o perfil do animal sempre atualizado.
+                </p>
+
+            </div>
 
         </div>
 
@@ -127,7 +131,7 @@
                     <div class="row g-4">
 
                         {{-- SEXO --}}
-                        <div class="col-lg-3">
+                        <div class="col-lg-4">
 
                             <label class="form-label fw-semibold mb-2">
                                 Sexo
@@ -168,7 +172,7 @@
                         </div>
 
                         {{-- PORTE --}}
-                        <div class="col-lg-3">
+                        <div class="col-lg-4">
 
                             <label class="form-label fw-semibold mb-2">
                                 Porte
@@ -208,43 +212,9 @@
 
                         </div>
 
-                        {{-- STATUS --}}
-                        <div class="col-lg-3">
-
-                            <label class="form-label fw-semibold mb-2">
-                                Status
-                            </label>
-
-                            <select name="status"
-                                    class="form-select custom-select">
-
-                                <option value="DISPONIVEL"
-                                    {{ old('status', $animal->status) == 'DISPONIVEL' ? 'selected' : '' }}>
-
-                                    Disponível
-
-                                </option>
-
-                                <option value="ADOTADO"
-                                    {{ old('status', $animal->status) == 'ADOTADO' ? 'selected' : '' }}>
-
-                                    Adotado
-
-                                </option>
-
-                                <option value="INATIVO"
-                                    {{ old('status', $animal->status) == 'INATIVO' ? 'selected' : '' }}>
-
-                                    Inativo
-
-                                </option>
-
-                            </select>
-
-                        </div>
 
                         {{-- ESPÉCIE --}}
-                        <div class="col-lg-3">
+                        <div class="col-lg-4">
 
                             <label class="form-label fw-semibold mb-2">
                                 <span class="required-field">*</span>

@@ -73,7 +73,8 @@
                                    name="name"
                                    class="form-control custom-input"
                                    value="{{ old('name') }}"
-                                   placeholder="Digite seu nome">
+                                   placeholder="Digite seu nome"
+                                   required>
 
                         </div>
 
@@ -90,7 +91,8 @@
                                    name="email"
                                    class="form-control custom-input"
                                    value="{{ old('email') }}"
-                                   placeholder="Digite seu e-mail">
+                                   placeholder="Digite seu e-mail"
+                                   required>
 
                         </div>
 
@@ -110,7 +112,8 @@
                             <input type="password"
                                 name="password"
                                 class="form-control custom-input"
-                                placeholder="Digite sua senha">
+                                placeholder="Digite sua senha"
+                                required>
 
                         </div>
 
@@ -126,7 +129,8 @@
                             <input type="password"
                                 name="password_confirmation"
                                 class="form-control custom-input"
-                                placeholder="Confirme sua senha">
+                                placeholder="Confirme sua senha"
+                                required>
 
                         </div>
 
@@ -210,7 +214,8 @@
                                    name="celular"
                                    class="form-control custom-input"
                                    value="{{ old('celular') }}"
-                                   placeholder="Digite seu celular">
+                                   placeholder="Digite seu celular"
+                                   required>
 
                         </div>
 
@@ -243,7 +248,8 @@
                                    name="cep"
                                    class="form-control custom-input"
                                    value="{{ old('cep') }}"
-                                   placeholder="Digite o CEP">
+                                   placeholder="Digite o CEP"
+                                   required>
 
                         </div>
 
@@ -260,7 +266,8 @@
                                    name="logradouro"
                                    class="form-control custom-input"
                                    value="{{ old('logradouro') }}"
-                                   placeholder="Digite o logradouro">
+                                   placeholder="Digite o logradouro"
+                                   required>
 
                         </div>
 
@@ -281,7 +288,8 @@
                                    name="numero"
                                    class="form-control custom-input"
                                    value="{{ old('numero') }}"
-                                   placeholder="Número">
+                                   placeholder="Número"
+                                   required>
 
                         </div>
 
@@ -314,7 +322,8 @@
                                    name="cidade"
                                    class="form-control custom-input"
                                    value="{{ old('cidade') }}"
-                                   placeholder="Cidade">
+                                   placeholder="Cidade"
+                                   required>
 
                         </div>
 
@@ -330,7 +339,8 @@
                         </label>
 
                         <select name="estado"
-                                class="form-select custom-input">
+                                class="form-select custom-input"
+                                required>
 
                             <option value="">
 

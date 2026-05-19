@@ -34,13 +34,25 @@ class EspecieController extends Controller
     // SALVAR
     public function store(Request $request)
     {
+        $request->merge([
+            'nome' => trim($request->nome)
+        ]);
+
         $request->validate([
-            'nome' => 'required|max:255',
+
+            'nome' => 'required|max:255|unique:especies,nome',
+
             'descricao' => 'nullable'
+
+        ], [
+
+            'nome.unique' =>
+                'Esta espécie já está cadastrada.',
+
         ]);
 
         Especie::create([
-            'nome' => $request->nome,
+            'nome' => ucfirst(strtolower($request->nome)),
             'descricao' => $request->descricao
         ]);
 
@@ -59,15 +71,27 @@ class EspecieController extends Controller
     // ATUALIZAR
     public function update(Request $request, $id)
     {
+        $request->merge([
+            'nome' => trim($request->nome)
+        ]);
+
         $request->validate([
-            'nome' => 'required|max:255',
+
+            'nome' => 'required|max:255|unique:especies,nome,' . $id,
+
             'descricao' => 'nullable'
+
+        ], [
+
+            'nome.unique' =>
+                'Esta espécie já está cadastrada.',
+
         ]);
 
         $especie = Especie::findOrFail($id);
 
         $especie->update([
-            'nome' => $request->nome,
+            'nome' => ucfirst(strtolower($request->nome)),
             'descricao' => $request->descricao
         ]);
 

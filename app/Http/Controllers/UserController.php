@@ -34,19 +34,78 @@ class UserController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'name' => 'required|max:255',
-            'email' => 'required|email|unique:users,email',
+  
+    /*
+    |--------------------------------------------------------------------------
+    | NORMALIZAÇÃO
+    |--------------------------------------------------------------------------
+    */
 
-            'password' => 'required|string|min:6|confirmed',
+    $request->merge([
 
-            'celular' => 'required',
+        'cpf' => $request->cpf
+            ? preg_replace('/\D/', '', $request->cpf)
+            : null,
 
-            'cep' => 'required',
-            'logradouro' => 'required|max:255',
-            'numero' => 'required|max:20',
-            'cidade' => 'required|max:255',
-            'estado' => 'required|max:2',
+        'cnpj' => $request->cnpj
+            ? preg_replace('/\D/', '', $request->cnpj)
+            : null,
+
+        'telefone' => $request->telefone
+            ? preg_replace('/\D/', '', $request->telefone)
+            : null,
+
+        'celular' => $request->celular
+            ? preg_replace('/\D/', '', $request->celular)
+            : null,
+
+        'cep' => $request->cep
+            ? preg_replace('/\D/', '', $request->cep)
+            : null,
+
+    ]);
+
+    /*
+    |--------------------------------------------------------------------------
+    | VALIDAÇÃO
+    |--------------------------------------------------------------------------
+    */
+
+    $request->validate([
+
+        'name' => 'required|max:255',
+
+        'email' => 'required|email|unique:users,email',
+
+        'password' => 'required|string|min:6|confirmed',
+
+        'celular' => 'required',
+
+        'cpf' => 'nullable|unique:users,cpf',
+
+        'cnpj' => 'nullable|unique:users,cnpj',
+
+        'cep' => 'required',
+
+        'logradouro' => 'required|max:255',
+
+        'numero' => 'required|max:20',
+
+        'cidade' => 'required|max:255',
+
+        'estado' => 'required|max:2',
+
+        ], [
+
+            'cpf.unique' =>
+                'Este CPF já está cadastrado.',
+
+            'cnpj.unique' =>
+                'Este CNPJ já está cadastrado.',
+
+            'email.unique' =>
+                'Este e-mail já está cadastrado.',
+
         ]);
 
         /*
@@ -120,9 +179,23 @@ class UserController extends Controller
             'user_id' => $user->id
         ]);
 
+        if (auth()->check() && auth()->user()->is_admin) {
+
+            return redirect()
+                ->route('users.index')
+                ->with(
+                    'success',
+                    'Usuário criado com sucesso!'
+                );
+
+        }
+
         return redirect()
             ->route('login')
-            ->with('success', 'Conta criada com sucesso!');
+            ->with(
+                'success',
+                'Conta criada com sucesso!'
+            );
     }
 
     public function show(string $id)

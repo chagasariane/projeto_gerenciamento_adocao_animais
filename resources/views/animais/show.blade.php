@@ -106,45 +106,88 @@
                     </div>
                 @endif
 
-                {{-- RESPONSÁVEL + BOTÃO ADOTAR --}}
+                {{-- RESPONSÁVEL --}}
                 <div class="modern-section-card">
-                    <h3 class="modern-section-title">Responsável</h3>
+
+                    <h3 class="modern-section-title">
+
+                        Responsável
+
+                    </h3>
+
                     <div class="responsavel-box">
+
                         <div class="responsavel-avatar">
+
                             {{ strtoupper(substr($animal->user->name, 0, 2)) }}
+
                         </div>
+
                         <div>
-                            <h5 class="responsavel-nome">{{ $animal->user->name }}</h5>
+
+                            <h5 class="responsavel-nome">
+
+                                {{ $animal->user->name }}
+
+                            </h5>
+
                             @if($animal->user->telefone)
+
                                 <p class="responsavel-contato">
+
                                     <i class="bi bi-telephone"></i>
+
                                     {{ $animal->user->telefone }}
+
                                 </p>
+
                             @endif
+
                         </div>
+
                     </div>
 
+                </div>
+
+                {{-- BOTÕES --}}
+                <div class="d-flex gap-3 mt-4 flex-wrap">
+
+                    <button
+                        type="button"
+                        class="btn back-btn"
+                        onclick="history.back()">
+
+                        Voltar
+
+                    </button>
+
                     @auth
-                        @if(auth()->id() != $animal->user_id && $animal->status == 'DISPONIVEL')
+
+                        @if(
+                            auth()->id() != $animal->user_id &&
+                            $animal->status == 'DISPONIVEL'
+                        )
 
                             <a href="{{ route('adocoes.create', ['animal_id' => $animal->id]) }}"
-                            class="modern-adopt-btn w-100 d-block text-center mt-3">
+                            class="btn modern-adopt-btn">
 
                                 Quero Adotar
 
                             </a>
 
                         @endif
+
                     @else
 
                         <a href="{{ route('login') }}"
-                        class="modern-adopt-btn w-100 d-block text-center mt-3">
+                        class="btn modern-adopt-btn">
 
                             Faça login para adotar
 
                         </a>
 
                     @endauth
+
                 </div>
 
             </div>

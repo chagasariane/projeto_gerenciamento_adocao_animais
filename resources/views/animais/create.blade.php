@@ -88,7 +88,8 @@
                             <input type="date"
                                    name="data_nascimento"
                                    class="form-control custom-input"
-                                   value="{{ old('data_nascimento') }}">
+                                   value="{{ old('data_nascimento') }}"
+                                   required>
 
                         </div>
 
