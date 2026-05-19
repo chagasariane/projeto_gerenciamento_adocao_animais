@@ -136,19 +136,19 @@
                                     class="form-select custom-select"
                                     required>
 
-                            <option value="1"
-                                {{ old('is_admin', $user->is_admin) ? 'selected' : '' }}>
+                                <option value="1"
+                                    {{ old('is_admin', $user->is_admin) ? 'selected' : '' }}>
 
-                                Administrador
+                                    Administrador
 
-                            </option>
+                                </option>
 
-                            <option value="0"
-                                {{ !old('is_admin', $user->is_admin) ? 'selected' : '' }}>
+                                <option value="0"
+                                    {{ !old('is_admin', $user->is_admin) ? 'selected' : '' }}>
 
-                                Usuário Comum
+                                    Usuário Comum
 
-                            </option>
+                                </option>
 
                         </select>
 
@@ -361,8 +361,8 @@
                         </label>
 
                         <select name="estado"
-                                    class="form-select custom-select"
-                                    required>
+                                class="form-select custom-select"
+                                required>
 
                                 <option value="">
                                     Selecione o estado

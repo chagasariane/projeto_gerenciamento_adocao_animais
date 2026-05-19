@@ -64,6 +64,7 @@
                         <label class="form-label fw-semibold">
 
                             Nome da Raça
+                            <span class="required-field">*</span>
 
                         </label>
 
@@ -100,6 +101,7 @@
                         <label class="form-label fw-semibold">
 
                             Espécie
+                            <span class="required-field">*</span>
 
                         </label>
 

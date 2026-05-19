@@ -65,6 +65,7 @@
                         <label class="form-label fw-semibold mb-2">
 
                             Nome da Espécie
+                            <span class="required-field">*</span>
 
                         </label>
 
