@@ -702,24 +702,38 @@
 
     inputFotos.addEventListener('change', (event) => {
 
-        Array.from(event.target.files)
-            .forEach(file => {
+    Array.from(event.target.files)
+        .forEach(file => {
 
-                arquivos.push({
+            /*
+            |----------------------------------------------------------
+            | IGNORA ARQUIVOS INVÁLIDOS
+            |----------------------------------------------------------
+            */
 
-                    file: file,
+            if (
+                !file ||
+                !file.type ||
+                !file.type.startsWith('image/')
+            ) {
+                return;
+            }
 
-                    preview: URL.createObjectURL(file)
+            arquivos.push({
 
-                });
+                file: file,
+
+                preview: URL.createObjectURL(file)
 
             });
 
-        atualizarInputFiles();
+        });
 
-        renderizarPreview();
+    atualizarInputFiles();
 
-    });
+    renderizarPreview();
+
+});
 
     /*
     |--------------------------------------------------------------------------
@@ -734,7 +748,19 @@
 
         arquivos.forEach(item => {
 
-            dataTransfer.items.add(item.file);
+            arquivos.forEach(item => {
+
+    if (
+        item &&
+        item.file &&
+        item.file.name
+    ) {
+
+        dataTransfer.items.add(item.file);
+
+    }
+
+});
 
         });
 

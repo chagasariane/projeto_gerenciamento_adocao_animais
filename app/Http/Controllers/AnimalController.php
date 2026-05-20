@@ -337,7 +337,7 @@ class AnimalController extends Controller
         | ATUALIZAÇÃO
         |--------------------------------------------------------------------------
         */
-
+        unset($dados['fotos']);
         $animal->update($dados);
 
         return redirect()
@@ -346,6 +346,29 @@ class AnimalController extends Controller
                 'success',
                 'Animal atualizado com sucesso!'
             );
+        
+            if ($request->hasFile('fotos')) {
+
+    foreach ($request->file('fotos') as $index => $foto) {
+
+        if ($foto) {
+
+            $caminho = $foto->store(
+                'animais',
+                'public'
+            );
+
+            AnimalFoto::create([
+
+                'animal_id' => $animal->id,
+
+                'caminho' => $caminho,
+
+                'principal' => false
+            ]);
+        }
+    }
+}
     }
 
     /*
