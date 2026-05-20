@@ -167,6 +167,9 @@
                                             <strong>
                                                 {{ $adocao->user->name ?? 'Usuário removido' }}
                                             </strong>
+                                            <div>
+                                                📞 {{ $adocao->user->celular ?? 'Não informado' }}
+                                            </div>
 
                                         </div>
 
