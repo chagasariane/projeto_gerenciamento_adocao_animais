@@ -168,7 +168,22 @@
                                                 {{ $adocao->user->name ?? 'Usuário removido' }}
                                             </strong>
                                             <div>
-                                                📞 {{ $adocao->user->celular ?? 'Não informado' }}
+                                                📞
+                                                @if($adocao->user && $adocao->user->celular)
+
+                                                    {{
+                                                        preg_replace(
+                                                            '/(\d{2})(\d{5})(\d{4})/',
+                                                            '($1) $2-$3',
+                                                            $adocao->user->celular
+                                                        )
+                                                    }}
+
+                                                @else
+
+                                                    Não informado
+
+                                                @endif
                                             </div>
 
                                         </div>
