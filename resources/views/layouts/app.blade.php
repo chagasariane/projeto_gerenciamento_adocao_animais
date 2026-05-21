@@ -70,8 +70,7 @@
 
                         <li class="nav-item">
 
-                            <a class="nav-link"
-                               href="{{ route('animais.index') }}">
+                            <a class="nav-link {{ request()->routeIs('animais.*') ? 'active' : '' }}" href="{{ route('animais.index') }}">
 
                                 Meus Animais
 
@@ -81,8 +80,7 @@
 
                         <li class="nav-item">
 
-                            <a class="nav-link"
-                               href="{{ route('adocoes.index') }}">
+                            <a class="nav-link {{ request()->routeIs('adocoes.*') ? 'active' : '' }}" href="{{ route('adocoes.index') }}">
 
                                 Adoções
 
@@ -99,12 +97,19 @@
 
                             <li class="nav-item dropdown">
 
-                                <a class="nav-link dropdown-toggle admin-link d-flex align-items-center gap-1"
-                                    href="#"
-                                    id="adminDropdown"
-                                    role="button"
-                                    data-bs-toggle="dropdown"
-                                    aria-expanded="false">
+                                <a class="nav-link dropdown-toggle admin-link d-flex align-items-center gap-1
+                                    {{
+                                            request()->routeIs('especies.*') ||
+                                            request()->routeIs('racas.*') ||
+                                            request()->routeIs('users.*')
+                                            ? 'active-admin'
+                                            : ''
+                                    }}"
+                                        href="#"
+                                        id="adminDropdown"
+                                        role="button"
+                                        data-bs-toggle="dropdown"
+                                        aria-expanded="false">
 
                                         <i class="bi bi-shield-lock"></i>
 
@@ -162,8 +167,7 @@
                     {{-- COMO FUNCIONA --}}
                     <li class="nav-item">
 
-                        <a class="nav-link"
-                        href="{{ route('como-funciona') }}">
+                        <a class="nav-link {{ request()->routeIs('como-funciona') ? 'active' : '' }}" href="{{ route('como-funciona') }}">
 
                             Como Funciona
 
@@ -174,8 +178,7 @@
                     {{-- SOBRE --}}
                     <li class="nav-item">
 
-                        <a class="nav-link"
-                        href="{{ route('sobre') }}">
+                        <a class="nav-link {{ request()->routeIs('sobre') ? 'active' : '' }}" href="{{ route('sobre') }}">
 
                             Sobre
 
