@@ -130,39 +130,35 @@
 
                     </div>
 
-                    {{-- CIDADE --}}
-                    <div class="col-md-3">
+                    {{-- RAÇA --}}
+<div class="col-lg-3">
 
-                        <label class="form-label fw-semibold">
+    <label class="form-label fw-semibold mb-2">
+        Raça
+    </label>
 
-                            Cidade
+    <input type="text"
+           name="raca"
+           class="form-control custom-input"
+           value="{{ request('raca') }}"
+           placeholder="Digite a raça">
 
-                        </label>
+</div>
 
-                        <input type="text"
-                               name="cidade"
-                               class="form-control custom-input"
-                               placeholder="Digite a cidade"
-                               value="{{ request('cidade') }}">
+{{-- CIDADE --}}
+<div class="col-lg-3">
 
-                    </div>
+    <label class="form-label fw-semibold mb-2">
+        Cidade
+    </label>
 
-                    {{-- BUSCA --}}
-                    <div class="col-md-3">
+    <input type="text"
+           name="cidade"
+           class="form-control custom-input"
+           value="{{ request('cidade') }}"
+           placeholder="Digite a cidade">
 
-                        <label class="form-label fw-semibold">
-
-                            Buscar
-
-                        </label>
-
-                        <input type="text"
-                               name="busca"
-                               class="form-control custom-input"
-                               placeholder="Nome do animal"
-                               value="{{ request('busca') }}">
-
-                    </div>
+</div>
 
                     {{-- BOTÕES --}}
                     <div class="col-12">

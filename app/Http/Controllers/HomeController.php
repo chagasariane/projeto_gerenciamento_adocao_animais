@@ -87,14 +87,17 @@ class HomeController extends Controller
         |--------------------------------------------------------------------------
         */
 
-        if ($request->filled('busca')) {
+        if ($request->filled('raca')) {
 
-            $query->where(
-                'nome',
-                'like',
-                '%' . $request->busca . '%'
+        $query->whereHas('raca', function ($q) use ($request) {
+
+        $q->where(
+            'nome',
+            'like',
+            '%' . $request->raca . '%'
             );
 
+            });
         }
 
         /*
