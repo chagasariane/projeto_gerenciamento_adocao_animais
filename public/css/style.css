@@ -2064,7 +2064,7 @@ body{
 }
 
 .active-thumb{
-    border-color: #2563eb;
+    border-color: transparent;
 }
 
 /*
@@ -2329,7 +2329,12 @@ body{
 
 .lightbox-image{
     max-width: 92%;
-    max-height: 82vh;
+    max-height: 68vh;
+
+    width: auto;
+    height: auto;
+
+    object-fit: contain;
 
     border-radius: 26px;
 
