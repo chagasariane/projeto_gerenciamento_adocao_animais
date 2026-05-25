@@ -58,7 +58,7 @@
 
                     @if($adocao->animal->fotoPrincipal)
 
-                        <img src="{{ asset('storage/' . $adocao->animal->fotoPrincipal->caminho) }}"
+                        <img src="{{ $adocao->animal->fotoPrincipal->caminho }}"
                              class="manage-photo"
                              alt="{{ $adocao->animal->nome }}">
 
