@@ -24,7 +24,7 @@
                     @if($animal->fotos->count())
                         <img
                             id="gallery-featured"
-                            src="{{ $foto->caminho }}"
+                            src="{{ $animal->fotoPrincipal?->caminho }}"
                             class="animal-featured-image"
                             alt="{{ $animal->nome }}">
                     @else
