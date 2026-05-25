@@ -198,7 +198,7 @@
                         {{-- IMAGEM --}}
                         @if($animal->fotoPrincipal)
 
-                            <img src="{{ $foto->caminho }}"
+                            <img src="{{ $animal->fotoPrincipal?->caminho }}"
                                 class="animal-image"
                                 alt="{{ $animal->nome }}">
 
