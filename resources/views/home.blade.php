@@ -226,19 +226,19 @@
                         <div class="animal-card">
 
                             {{-- IMAGEM --}}
-                            @if($animal->fotoPrincipal)
+                                @if($animal->fotoPrincipal)
 
-                                <img src="{{ asset('storage/' . $animal->fotoPrincipal->caminho) }}"
-                                    class="animal-image"
-                                    alt="{{ $animal->nome }}">
+                                    <img src="{{ $animal->fotoPrincipal->caminho }}"
+                                        class="animal-image"
+                                        alt="{{ $animal->nome }}">
 
-                            @else
+                                @else
 
-                                <img src="{{ asset('imagem/sem-foto.png') }}{{ $animal->id }}"
-                                    class="animal-image"
-                                    alt="{{ $animal->nome }}">
+                                    <img src="{{ asset('imagem/sem-foto.png') }}"
+                                        class="animal-image"
+                                        alt="{{ $animal->nome }}">
 
-                            @endif
+                                @endif
 
                             <div class="animal-body">
 
