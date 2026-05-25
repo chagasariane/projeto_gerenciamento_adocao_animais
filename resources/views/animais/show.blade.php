@@ -24,7 +24,7 @@
                     @if($animal->fotos->count())
                         <img
                             id="gallery-featured"
-                            src="{{ asset('storage/' . $animal->fotos->first()->caminho) }}"
+                            src="{{ $foto->caminho }}"
                             class="animal-featured-image"
                             alt="{{ $animal->nome }}">
                     @else
@@ -40,8 +40,8 @@
                     <div class="animal-thumbs-row">
                         @foreach($animal->fotos as $index => $foto)
                             <div class="animal-thumb {{ $index === 0 ? 'active-thumb' : '' }}"
-                                 data-img="{{ asset('storage/' . $foto->caminho) }}">
-                                <img src="{{ asset('storage/' . $foto->caminho) }}" alt="Foto {{ $index + 1 }}">
+                                 data-img="{{ $foto->caminho }}">
+                                <img src="{{ $foto->caminho }}" alt="Foto {{ $index + 1 }}">
                             </div>
                         @endforeach
                     </div>

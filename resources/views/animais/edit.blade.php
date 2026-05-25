@@ -469,7 +469,7 @@
                             @endif
 
                             {{-- IMAGEM --}}
-                            <img src="{{ asset('storage/' . $foto->caminho) }}"
+                            <img src="{{ $foto->caminho }}"
                                 class="animal-image"
                                 alt="Foto do animal">
 

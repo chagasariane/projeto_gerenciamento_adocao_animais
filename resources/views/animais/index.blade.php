@@ -198,7 +198,7 @@
                         {{-- IMAGEM --}}
                         @if($animal->fotoPrincipal)
 
-                            <img src="{{ asset('storage/' . $animal->fotoPrincipal->caminho) }}"
+                            <img src="{{ $foto->caminho }}"
                                 class="animal-image"
                                 alt="{{ $animal->nome }}">
 

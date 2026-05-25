@@ -7,7 +7,7 @@ use App\Http\Requests\StoreAnimalFotoRequest;
 use App\Models\Animal;
 use App\Models\AnimalFoto;
 
-use Illuminate\Support\Facades\Storage;
+use Cloudinary\Cloudinary;
 
 class AnimalFotoController extends Controller
 {
@@ -80,14 +80,16 @@ class AnimalFotoController extends Controller
             
             
 
-            $nomeArquivo = time() . '_' . $foto->getClientOriginalName();
+            $cloudinary = new Cloudinary(env('CLOUDINARY_URL'));
 
-$foto->move(
-    public_path('storage/animais'),
-    $nomeArquivo
-);
+            $upload = $cloudinary->uploadApi()->upload(
+                $foto->getRealPath(),
+                [
+                    'folder' => 'miaudot/animais'
+                ]
+            );
 
-$caminho = 'animais/' . $nomeArquivo;
+            $caminho = $upload['secure_url'];
 
             /*
             |--------------------------------------------------------------
@@ -231,14 +233,14 @@ $caminho = 'animais/' . $nomeArquivo;
         |--------------------------------------------------------------------------
         */
 
-        if (
+        /*if (
             Storage::disk('public')
                 ->exists($foto->caminho)
         ) {
 
             Storage::disk('public')
                 ->delete($foto->caminho);
-        }
+        }*/
 
         /*
         |--------------------------------------------------------------------------
