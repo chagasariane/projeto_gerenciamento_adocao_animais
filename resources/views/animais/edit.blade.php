@@ -519,7 +519,8 @@
 
             <form action="{{ route('animais.fotos.store', $animal->id) }}"
                 method="POST"
-                enctype="multipart/form-data">
+                enctype="multipart/form-data"
+                id="form-fotos">
 
                 @csrf
 
@@ -705,12 +706,6 @@
     Array.from(event.target.files)
         .forEach(file => {
 
-            /*
-            |----------------------------------------------------------
-            | IGNORA ARQUIVOS INVÁLIDOS
-            |----------------------------------------------------------
-            */
-
             if (
                 !file ||
                 !file.type ||
@@ -719,12 +714,19 @@
                 return;
             }
 
+            const jaExiste = arquivos.some(item =>
+                item.file.name === file.name &&
+                item.file.size === file.size &&
+                item.file.lastModified === file.lastModified
+            );
+
+            if (jaExiste) {
+                return;
+            }
+
             arquivos.push({
-
                 file: file,
-
                 preview: URL.createObjectURL(file)
-
             });
 
         });
@@ -743,30 +745,22 @@
 
     function atualizarInputFiles() {
 
-        const dataTransfer =
-            new DataTransfer();
+    const dataTransfer = new DataTransfer();
 
-        arquivos.forEach(item => {
+    arquivos.forEach(item => {
 
-            arquivos.forEach(item => {
+        if (
+            item &&
+            item.file &&
+            item.file.name
+        ) {
+            dataTransfer.items.add(item.file);
+        }
 
-    if (
-        item &&
-        item.file &&
-        item.file.name
-    ) {
+    });
 
-        dataTransfer.items.add(item.file);
-
-    }
-
-});
-
-        });
-
-        inputFotos.files =
-            dataTransfer.files;
-    }
+    inputFotos.files = dataTransfer.files;
+}
 
     /*
     |--------------------------------------------------------------------------
@@ -868,6 +862,22 @@
         }
 
     });
+
+const formFotos = document.getElementById('form-fotos');
+
+if (formFotos) {
+    formFotos.addEventListener('submit', function () {
+        const botao = formFotos.querySelector('button[type="submit"]');
+
+        if (botao) {
+            botao.disabled = true;
+            botao.innerText = 'Enviando...';
+        }
+    });
+}
+
+
+
 
 </script>
 
