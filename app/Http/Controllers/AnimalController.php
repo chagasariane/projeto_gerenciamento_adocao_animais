@@ -11,8 +11,9 @@ use App\Models\Raca;
 use App\Models\AnimalFoto;
 
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
+
+use Cloudinary\Cloudinary;
 
 class AnimalController extends Controller
 {
@@ -190,12 +191,18 @@ class AnimalController extends Controller
 
             if ($request->hasFile('fotos')) {
 
+                $cloudinary = new Cloudinary(env('CLOUDINARY_URL'));
+
                 foreach ($request->file('fotos') as $index => $foto) {
 
-                    $caminho = $foto->store(
-                        'animais',
-                        'public'
+                    $upload = $cloudinary->uploadApi()->upload(
+                        $foto->getRealPath(),
+                        [
+                            'folder' => 'miaudot/animais'
+                        ]
                     );
+
+                    $caminho = $upload['secure_url'];
 
                     AnimalFoto::create([
 
@@ -233,11 +240,7 @@ class AnimalController extends Controller
             |--------------------------------------------------------------------------
             */
 
-            if (isset($caminho)) {
-
-                Storage::disk('public')
-                    ->delete($caminho);
-            }
+            
 
             return back()
                 ->withInput()
