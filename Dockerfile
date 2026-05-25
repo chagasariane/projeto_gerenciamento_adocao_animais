@@ -1,7 +1,7 @@
 FROM php:8.3-cli
 
 RUN apt-get update && apt-get install -y \
-    git unzip curl libsqlite3-dev zip
+    git unzip curl libsqlite3-dev zip npm
 
 RUN docker-php-ext-install pdo pdo_sqlite
 
@@ -12,6 +12,10 @@ WORKDIR /app
 COPY . .
 
 RUN composer install --no-dev --optimize-autoloader
+
+RUN touch /tmp/database.sqlite
+
+RUN php artisan config:clear
 
 EXPOSE 10000
 
