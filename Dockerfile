@@ -25,7 +25,7 @@ RUN npm run build
 
 RUN touch database/database.sqlite
 
-RUN php artisan migrate --force
+RUN php artisan migrate --seed --force
 
 EXPOSE 10000
 
