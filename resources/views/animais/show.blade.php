@@ -162,30 +162,32 @@
                     </button>
 
                     @auth
+                        @if(auth()->id() != $animal->user_id)
 
-                        @if(
-                            auth()->id() != $animal->user_id &&
-                            $animal->status == 'DISPONIVEL'
-                        )
+                            @if($animal->status == 'DISPONIVEL')
+                                <a
+                                    href="{{ route('adocoes.create', ['animal_id' => $animal->id]) }}"
+                                    class="btn modern-adopt-btn"
+                                >
+                                    Quero Adotar
+                                </a>
+                            @endif
 
-                            <a href="{{ route('adocoes.create', ['animal_id' => $animal->id]) }}"
-                            class="btn modern-adopt-btn">
-
-                                Quero Adotar
-
+                            <a
+                                href="{{ route('chat.iniciar', $animal) }}"
+                                class="btn btn-primary"
+                            >
+                                Enviar mensagem ao protetor
                             </a>
 
                         @endif
-
                     @else
-
-                        <a href="{{ route('login') }}"
-                        class="btn modern-adopt-btn">
-
+                        <a
+                            href="{{ route('login') }}"
+                            class="btn modern-adopt-btn"
+                        >
                             Faça login para adotar
-
                         </a>
-
                     @endauth
 
                 </div>

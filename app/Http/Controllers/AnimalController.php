@@ -9,6 +9,7 @@ use App\Models\Animal;
 use App\Models\Especie;
 use App\Models\Raca;
 use App\Models\AnimalFoto;
+use Illuminate\Support\Facades\Auth;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
@@ -30,7 +31,7 @@ class AnimalController extends Controller
             'especie',
             'fotoPrincipal'
         ])
-        ->where('user_id', auth()->id());
+        ->where('user_id', Auth::id());
 
         /*
         |--------------------------------------------------------------------------
@@ -157,7 +158,7 @@ class AnimalController extends Controller
             |--------------------------------------------------------------------------
             */
 
-            $dados['user_id'] = auth()->id();
+            $dados['user_id'] = Auth::id();
 
             $dados['status'] = 'DISPONIVEL';
 

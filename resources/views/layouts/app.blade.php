@@ -25,6 +25,7 @@
 
 <body class="d-flex flex-column min-vh-100">
 
+
     {{-- NAVBAR --}}
     <nav class="navbar navbar-expand-lg navbar-light navbar-custom fixed-top">
 
@@ -87,7 +88,14 @@
                             </a>
 
                         </li>
-
+                        <li class="nav-item">
+                            <a
+                                class="nav-link {{ request()->routeIs('chat.*') ? 'active' : '' }}"
+                                href="{{ route('chat.index') }}"
+                            >
+                                Chats
+                            </a>
+                        </li>
                     @endauth
 
                     {{-- ADMIN --}}
@@ -326,23 +334,28 @@
 
                     </a>
 
-                    @auth
+            {{-- AUTENTICADO --}}
+            @auth
+                <li class="nav-item">
+                    <a
+                        class="nav-link {{ request()->routeIs('animais.*') ? 'active' : '' }}"
+                        href="{{ route('animais.index') }}"
+                    >
+                        Meus Animais
+                    </a>
+                </li>
 
-                        <a href="{{ route('animais.index') }}"
-                           class="footer-link">
+                <li class="nav-item">
+                    <a
+                        class="nav-link {{ request()->routeIs('adocoes.*') ? 'active' : '' }}"
+                        href="{{ route('adocoes.index') }}"
+                    >
+                        Adoções
+                    </a>
+                </li>
 
-                            Meus Animais
 
-                        </a>
-
-                        <a href="{{ route('adocoes.index') }}"
-                           class="footer-link">
-
-                            Adoções
-
-                        </a>
-
-                    @endauth
+            @endauth
 
                 </div>
 

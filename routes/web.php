@@ -10,6 +10,7 @@ use App\Http\Controllers\RacaController;
 use App\Http\Controllers\AnimalController;
 use App\Http\Controllers\AdocaoController;
 use App\Http\Controllers\AnimalFotoController;
+use App\Http\Controllers\ChatController;
 
 /*
 |--------------------------------------------------------------------------
@@ -45,6 +46,7 @@ Route::get('/register', [AuthController::class, 'registerForm'])
 
 Route::post('/logout', [AuthController::class, 'logout'])
     ->name('logout');
+
 
 /*
 |--------------------------------------------------------------------------
@@ -153,4 +155,22 @@ Route::middleware(['auth'])->group(function () {
 
     Route::resource('adocoes', AdocaoController::class);
 
+    /*
+    |--------------------------------------------------------------------------
+    | CHAT
+    |--------------------------------------------------------------------------
+    */
+
+
+    Route::get('/chat', [ChatController::class, 'index'])
+        ->name('chat.index');
+
+    Route::get('/chat/animal/{animal}/iniciar', [ChatController::class, 'iniciar'])
+        ->name('chat.iniciar');
+
+    Route::get('/chat/{conversa}', [ChatController::class, 'show'])
+        ->name('chat.show');
+
+    Route::post('/chat/{conversa}/mensagem', [ChatController::class, 'store'])
+        ->name('chat.mensagem.store');
 });

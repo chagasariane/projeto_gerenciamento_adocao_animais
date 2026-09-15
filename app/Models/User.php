@@ -69,4 +69,22 @@ class User extends Authenticatable
     {
         return $this->hasMany(Adocao::class);
     }
+
+        
+    // CHAT RELATIONSHIPS
+        public function conversasComoUsuario1()
+        {
+            return $this->hasMany(Conversa::class, 'usuario_1_id');
+        }
+
+        public function conversasComoUsuario2()
+        {
+            return $this->hasMany(Conversa::class, 'usuario_2_id');
+        }
+
+        public function mensagens()
+        {
+            return $this->hasMany(Mensagem::class);
+        }
+
 }
