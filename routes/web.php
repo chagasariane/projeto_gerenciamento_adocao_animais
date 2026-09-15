@@ -47,6 +47,18 @@ Route::get('/register', [AuthController::class, 'registerForm'])
 Route::post('/logout', [AuthController::class, 'logout'])
     ->name('logout');
 
+Route::get('/forgot-password', [AuthController::class, 'forgotPasswordForm'])
+    ->name('password.request');
+
+Route::post('/forgot-password', [AuthController::class, 'sendResetLink'])
+    ->name('password.email');
+
+Route::get('/reset-password/{token}', [AuthController::class, 'resetPasswordForm'])
+    ->name('password.reset');
+
+Route::post('/reset-password', [AuthController::class, 'resetPassword'])
+    ->name('password.update');
+
 
 /*
 |--------------------------------------------------------------------------

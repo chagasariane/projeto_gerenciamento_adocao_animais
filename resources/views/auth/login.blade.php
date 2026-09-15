@@ -154,7 +154,12 @@
                                     Entrar na plataforma
 
                                 </button>
-
+                                
+                                <div class="text-end mb-4">
+                                    <a href="{{ route('password.request') }}" class="auth-forgot-link">
+                                        Esqueci minha senha
+                                    </a>
+                                </div>
                             </form>
 
                             {{-- FOOTER --}}
