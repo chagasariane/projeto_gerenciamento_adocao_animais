@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\Endereco;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
@@ -179,7 +180,7 @@ class UserController extends Controller
             'user_id' => $user->id
         ]);
 
-        if (auth()->check() && auth()->user()->is_admin) {
+        if (Auth::check() && Auth::user()->is_admin) {
 
             return redirect()
                 ->route('users.index')
@@ -190,11 +191,14 @@ class UserController extends Controller
 
         }
 
+        Auth::login($user);
+        $request->session()->regenerate();
+
         return redirect()
-            ->route('login')
+            ->to('/')
             ->with(
                 'success',
-                'Conta criada com sucesso!'
+                'Conta criada com sucesso! Seja bem-vindo(a)!'
             );
     }
 
@@ -316,7 +320,7 @@ class UserController extends Controller
 
         }
 
-        $user->update($data);
+        User::whereKey($user->id)->update($data);
 
         /*
         |--------------------------------------------------------------------------
@@ -369,21 +373,21 @@ class UserController extends Controller
 
     public function perfil()
     {
-        $user = auth()->user();
+        $user = Auth::user();
 
         return view('users.perfil', compact('user'));
     }
 
     public function editarPerfil()
     {
-        $user = auth()->user();
+        $user = Auth::user();
 
         return view('users.editar-perfil', compact('user'));
     }
 
     public function atualizarPerfil(Request $request)
     {
-        $user = auth()->user();
+        $user = Auth::user();
 
         $request->validate([
 
@@ -485,7 +489,7 @@ class UserController extends Controller
 
         }
 
-        $user->update($data);
+        User::whereKey($user->id)->update($data);
 
         /*
         |--------------------------------------------------------------------------

@@ -173,14 +173,13 @@
                                 </a>
                             @endif
 
-                            <a
-                                href="{{ route('chat.iniciar', $animal) }}"
-                                class="btn btn-primary"
-                            >
-                                Enviar mensagem ao protetor
-                            </a>
+                        <a href="{{ route('chat.iniciar', $animal) }}" class="btn chat-protetor-btn">
+                            <i class="bi bi-chat-dots-fill"></i>
+                            <span>Enviar mensagem ao protetor</span>
+                        </a>
 
                         @endif
+                        
                     @else
                         <a
                             href="{{ route('login') }}"
