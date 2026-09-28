@@ -221,6 +221,122 @@
                     {{-- AUTENTICADO --}}
                     @auth
 
+                    {{-- NOTIFICAÇÕES --}}
+                    @php
+                        $notificacoes = auth()->user()
+                            ->notifications()
+                            ->latest()
+                            ->limit(10)
+                            ->get();
+
+                        $naoLidas = auth()->user()
+                            ->unreadNotifications()
+                            ->count();
+                    @endphp
+
+                    <div class="dropdown notification-dropdown">
+
+                        <button
+                            class="notification-button"
+                            type="button"
+                            data-bs-toggle="dropdown"
+                            aria-expanded="false"
+                            aria-label="Notificações"
+                        >
+
+                            <i class="bi bi-bell"></i>
+
+                            @if($naoLidas > 0)
+
+                                <span class="notification-count">
+                                    {{ $naoLidas > 99 ? '99+' : $naoLidas }}
+                                </span>
+
+                            @endif
+
+                        </button>
+
+                        <div class="dropdown-menu dropdown-menu-end notification-menu">
+
+                            <div class="notification-header">
+
+                                <span>Notificações</span>
+
+                                @if($naoLidas > 0)
+                                    <span class="notification-header-count">
+                                        {{ $naoLidas }} nova{{ $naoLidas > 1 ? 's' : '' }}
+                                    </span>
+                                @endif
+
+                            </div>
+
+                            <div class="notification-list">
+
+                                @forelse($notificacoes as $notificacao)
+
+                                    <a
+                                        href="{{ route('notificacoes.show', $notificacao->id) }}"
+                                        class="notification-item {{ is_null($notificacao->read_at) ? 'notification-unread' : '' }}"
+                                    >
+
+                                        <div class="notification-icon">
+
+                                            @if(($notificacao->data['tipo'] ?? '') === 'nova_mensagem')
+
+                                                <i class="bi bi-chat-dots"></i>
+
+                                            @else
+
+                                                <i class="bi bi-bell"></i>
+
+                                            @endif
+
+                                        </div>
+
+                                        <div class="notification-content">
+
+                                            <div class="notification-title">
+                                                {{ $notificacao->data['titulo'] ?? 'Notificação' }}
+                                            </div>
+
+                                            <div class="notification-text">
+                                                {{ $notificacao->data['mensagem'] ?? '' }}
+                                            </div>
+
+                                            <div class="notification-time">
+                                                {{ $notificacao->created_at->diffForHumans() }}
+                                            </div>
+
+                                        </div>
+
+                                        @if(is_null($notificacao->read_at))
+
+                                            <span class="notification-dot"></span>
+
+                                        @endif
+
+                                    </a>
+
+                                @empty
+
+                                    <div class="notification-empty">
+
+                                        <i class="bi bi-bell-slash"></i>
+
+                                        <span>
+                                            Nenhuma notificação.
+                                        </span>
+
+                                    </div>
+
+                                @endforelse
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
                         <div class="dropdown">
 
                             <a class="nav-link dropdown-toggle user-dropdown d-flex align-items-center gap-1"

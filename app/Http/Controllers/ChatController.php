@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Animal;
+use App\Notifications\NovaMensagemNotification;
 
 class ChatController extends Controller
 {
@@ -69,37 +70,52 @@ class ChatController extends Controller
     /**
      * Salva uma nova mensagem na conversa.
      */
-    public function store(Request $request, Conversa $conversa)
-    {
-        /** @var User $usuario */
-        $usuario = Auth::user();
+            public function store(Request $request, Conversa $conversa)
+            {
+                /** @var User $usuario */
+                $usuario = Auth::user();
 
-        // Verifica se o usuário faz parte dessa conversa
-        if (
-            $conversa->usuario_1_id !== $usuario->id &&
-            $conversa->usuario_2_id !== $usuario->id
-        ) {
-            abort(403);
-        }
+                // Verifica se o usuário faz parte dessa conversa
+                if (
+                    $conversa->usuario_1_id !== $usuario->id &&
+                    $conversa->usuario_2_id !== $usuario->id
+                ) {
+                    abort(403);
+                }
 
-        // Valida a mensagem
-        $request->validate([
-            'mensagem' => [
-                'required',
-                'string',
-                'max:5000'
-            ],
-        ]);
+                // Valida a mensagem
+                $request->validate([
+                    'mensagem' => [
+                        'required',
+                        'string',
+                        'max:5000'
+                    ],
+                ]);
 
-        // Cria a mensagem
-        $conversa->mensagens()->create([
-            'usuario_id' => $usuario->id,
-            'mensagem' => $request->mensagem,
-            'lida' => false,
-        ]);
+                // Cria a mensagem
+                $mensagem = $conversa->mensagens()->create([
+                    'usuario_id' => $usuario->id,
+                    'mensagem' => $request->mensagem,
+                    'lida' => false,
+                ]);
 
-        return redirect()->route('chat.show', $conversa);
-    }
+                // Identifica quem deve receber a notificação
+                $destinatario = $conversa->usuario_1_id === $usuario->id
+                    ? $conversa->usuario2
+                    : $conversa->usuario1;
+
+                // Envia a notificação para o outro usuário
+                if ($destinatario) {
+                    $destinatario->notify(
+                        new NovaMensagemNotification(
+                            $mensagem,
+                            $conversa
+                        )
+                    );
+                }
+
+                return redirect()->route('chat.show', $conversa);
+            }
 
     
 //método iniciar

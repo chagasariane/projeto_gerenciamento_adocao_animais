@@ -10,6 +10,8 @@ use App\Models\Animal;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Notifications\StatusAdocaoNotification;
+use App\Notifications\NovaSolicitacaoAdocaoNotification;
 
 class AdocaoController extends Controller
 {
@@ -189,13 +191,35 @@ class AdocaoController extends Controller
 
         $dados['status'] = 'PENDENTE';
 
-        /*
-        |--------------------------------------------------------------------------
-        | CRIAÇÃO
-        |--------------------------------------------------------------------------
+        /**
+        *--------------------------------------------------------------------------
+        * CRIAÇÃO
+        *--------------------------------------------------------------------------
         */
 
-        Adocao::create($dados);
+        $adocao = Adocao::create($dados);
+
+        /**
+         *--------------------------------------------------------------------------
+        * NOTIFICA O RESPONSÁVEL PELO ANIMAL
+        *--------------------------------------------------------------------------
+        */
+
+        $adocao->load([
+            'user',
+            'animal.user'
+        ]);
+
+        $protetor = $adocao->animal->user;
+
+        if ($protetor) {
+
+            $protetor->notify(
+                new NovaSolicitacaoAdocaoNotification(
+                    $adocao
+                )
+            );
+        }
 
         return redirect()
             ->route('adocoes.index')
@@ -204,6 +228,7 @@ class AdocaoController extends Controller
                 'Solicitação enviada com sucesso!'
             );
     }
+
 
     /*
     |--------------------------------------------------------------------------
@@ -256,120 +281,148 @@ class AdocaoController extends Controller
     |--------------------------------------------------------------------------
     */
 
-    public function update(
-        UpdateAdocaoRequest $request,
-        string $id
-    ) {
-        $adocao = Adocao::with('animal')
-            ->findOrFail($id);
+        public function update( UpdateAdocaoRequest $request, string $id) {
+            $adocao = Adocao::with([
+                'animal',
+                'user'
+            ])->findOrFail($id);
 
-        /*
-        |--------------------------------------------------------------------------
-        | AUTHORIZATION
-        |--------------------------------------------------------------------------
-        */
+            /**
+             *--------------------------------------------------------------------------
+            * AUTHORIZATION
+            *--------------------------------------------------------------------------
+            */
 
-        $this->authorize('update', $adocao);
+            $this->authorize('update', $adocao);
 
-        /*
-        |--------------------------------------------------------------------------
-        | SOMENTE PENDENTE
-        |--------------------------------------------------------------------------
-        */
+            /**
+             *--------------------------------------------------------------------------
+            * SOMENTE PENDENTE
+            *--------------------------------------------------------------------------
+            */
 
-        if ($adocao->status != 'PENDENTE') {
+            if ($adocao->status != 'PENDENTE') {
+
+                return redirect()
+                    ->route('adocoes.index')
+                    ->withErrors([
+                        'adocao' =>
+                            'Esta solicitação já foi finalizada.'
+                    ]);
+            }
+
+            /**
+             *--------------------------------------------------------------------------
+            * DADOS VALIDADOS
+            *--------------------------------------------------------------------------
+            */
+
+            $dados = $request->validated();
+
+            /**
+             *--------------------------------------------------------------------------
+            * PROCESSO TRANSACIONAL
+            *--------------------------------------------------------------------------
+            */
+
+            DB::transaction(function () use (
+                $dados,
+                $adocao
+            ) {
+
+                /**
+                 *--------------------------------------------------------------------------
+                * APROVAÇÃO
+                *--------------------------------------------------------------------------
+                */
+
+                if ($dados['status'] == 'APROVADA') {
+
+                    $adocao->update([
+                        'status' => 'APROVADA',
+                        'data_aprovacao' => now(),
+                    ]);
+
+                    /**
+                     *--------------------------------------------------------------------------
+                    * ANIMAL ADOTADO
+                    *--------------------------------------------------------------------------
+                    */
+
+                    $adocao->animal->update([
+                        'status' => 'ADOTADO'
+                    ]);
+
+                    /**
+                     *--------------------------------------------------------------------------
+                    * RECUSA OUTRAS SOLICITAÇÕES
+                    *--------------------------------------------------------------------------
+                    */
+
+                    $outrasAdocoes = Adocao::with([
+                        'user',
+                        'animal'
+                    ])
+                        ->where(
+                            'animal_id',
+                            $adocao->animal_id
+                        )
+                        ->where('id', '!=', $adocao->id)
+                        ->where('status', 'PENDENTE')
+                        ->get();
+
+                    foreach ($outrasAdocoes as $outraAdocao) {
+
+                        $outraAdocao->update([
+                            'status' => 'RECUSADA'
+                        ]);
+
+                        if ($outraAdocao->user) {
+
+                            $outraAdocao->user->notify(
+                                new StatusAdocaoNotification(
+                                    $outraAdocao
+                                )
+                            );
+                        }
+                    }
+
+                } else {
+
+                    /**
+                     *--------------------------------------------------------------------------
+                    * RECUSA
+                    *--------------------------------------------------------------------------
+                    */
+
+                    $adocao->update([
+                        'status' => 'RECUSADA'
+                    ]);
+                }
+
+                /**
+                 *--------------------------------------------------------------------------
+                * NOTIFICA O SOLICITANTE
+                *--------------------------------------------------------------------------
+                */
+
+                if ($adocao->user) {
+
+                    $adocao->user->notify(
+                        new StatusAdocaoNotification(
+                            $adocao
+                        )
+                    );
+                }
+            });
 
             return redirect()
                 ->route('adocoes.index')
-                ->withErrors([
-                    'adocao' =>
-                        'Esta solicitação já foi finalizada.'
-                ]);
+                ->with(
+                    'success',
+                    'Solicitação atualizada com sucesso!'
+                );
         }
-
-        /*
-        |--------------------------------------------------------------------------
-        | DADOS VALIDADOS
-        |--------------------------------------------------------------------------
-        */
-
-        $dados = $request->validated();
-
-        /*
-        |--------------------------------------------------------------------------
-        | PROCESSO TRANSACIONAL
-        |--------------------------------------------------------------------------
-        */
-
-        DB::transaction(function () use (
-            $dados,
-            $adocao
-        ) {
-
-            /*
-            |--------------------------------------------------------------------------
-            | APROVAÇÃO
-            |--------------------------------------------------------------------------
-            */
-
-            if ($dados['status'] == 'APROVADA') {
-
-                $adocao->update([
-
-                    'status' => 'APROVADA',
-
-                    'data_aprovacao' => now(),
-                ]);
-
-                /*
-                |--------------------------------------------------------------------------
-                | ANIMAL ADOTADO
-                |--------------------------------------------------------------------------
-                */
-
-                $adocao->animal->update([
-
-                    'status' => 'ADOTADO'
-                ]);
-
-                /*
-                |--------------------------------------------------------------------------
-                | RECUSA OUTRAS
-                |--------------------------------------------------------------------------
-                */
-
-                Adocao::where(
-                    'animal_id',
-                    $adocao->animal_id
-                )
-                ->where('id', '!=', $adocao->id)
-                ->where('status', 'PENDENTE')
-                ->update([
-                    'status' => 'RECUSADA'
-                ]);
-
-            } else {
-
-                /*
-                |--------------------------------------------------------------------------
-                | RECUSA
-                |--------------------------------------------------------------------------
-                */
-
-                $adocao->update([
-
-                    'status' => 'RECUSADA'
-                ]);
-            }
-        });
-
-        return redirect()
-            ->route('adocoes.index')
-            ->with(
-                'success',
-                'Solicitação atualizada com sucesso!'
-            );
-    }
 
     /*
     |--------------------------------------------------------------------------

@@ -12,6 +12,7 @@ use App\Http\Controllers\AdocaoController;
 use App\Http\Controllers\AnimalFotoController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\QuestionarioAdocaoController;
+use App\Http\Controllers\NotificacaoController;
 
 /*
 |--------------------------------------------------------------------------
@@ -213,4 +214,9 @@ Route::middleware(['auth'])->group(function () {
         '/chat/{conversa}/mensagem',
         [ChatController::class, 'store']
     )->name('chat.mensagem.store');
+
+    Route::get(
+        '/notificacoes/{notification}',
+        [NotificacaoController::class, 'show']
+    )->name('notificacoes.show');
 });
