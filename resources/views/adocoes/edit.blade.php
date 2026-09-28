@@ -12,16 +12,12 @@
             <div>
 
                 <h1 class="section-title mb-2">
-
                     Gerenciar Solicitação
-
                 </h1>
 
                 <p class="crud-description m-0">
-
                     Avalie a solicitação de adoção recebida
                     e defina o andamento do processo.
-
                 </p>
 
             </div>
@@ -80,9 +76,7 @@
                         <div>
 
                             <h2 class="manage-animal-name">
-
                                 {{ $adocao->animal->nome }}
-
                             </h2>
 
                             <p class="manage-animal-meta mb-0">
@@ -99,33 +93,25 @@
                         @if($adocao->status == 'PENDENTE')
 
                             <span class="status-badge pending-badge">
-
                                 Pendente
-
                             </span>
 
                         @elseif($adocao->status == 'APROVADA')
 
                             <span class="status-badge approved-badge">
-
                                 Aprovada
-
                             </span>
 
                         @elseif($adocao->status == 'RECUSADA')
 
                             <span class="status-badge refused-badge">
-
                                 Recusada
-
                             </span>
 
                         @else
 
                             <span class="status-badge canceled-badge">
-
                                 Cancelada
-
                             </span>
 
                         @endif
@@ -137,15 +123,11 @@
                         <div class="manage-meta-item">
 
                             <span class="manage-meta-label">
-
                                 Solicitante
-
                             </span>
 
                             <span class="manage-meta-value">
-
                                 {{ $adocao->user->name ?? 'Usuário removido' }}
-
                             </span>
 
                         </div>
@@ -153,9 +135,7 @@
                         <div class="manage-meta-item">
 
                             <span class="manage-meta-label">
-
                                 Contato
-
                             </span>
 
                             <span class="manage-meta-value">
@@ -210,15 +190,11 @@
                         <div class="manage-meta-item">
 
                             <span class="manage-meta-label">
-
                                 Data da Solicitação
-
                             </span>
 
                             <span class="manage-meta-value">
-
                                 {{ $adocao->created_at->format('d/m/Y \à\s H:i') }}
-
                             </span>
 
                         </div>
@@ -235,20 +211,66 @@
                 <div class="manage-message-box">
 
                     <span class="message-label">
-
                         Mensagem enviada pelo solicitante
-
                     </span>
 
                     <p class="message-content mb-0">
-
                         {{ $adocao->mensagem }}
-
                     </p>
 
                 </div>
 
             @endif
+
+
+            {{-- QUESTIONÁRIO DE ADOÇÃO --}}
+            <div class="card mb-4 mt-4">
+
+                <div class="card-header">
+
+                    <h4 class="mb-0">
+                        Questionário de adoção
+                    </h4>
+
+                </div>
+
+                <div class="card-body">
+
+                    @if($adocao->respostas->isEmpty())
+
+                        <p class="text-muted mb-0">
+                            Nenhuma resposta foi encontrada para esta solicitação.
+                        </p>
+
+                    @else
+
+                        @foreach($adocao->respostas as $resposta)
+
+                            <div class="mb-4">
+
+                                <strong class="d-block mb-2">
+
+                                    {{ $loop->iteration }}.
+                                    {{ $resposta->pergunta }}
+
+                                </strong>
+
+                                <div class="p-3 bg-light rounded">
+
+                                    {{ $resposta->resposta ?: 'Não informado' }}
+
+                                </div>
+
+                            </div>
+
+                        @endforeach
+
+                    @endif
+
+                </div>
+
+            </div>
+
 
             {{-- FORM --}}
             @if($adocao->status == 'PENDENTE')
@@ -264,9 +286,7 @@
                         <div class="mb-4">
 
                             <label class="form-label fw-semibold">
-
                                 Decisão da solicitação
-
                             </label>
 
                             <select name="status"
@@ -274,21 +294,15 @@
                                     required>
 
                                 <option value="">
-
                                     Selecione uma opção
-
                                 </option>
 
                                 <option value="APROVADA">
-
                                     Aprovar Solicitação
-
                                 </option>
 
                                 <option value="RECUSADA">
-
                                     Recusar Solicitação
-
                                 </option>
 
                             </select>

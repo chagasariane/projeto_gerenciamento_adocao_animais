@@ -11,6 +11,7 @@ use App\Http\Controllers\AnimalController;
 use App\Http\Controllers\AdocaoController;
 use App\Http\Controllers\AnimalFotoController;
 use App\Http\Controllers\ChatController;
+use App\Http\Controllers\QuestionarioAdocaoController;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,9 +27,11 @@ Route::get('/', [HomeController::class, 'index']);
 |--------------------------------------------------------------------------
 */
 
-Route::view('/como-funciona','pages.como-funciona')->name('como-funciona');
+Route::view('/como-funciona', 'pages.como-funciona')
+    ->name('como-funciona');
 
-Route::view('/sobre','pages.sobre')->name('sobre');
+Route::view('/sobre', 'pages.sobre')
+    ->name('sobre');
 
 /*
 |--------------------------------------------------------------------------
@@ -59,7 +62,6 @@ Route::get('/reset-password/{token}', [AuthController::class, 'resetPasswordForm
 Route::post('/reset-password', [AuthController::class, 'resetPassword'])
     ->name('password.update');
 
-
 /*
 |--------------------------------------------------------------------------
 | CADASTRO PÚBLICO
@@ -87,7 +89,6 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::resource('especies', EspecieController::class);
 
     Route::resource('racas', RacaController::class);
-
 });
 
 /*
@@ -97,6 +98,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
 */
 
 Route::middleware(['auth'])->group(function () {
+
     /*
     |--------------------------------------------------------------------------
     | PERFIL
@@ -135,7 +137,12 @@ Route::middleware(['auth'])->group(function () {
     | ANIMAIS
     |--------------------------------------------------------------------------
     */
-    Route::get('/especies/{id}/racas',[AnimalController::class, 'racasPorEspecie'])->name('especies.racas');
+
+    Route::get(
+        '/especies/{id}/racas',
+        [AnimalController::class, 'racasPorEspecie']
+    )->name('especies.racas');
+
     Route::resource('animais', AnimalController::class);
 
     /*
@@ -168,21 +175,42 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('adocoes', AdocaoController::class);
 
     /*
+    | Questionário de adoção
+    */
+
+    Route::get(
+        '/animais/{animal}/adotar',
+        [QuestionarioAdocaoController::class, 'create']
+    )->name('adocoes.questionario');
+
+    Route::post(
+        '/animais/{animal}/adotar',
+        [QuestionarioAdocaoController::class, 'store']
+    )->name('adocoes.questionario.store');
+
+    /*
     |--------------------------------------------------------------------------
     | CHAT
     |--------------------------------------------------------------------------
     */
 
+    Route::get(
+        '/chat',
+        [ChatController::class, 'index']
+    )->name('chat.index');
 
-    Route::get('/chat', [ChatController::class, 'index'])
-        ->name('chat.index');
+    Route::get(
+        '/chat/animal/{animal}/iniciar',
+        [ChatController::class, 'iniciar']
+    )->name('chat.iniciar');
 
-    Route::get('/chat/animal/{animal}/iniciar', [ChatController::class, 'iniciar'])
-        ->name('chat.iniciar');
+    Route::get(
+        '/chat/{conversa}',
+        [ChatController::class, 'show']
+    )->name('chat.show');
 
-    Route::get('/chat/{conversa}', [ChatController::class, 'show'])
-        ->name('chat.show');
-
-    Route::post('/chat/{conversa}/mensagem', [ChatController::class, 'store'])
-        ->name('chat.mensagem.store');
+    Route::post(
+        '/chat/{conversa}/mensagem',
+        [ChatController::class, 'store']
+    )->name('chat.mensagem.store');
 });

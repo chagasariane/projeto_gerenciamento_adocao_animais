@@ -217,7 +217,8 @@ class AdocaoController extends Controller
             'user',
             'animal.fotoPrincipal',
             'animal.raca',
-            'animal.especie'
+            'animal.especie',
+            'respostas'
         ])->findOrFail($id);
 
         /*

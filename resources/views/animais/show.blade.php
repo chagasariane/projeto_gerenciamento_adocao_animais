@@ -166,10 +166,10 @@
 
                             @if($animal->status == 'DISPONIVEL')
                                 <a
-                                    href="{{ route('adocoes.create', ['animal_id' => $animal->id]) }}"
-                                    class="btn modern-adopt-btn"
+                                    href="{{ route('adocoes.questionario', $animal) }}"
+                                    class="btn btn-success"
                                 >
-                                    Quero Adotar
+                                    Quero adotar
                                 </a>
                             @endif
 

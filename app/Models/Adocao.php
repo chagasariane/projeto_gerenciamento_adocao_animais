@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use App\Models\RespostaAdocao;
 
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -55,4 +57,10 @@ class Adocao extends Model
     {
         return $this->belongsTo(Animal::class);
     }
+
+    public function respostas(): HasMany
+    {
+        return $this->hasMany(RespostaAdocao::class);
+    }
+    
 }
