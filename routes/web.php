@@ -13,6 +13,8 @@ use App\Http\Controllers\AnimalFotoController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\QuestionarioAdocaoController;
 use App\Http\Controllers\NotificacaoController;
+use App\Http\Controllers\RelatorioController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -90,6 +92,18 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::resource('especies', EspecieController::class);
 
     Route::resource('racas', RacaController::class);
+
+    /*
+    |--------------------------------------------------------------------------
+    | RELATÓRIOS
+    |--------------------------------------------------------------------------
+    */
+
+    Route::get(
+        '/relatorios',
+        [RelatorioController::class, 'index']
+    )->name('relatorios.index');
+
 });
 
 /*

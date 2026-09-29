@@ -109,7 +109,8 @@
                                     {{
                                             request()->routeIs('especies.*') ||
                                             request()->routeIs('racas.*') ||
-                                            request()->routeIs('users.*')
+                                            request()->routeIs('users.*') ||
+                                            request()->routeIs('relatorios.*')
                                             ? 'active-admin'
                                             : ''
                                     }}"
@@ -132,36 +133,33 @@
                                 <ul class="dropdown-menu">
 
                                     <li>
-
                                         <a class="dropdown-item"
                                         href="{{ route('especies.index') }}">
-
                                             Espécies
-
                                         </a>
-
                                     </li>
 
                                     <li>
-
                                         <a class="dropdown-item"
                                         href="{{ route('racas.index') }}">
-
                                             Raças
-
                                         </a>
-
                                     </li>
 
                                     <li>
-
                                         <a class="dropdown-item"
                                         href="{{ route('users.index') }}">
-
                                             Usuários
-
                                         </a>
+                                    </li>
 
+                                    {{-- ADICIONE AQUI --}}
+                                    <li>
+                                        <a class="dropdown-item"
+                                        href="{{ route('relatorios.index') }}">
+                                            <i class="bi bi-bar-chart-line me-2"></i>
+                                            Relatórios
+                                        </a>
                                     </li>
 
                                 </ul>
