@@ -285,8 +285,8 @@
                             {{-- BOTÕES --}}
                             <div class="d-flex gap-2">
 
-                                <a href="{{ route('animais.show', $animal->id) }}"
-                                   class="animal-btn text-decoration-none text-center">
+                                <a href="{{ route('animais.show', $animal->id) }}?veio_dos_meus_animais=1"
+                                    class="animal-btn text-decoration-none text-center">
 
                                     Visualizar
 

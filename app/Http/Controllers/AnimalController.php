@@ -286,94 +286,152 @@ class AnimalController extends Controller
     */
 
     public function update(
-        UpdateAnimalRequest $request,
-        string $id
+    UpdateAnimalRequest $request,
+    string $id
+) {
+    $animal = Animal::findOrFail($id);
+
+    $this->authorize('update', $animal);
+
+    /*
+    |--------------------------------------------------------------------------
+    | VALIDAÇÃO DE INTEGRIDADE
+    |--------------------------------------------------------------------------
+    */
+
+    $raca = Raca::findOrFail(
+        $request->raca_id
+    );
+
+    if (
+        $raca->especie_id !=
+        $request->especie_id
     ) {
-        $animal = Animal::findOrFail($id);
+        return back()
+            ->withInput()
+            ->withErrors([
+                'raca_id' =>
+                    'A raça selecionada não pertence à espécie informada.'
+            ]);
+    }
 
-        $this->authorize('update', $animal);
+    /*
+    |--------------------------------------------------------------------------
+    | DADOS VALIDADOS
+    |--------------------------------------------------------------------------
+    */
 
-        /*
-        |--------------------------------------------------------------------------
-        | VALIDAÇÃO DE INTEGRIDADE
-        |--------------------------------------------------------------------------
-        */
+    $dados = $request->validated();
 
-        $raca = Raca::findOrFail(
-            $request->raca_id
+    // Separa as fotos dos demais dados do animal.
+    $fotos = $dados['fotos'] ?? [];
+
+    unset($dados['fotos']);
+
+    /*
+    |--------------------------------------------------------------------------
+    | CAMPOS BOOLEANOS
+    |--------------------------------------------------------------------------
+    */
+
+    $dados['castrado'] =
+        $request->boolean('castrado');
+
+    $dados['vacinado'] =
+        $request->boolean('vacinado');
+
+    /*
+    |--------------------------------------------------------------------------
+    | ATUALIZAÇÃO DOS DADOS DO ANIMAL
+    |--------------------------------------------------------------------------
+    */
+
+    $animal->update($dados);
+
+    /*
+    |--------------------------------------------------------------------------
+    | ENVIO DAS NOVAS FOTOS
+    |--------------------------------------------------------------------------
+    */
+
+    if ($request->hasFile('fotos')) {
+
+        // Verifica se o animal já possui uma foto principal.
+        $possuiFotoPrincipal =
+            $animal->fotoPrincipal()->exists();
+
+        // Inicializa o Cloudinary.
+        $cloudinary = new Cloudinary(
+            env('CLOUDINARY_URL')
         );
 
-        if (
-            $raca->especie_id !=
-            $request->especie_id
-        ) {
+        foreach ($fotos as $index => $foto) {
 
-            return back()
-                ->withInput()
-                ->withErrors([
-                    'raca_id' =>
-                        'A raça selecionada não pertence à espécie informada.'
-                ]);
-        }
+            // Ignora arquivos inválidos.
+            if (
+                !$foto ||
+                !$foto->isValid()
+            ) {
+                continue;
+            }
 
-        /*
-        |--------------------------------------------------------------------------
-        | DADOS VALIDADOS
-        |--------------------------------------------------------------------------
-        */
+            // Envia a imagem para o Cloudinary.
+            $upload = $cloudinary
+                ->uploadApi()
+                ->upload(
+                    $foto->getRealPath(),
+                    [
+                        'folder' => 'miaudot/animais'
+                    ]
+                );
 
-        $dados = $request->validated();
+            // Obtém a URL segura da imagem.
+            $caminho = $upload['secure_url'];
 
-        /*
-        |--------------------------------------------------------------------------
-        | CAMPOS BOOLEANOS
-        |--------------------------------------------------------------------------
-        */
+            /*
+            |--------------------------------------------------------------------------
+            | DEFINIÇÃO DA FOTO PRINCIPAL
+            |--------------------------------------------------------------------------
+            */
 
-        $dados['castrado'] =
-            $request->boolean('castrado');
+            $principal = false;
 
-        $dados['vacinado'] =
-            $request->boolean('vacinado');
+            if (
+                !$possuiFotoPrincipal &&
+                $index === 0
+            ) {
+                $principal = true;
 
-        /*
-        |--------------------------------------------------------------------------
-        | ATUALIZAÇÃO
-        |--------------------------------------------------------------------------
-        */
-        unset($dados['fotos']);
-        $animal->update($dados);
+                $possuiFotoPrincipal = true;
+            }
 
-        return redirect()
-            ->route('animais.index')
-            ->with(
-                'success',
-                'Animal atualizado com sucesso!'
-            );
-        
-            if ($request->hasFile('fotos')) {
-
-    foreach ($request->file('fotos') as $index => $foto) {
-
-        if ($foto) {
-
-            $caminho = $foto->store(
-                'animais',
-                'public'
-            );
+            /*
+            |--------------------------------------------------------------------------
+            | REGISTRO DA FOTO NO BANCO DE DADOS
+            |--------------------------------------------------------------------------
+            */
 
             AnimalFoto::create([
-
                 'animal_id' => $animal->id,
-
                 'caminho' => $caminho,
-
-                'principal' => false
+                'principal' => $principal
             ]);
         }
     }
+
+    /*
+    |--------------------------------------------------------------------------
+    | REDIRECIONAMENTO
+    |--------------------------------------------------------------------------
+    */
+
+    return redirect()
+        ->route('animais.index')
+        ->with(
+            'success',
+            'Animal atualizado com sucesso!'
+        );
 }
-    }
 
     /*
     |--------------------------------------------------------------------------
