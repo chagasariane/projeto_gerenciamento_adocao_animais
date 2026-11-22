@@ -148,17 +148,14 @@
                                 </div>
 
                                 {{-- BOTÃO --}}
-                                <button type="submit"
-                                        class="btn auth-submit-btn w-100">
-
+                                <button type="submit" class="btn auth-submit-btn w-100">
                                     Entrar na plataforma
-
                                 </button>
                                 
-                                <div class="text-end mb-4">
-                                    <a href="{{ route('password.request') }}" class="auth-forgot-link">
-                                        Esqueci minha senha
-                                    </a>
+                                {{-- RECUPERAÇÃO DE SENHA --}}
+
+                                <div class="auth-forgot-wrapper"> <a href="{{ route('password.request') }}" class="auth-forgot-link"> 
+                                    Esqueci minha senha </a> 
                                 </div>
                             </form>
 

@@ -436,40 +436,34 @@
                 <div class="col-lg-2 col-md-6">
 
                     <h5 class="footer-title">
-
                         Navegação
-
                     </h5>
 
-                    <a href="{{ url('/') }}"
-                       class="footer-link">
-
+                    <a href="{{ url('/') }}" class="footer-link">
                         Home
-
                     </a>
 
-            {{-- AUTENTICADO --}}
-            @auth
-                <li class="nav-item">
-                    <a
-                        class="nav-link {{ request()->routeIs('animais.*') ? 'active' : '' }}"
-                        href="{{ route('animais.index') }}"
-                    >
-                        Meus Animais
+                    @auth
+                        <a href="{{ route('animais.index') }}" class="footer-link">
+                            Meus Animais
+                        </a>
+
+                        <a href="{{ route('adocoes.index') }}" class="footer-link">
+                            Adoções
+                        </a>
+
+                        <a href="{{ route('chat.index') }}" class="footer-link">
+                            Chats
+                        </a>
+                    @endauth
+
+                    <a href="{{ route('como-funciona') }}" class="footer-link">
+                        Como Funciona
                     </a>
-                </li>
 
-                <li class="nav-item">
-                    <a
-                        class="nav-link {{ request()->routeIs('adocoes.*') ? 'active' : '' }}"
-                        href="{{ route('adocoes.index') }}"
-                    >
-                        Adoções
+                    <a href="{{ route('sobre') }}" class="footer-link">
+                        Sobre
                     </a>
-                </li>
-
-
-            @endauth
 
                 </div>
 

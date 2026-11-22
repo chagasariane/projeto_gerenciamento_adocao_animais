@@ -51,7 +51,9 @@
 
             {{-- FORM PRINCIPAL --}}
             <form action="{{ route('animais.update', $animal->id) }}"
-                  method="POST">
+                method="POST"
+                enctype="multipart/form-data"
+                id="form-atualizar-animal">
 
                 @csrf
                 @method('PUT')
@@ -410,28 +412,7 @@
 
                 </div>
 
-                {{-- BOTÕES --}}
-                <div class="d-flex flex-column flex-md-row justify-content-end gap-3">
-
-                    <a href="{{ route('animais.index') }}"
-                       class="back-btn text-decoration-none text-center">
-
-                        Cancelar
-
-                    </a>
-
-                    <button type="submit"
-                            class="save-btn">
-
-                        Atualizar Animal
-
-                    </button>
-
-                </div>
-
             </form>
-
-        </div>
 
         {{-- FOTOS ATUAIS --}}
         <div class="mb-5 mt-5">
@@ -515,12 +496,12 @@
         </div>
 
         {{-- ADICIONAR NOVAS FOTOS --}}
-        <div class="filter-box mt-5">
+        <div class="mt-5">
 
-            <form action="{{ route('animais.fotos.store', $animal->id) }}"
+            <!-- <form action="{{ route('animais.fotos.store', $animal->id) }}"
                 method="POST"
                 enctype="multipart/form-data"
-                id="form-fotos">
+                id="form-fotos"> -->
 
                 @csrf
 
@@ -561,6 +542,7 @@
                         <input type="file"
                             id="edit-fotos"
                             name="fotos[]"
+                            form="form-atualizar-animal"
                             multiple
                             accept="image/*"
                             hidden>
@@ -582,23 +564,29 @@
 
                     </div>
 
-                    {{-- ACTIONS --}}
-                    <div class="d-flex justify-content-end">
-
-                        <button type="submit"
-                                class="save-btn">
-
-                            Enviar Fotos
-
-                        </button>
-
-                    </div>
-
                 </div>
 
             </form>
 
         </div>
+
+        {{-- BOTÕES FINAIS --}}
+        <div class="d-flex flex-column flex-md-row justify-content-end gap-3 mt-4">
+
+            <a href="{{ route('animais.index') }}"
+               class="back-btn text-decoration-none text-center">
+                Cancelar
+            </a>
+
+            <button type="submit"
+                    form="form-atualizar-animal"
+                    class="save-btn">
+                Atualizar Animal
+            </button>
+
+        </div>
+
+        </div> {{-- Fim do container principal branco --}}
 
     </div>
 
@@ -862,22 +850,6 @@
         }
 
     });
-
-const formFotos = document.getElementById('form-fotos');
-
-if (formFotos) {
-    formFotos.addEventListener('submit', function () {
-        const botao = formFotos.querySelector('button[type="submit"]');
-
-        if (botao) {
-            botao.disabled = true;
-            botao.innerText = 'Enviando...';
-        }
-    });
-}
-
-
-
 
 </script>
 

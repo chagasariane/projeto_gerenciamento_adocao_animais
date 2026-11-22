@@ -10,9 +10,11 @@
         <div class="chat-header">
 
             <a
-                href="{{ route('chat.index') }}"
+                href="{{ request('origem') === 'animal' && request('animal_id')
+                    ? route('animais.show', request('animal_id')) . '?veio_do_chat=1'
+                    : route('chat.index') }}"
                 class="chat-header-back"
-                title="Voltar para os chats"
+                title="Voltar"
             >
                 <i class="bi bi-arrow-left"></i>
             </a>
@@ -111,6 +113,18 @@
             >
 
                 @csrf
+
+                <input
+                    type="hidden"
+                    name="origem"
+                    value="{{ request('origem') }}"
+                >
+
+                <input
+                    type="hidden"
+                    name="animal_id"
+                    value="{{ request('animal_id') }}"
+                >
 
                 <div class="chat-input-wrapper">
 

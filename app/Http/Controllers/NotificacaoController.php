@@ -8,29 +8,49 @@ class NotificacaoController extends Controller
 {
     public function show(Request $request, string $notification)
     {
+        // Busca somente notificações pertencentes ao usuário autenticado.
         $notificacao = $request->user()
             ->notifications()
             ->where('id', $notification)
             ->firstOrFail();
 
-        // Marca como lida
+        // Marca a notificação como lida.
         if (is_null($notificacao->read_at)) {
             $notificacao->markAsRead();
         }
 
-        // Nova mensagem
+        $dados = $notificacao->data;
+        $tipo = $dados['tipo'] ?? null;
+
+        // Nova mensagem: abre a conversa correspondente.
         if (
-            ($notificacao->data['tipo'] ?? null) === 'nova_mensagem'
-            && isset($notificacao->data['conversa_id'])
+            $tipo === 'nova_mensagem'
+            && !empty($dados['conversa_id'])
         ) {
             return redirect()->route(
                 'chat.show',
-                $notificacao->data['conversa_id']
+                $dados['conversa_id']
             );
         }
 
-        // Futuramente outros tipos cairão aqui.
+        // Novo interesse em adoção: abre a tela de adoções.
+        if (
+            $tipo === 'nova_solicitacao_adocao'
+            && !empty($dados['adocao_id'])
+        ) {
+            return redirect()->route('adocoes.index');
+        }
 
-        return redirect('/');
+        // Atualização do status de uma adoção.
+        if (
+            $tipo === 'status_adocao'
+            && !empty($dados['adocao_id'])
+        ) {
+            return redirect()->route('adocoes.index');
+        }
+
+        // Destino padrão para notificações sem rota específica.
+        return redirect()->route('home')
+            ->with('info', 'Notificação marcada como lida.');
     }
 }

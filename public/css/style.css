@@ -322,67 +322,88 @@ body{
    FOOTER
 ========================= */
 
-.footer-custom{
+.footer-custom {
     background-color: #1b4332;
-    color: white;
+    color: #ffffff;
     padding: 80px 0 30px;
 }
 
-.footer-logo{
+/* Logo */
+.footer-logo {
     font-size: 2rem;
     font-weight: 800;
     margin-bottom: 20px;
     letter-spacing: -1px;
+    color: #ffffff;
 }
 
-.footer-description{
-    color: #d1d5db;
-    line-height: 1.9;
+/* Descrições */
+.footer-description,
+.footer-description-small {
+    color: #e2e8e5;
+    line-height: 1.8;
+}
+
+.footer-description {
     margin-bottom: 25px;
     max-width: 420px;
 }
 
-.footer-description-small{
-    color: #d1d5db;
-    line-height: 1.8;
-}
-
-.footer-title{
+/* Títulos das colunas */
+.footer-title {
     font-size: 1.1rem;
     font-weight: 700;
     margin-bottom: 22px;
+    color: #ffffff;
 }
 
-.footer-link{
+/* Links do rodapé */
+.footer-custom a.footer-link,
+.footer-custom a.footer-link:visited,
+.footer-custom a.footer-link:active {
     display: block;
+    color: #e2e8e5 !important;
     text-decoration: none;
-    color: #d1d5db;
     margin-bottom: 14px;
-    transition: 0.3s;
+    font-weight: 500;
+    transition: color 0.2s ease, transform 0.2s ease;
 }
 
-.footer-link:hover{
-    color: white;
+/* Efeito ao passar o mouse */
+.footer-custom a.footer-link:hover {
+    color: #ffffff !important;
+    text-decoration: underline;
     transform: translateX(4px);
 }
 
-.footer-text-item{
+/* Destaque do teclado */
+.footer-custom a.footer-link:focus-visible {
+    color: #ffffff !important;
+    outline: 2px solid #ffffff;
+    outline-offset: 4px;
+    border-radius: 2px;
+}
+
+/* Textos que não são links */
+.footer-text-item {
     display: block;
-    color: #d1d5db;
+    color: #e2e8e5;
     margin-bottom: 14px;
 }
 
-.footer-divider{
+/* Linha divisória */
+.footer-divider {
     margin: 45px 0 25px;
-    border-color: rgba(255,255,255,0.12);
+    border-color: rgba(255, 255, 255, 0.18);
 }
 
-.footer-bottom{
+/* Rodapé inferior */
+.footer-bottom {
     display: flex;
     justify-content: center;
     align-items: center;
     text-align: center;
-    color: #d1d5db;
+    color: #e2e8e5;
     font-size: 0.95rem;
 }
 
@@ -1139,20 +1160,58 @@ body{
     box-shadow: 0 15px 30px rgba(27,67,50,0.18);
 }
 
-.auth-footer-text{
-    margin-top: 35px;
-    text-align: center;
-    color: #64748b;
+/* =========================
+RECUPERAÇÃO DE SENHA
+========================= */
+
+.auth-forgot-wrapper {
+display: flex;
+justify-content: center;
+margin-top: 12px;
 }
 
-.auth-footer-text a{
-    color: #1b4332;
-    font-weight: 700;
-    text-decoration: none;
+.auth-forgot-link {
+color: #64748b;
+font-size: 0.875rem;
+font-weight: 500;
+text-decoration: none;
+outline: none;
+border: none;
+transition: color 0.2s ease;
 }
 
-.auth-footer-text a:hover{
-    text-decoration: underline;
+/* Efeito ao passar o mouse */
+.auth-forgot-link:hover {
+color: #1b4332;
+text-decoration: none;
+}
+
+/* Acessibilidade: exibe o contorno somente ao navegar pelo teclado */
+.auth-forgot-link:focus-visible {
+outline: 2px solid #1b4332;
+outline-offset: 3px;
+border-radius: 2px;
+}
+
+
+/* =========================
+RODAPÉ DA AUTENTICAÇÃO
+========================= */
+
+.auth-footer-text {
+margin-top: 35px;
+text-align: center;
+color: #64748b;
+}
+
+.auth-footer-text a {
+color: #1b4332;
+font-weight: 700;
+text-decoration: none;
+}
+
+.auth-footer-text a {
+text-decoration: underline;
 }
 
 /* =========================

@@ -35,15 +35,18 @@
 
         </div>
 
-        {{-- ALERT --}}
+        {{-- ALERTA DE SUCESSO --}}
         @if(session('success'))
+        <div class="custom-alert-success mb-4" role="alert">
+        {{ session('success') }}
+        </div>
+        @endif
 
-            <div class="custom-alert-success mb-4">
-
-                {{ session('success') }}
-
-            </div>
-
+        {{-- ALERTA DE ERRO --}}
+        @if(session('error'))
+        <div class="alert alert-danger mb-4" role="alert">
+        {{ session('error') }}
+        </div>
         @endif
 
         {{-- FILTRO --}}

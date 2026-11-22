@@ -178,11 +178,29 @@ class RacaController extends Controller
 
     public function destroy($id)
     {
-        $raca = Raca::findOrFail($id);
-        $raca->delete();
+    $raca = Raca::findOrFail($id);
 
-        return redirect()
-            ->route('racas.index')
-            ->with('success', 'Raça excluída com sucesso!');
+    // Verifica se existem animais vinculados à raça.
+    if ($raca->animais()->exists()) {
+
+    $nomesAnimais = $raca->animais()
+        ->orderBy('nome')
+        ->pluck('nome')
+        ->implode(', ');
+
+    return redirect()
+        ->route('racas.index')
+        ->with(
+            'error',
+            "Não é possível excluir a raça '{$raca->nome}', pois existem animais cadastrados que utilizam essa raça: {$nomesAnimais}."
+        );
+
+    }
+
+    $raca->delete();
+
+    return redirect()
+    ->route('racas.index')
+    ->with('success', 'Raça excluída com sucesso!');
     }
 }

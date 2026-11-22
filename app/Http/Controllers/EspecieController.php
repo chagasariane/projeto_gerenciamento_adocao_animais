@@ -103,11 +103,46 @@ class EspecieController extends Controller
     // EXCLUIR
     public function destroy($id)
     {
-        $especie = Especie::findOrFail($id);
-        $especie->delete();
+    $especie = Especie::with('racas')->findOrFail($id);
 
-        return redirect()
-            ->route('especies.index')
-            ->with('success', 'Espécie excluída com sucesso!');
+    // Verifica se existem raças vinculadas à espécie.
+    if ($especie->racas()->exists()) {
+
+    $nomesRacas = $especie->racas()
+        ->orderBy('nome')
+        ->pluck('nome')
+        ->implode(', ');
+
+    return redirect()
+        ->route('especies.index')
+        ->with(
+            'error',
+            "Não é possível excluir a espécie '{$especie->nome}', pois ela possui raças cadastradas: {$nomesRacas}."
+        );
+
+    }
+
+    // Verifica se existem animais vinculados diretamente à espécie.
+    if ($especie->animais()->exists()) {
+
+    $nomesAnimais = $especie->animais()
+        ->orderBy('nome')
+        ->pluck('nome')
+        ->implode(', ');
+
+    return redirect()
+        ->route('especies.index')
+        ->with(
+            'error',
+            "Não é possível excluir a espécie '{$especie->nome}', pois existem animais cadastrados que utilizam essa espécie: {$nomesAnimais}."
+        );
+
+    }
+
+    $especie->delete();
+
+    return redirect()
+    ->route('especies.index')
+    ->with('success', 'Espécie excluída com sucesso!');
     }
 }

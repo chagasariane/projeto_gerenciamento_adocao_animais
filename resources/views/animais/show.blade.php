@@ -152,14 +152,13 @@
                 {{-- BOTÕES --}}
                 <div class="d-flex gap-3 mt-4 flex-wrap">
 
-                    <button
-                        type="button"
-                        class="btn back-btn"
-                        onclick="history.back()">
-
+                    <a
+                        href="{{ request()->boolean('veio_dos_meus_animais')
+                            ? route('animais.index')
+                            : url('/#animais-disponiveis') }}"
+                        class="btn back-btn">
                         Voltar
-
-                    </button>
+                    </a>
 
                     @auth
                         @if(auth()->id() != $animal->user_id)
@@ -167,15 +166,15 @@
                             @if($animal->status == 'DISPONIVEL')
                                 <a
                                     href="{{ route('adocoes.questionario', $animal) }}"
-                                    class="btn btn-success"
+                                    class="btn chat-protetor-btn"
                                 >
                                     Quero adotar
                                 </a>
                             @endif
 
-                        <a href="{{ route('chat.iniciar', $animal) }}" class="btn chat-protetor-btn">
+                        <a href="{{ route('chat.iniciar', $animal) }}?origem=animal" class="btn chat-protetor-btn">
                             <i class="bi bi-chat-dots-fill"></i>
-                            <span>Enviar mensagem ao protetor</span>
+                            <span>Enviar mensagem ao responsável</span>
                         </a>
 
                         @endif

@@ -31,41 +31,49 @@ class ChatController extends Controller
     /**
      * Exibe as mensagens de uma conversa.
      */
-    public function show(Conversa $conversa)
+    public function show(Request $request, Conversa $conversa)
     {
-        /** @var User $usuario */
-        $usuario = Auth::user();
+    /** @var User $usuario */
+    $usuario = Auth::user();
 
-        // Verifica se o usuário faz parte dessa conversa
-        if (
-            $conversa->usuario_1_id !== $usuario->id &&
-            $conversa->usuario_2_id !== $usuario->id
-        ) {
-            abort(403);
-        }
-
-        $mensagens = $conversa->mensagens()
-            ->with('usuario')
-            ->orderBy('created_at')
-            ->get();
-
-        // Identifica o outro usuário da conversa
-        $outroUsuario = $conversa->usuario_1_id === $usuario->id
-            ? $conversa->usuario2
-            : $conversa->usuario1;
-
-        // Marca como lidas as mensagens enviadas pelo outro usuário
-        $conversa->mensagens()
-            ->where('usuario_id', '!=', $usuario->id)
-            ->where('lida', false)
-            ->update(['lida' => true]);
-
-        return view('chat.show', compact(
-            'conversa',
-            'mensagens',
-            'outroUsuario'
-        ));
+    // Verifica se o usuário faz parte dessa conversa
+    if (
+        $conversa->usuario_1_id !== $usuario->id &&
+        $conversa->usuario_2_id !== $usuario->id
+    ) {
+        abort(403);
     }
+
+    $mensagens = $conversa->mensagens()
+        ->with('usuario')
+        ->orderBy('created_at')
+        ->get();
+
+    // Identifica o outro usuário da conversa
+    $outroUsuario = $conversa->usuario_1_id === $usuario->id
+        ? $conversa->usuario2
+        : $conversa->usuario1;
+
+    // Marca como lidas as mensagens enviadas pelo outro usuário
+    $conversa->mensagens()
+        ->where('usuario_id', '!=', $usuario->id)
+        ->where('lida', false)
+        ->update(['lida' => true]);
+
+    // Preserva a origem da navegação
+    $origem = $request->query('origem');
+    $animalId = $request->query('animal_id');
+
+    return view('chat.show', compact(
+        'conversa',
+        'mensagens',
+        'outroUsuario',
+        'origem',
+        'animalId'
+    ));
+
+    }
+
 
     /**
      * Salva uma nova mensagem na conversa.
@@ -114,7 +122,10 @@ class ChatController extends Controller
                     );
                 }
 
-                return redirect()->route('chat.show', $conversa);
+                return redirect()->route('chat.show', array_merge(
+                    ['conversa' => $conversa->id],
+                    $request->only(['origem', 'animal_id'])
+                ));
             }
 
     
@@ -160,6 +171,10 @@ class ChatController extends Controller
             ]);
         }
 
-        return redirect()->route('chat.show', $conversa);
+        return redirect()->route('chat.show', [
+            'conversa' => $conversa->id,
+            'origem' => 'animal',
+            'animal_id' => $animal->id,
+        ]);
     }  
 }
